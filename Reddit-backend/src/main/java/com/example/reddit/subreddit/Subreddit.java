@@ -2,16 +2,25 @@ package com.example.reddit.subreddit;
 
 import com.example.reddit.post.Post;
 import com.example.reddit.user.RedditUser;
+import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
+@Table(name = "subreddits")
 public class Subreddit {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "title", nullable = false)
     private String title;
+    @OneToMany(mappedBy = "subreddit", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Post> posts = new HashSet<>();
+    @ManyToMany(mappedBy = "subscribedTo")
     private Set<RedditUser> users = new HashSet<>();
+    @ManyToMany(mappedBy = "moderated")
     private Set<RedditUser> moderators = new HashSet<>();
     public Subreddit() {
     }

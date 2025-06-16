@@ -3,25 +3,83 @@ package com.example.reddit.user;
 import com.example.reddit.comment.Comment;
 import com.example.reddit.post.Post;
 import com.example.reddit.subreddit.Subreddit;
+import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-
+@Entity
+@Table(name = "users")
 public class RedditUser {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
+    @Column(name = "password", nullable = false)
     private String password;
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Post> posts = new HashSet<>();
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Comment> comments = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "subreddit_users",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "subreddit_id")
+    )
     private Set<Subreddit> subscribedTo = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "subreddit_moderators",
+            joinColumns = @JoinColumn(name = "moderator_id"),
+            inverseJoinColumns = @JoinColumn(name = "subreddit_id")
+    )
+    private Set<Subreddit> moderated = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "post_up_votes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
     private Set<Post> upVotedPosts = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "post_down_votes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
     private Set<Post> downVotedPosts = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "comment_up_votes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "comment_id")
+    )
     private Set<Comment> upVotedComments = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "comment_down_votes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "comment_id")
+    )
     private Set<Comment> downVotedComments = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "user_saved_post",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
     private Set<Post> savedPosts = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "user_saved_comment",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "comment_id")
+    )
     private Set<Comment> savedComments = new HashSet<>();
 
     public RedditUser() {
@@ -83,6 +141,13 @@ public class RedditUser {
         this.subscribedTo = subscribedTo;
     }
 
+    public Set<Subreddit> getModerated() {
+        return moderated;
+    }
+
+    public void setModerated(Set<Subreddit> moderated) {
+        this.moderated = moderated;
+    }
     public Set<Post> getUpVotedPosts() {
         return upVotedPosts;
     }

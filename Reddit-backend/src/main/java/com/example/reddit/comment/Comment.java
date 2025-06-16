@@ -2,22 +2,39 @@ package com.example.reddit.comment;
 
 import com.example.reddit.post.Post;
 import com.example.reddit.user.RedditUser;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
+@Table(name = "comments")
 public class Comment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private RedditUser user;
+    @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
+    @Column(name = "content", nullable = false)
     private String content;
+    @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Comment> replies = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "parent_id", nullable = false)
     private Comment parent;
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
+    @ManyToMany(mappedBy = "upVotedComments")
     private Set<RedditUser> upVotedBy = new HashSet<>();
+    @ManyToMany(mappedBy = "downVotedComments")
     private Set<RedditUser> downVotedBy = new HashSet<>();
+    @ManyToMany(mappedBy = "savedComments")
     private Set<RedditUser> savedBy = new HashSet<>();
 
     public Comment() {
