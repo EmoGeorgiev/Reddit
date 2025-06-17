@@ -27,56 +27,56 @@ public class RedditUser {
     private Set<Comment> comments = new HashSet<>();
     @ManyToMany
     @JoinTable(
-            name = "subreddit_users",
+            name = "users_subreddits",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "subreddit_id")
     )
     private Set<Subreddit> subscribedTo = new HashSet<>();
     @ManyToMany
     @JoinTable(
-            name = "subreddit_moderators",
+            name = "moderators_subreddits",
             joinColumns = @JoinColumn(name = "moderator_id"),
             inverseJoinColumns = @JoinColumn(name = "subreddit_id")
     )
     private Set<Subreddit> moderated = new HashSet<>();
     @ManyToMany
     @JoinTable(
-            name = "post_up_votes",
+            name = "users_up_voted_posts",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id")
     )
     private Set<Post> upVotedPosts = new HashSet<>();
     @ManyToMany
     @JoinTable(
-            name = "post_down_votes",
+            name = "users_down_voted_posts",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id")
     )
     private Set<Post> downVotedPosts = new HashSet<>();
     @ManyToMany
     @JoinTable(
-            name = "comment_up_votes",
+            name = "users_up_voted_comments",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id")
     )
     private Set<Comment> upVotedComments = new HashSet<>();
     @ManyToMany
     @JoinTable(
-            name = "comment_down_votes",
+            name = "users_down_voted_comments",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id")
     )
     private Set<Comment> downVotedComments = new HashSet<>();
     @ManyToMany
     @JoinTable(
-            name = "user_saved_post",
+            name = "users_saved_posts",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id")
     )
     private Set<Post> savedPosts = new HashSet<>();
     @ManyToMany
     @JoinTable(
-            name = "user_saved_comment",
+            name = "users_saved_comments",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id")
     )
