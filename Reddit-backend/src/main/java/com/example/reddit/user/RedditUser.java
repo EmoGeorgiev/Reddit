@@ -1,8 +1,10 @@
 package com.example.reddit.user;
 
 import com.example.reddit.comment.Comment;
+import com.example.reddit.content.Content;
 import com.example.reddit.post.Post;
 import com.example.reddit.subreddit.Subreddit;
+import com.example.reddit.vote.Vote;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -39,48 +41,16 @@ public class RedditUser {
             inverseJoinColumns = @JoinColumn(name = "subreddit_id")
     )
     private Set<Subreddit> moderated = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Vote> voted = new HashSet<>();
     @ManyToMany
     @JoinTable(
-            name = "users_up_voted_posts",
+            name = "users_saved",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id")
+            inverseJoinColumns = @JoinColumn(name = "saved_id")
     )
-    private Set<Post> upVotedPosts = new HashSet<>();
-    @ManyToMany
-    @JoinTable(
-            name = "users_down_voted_posts",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id")
-    )
-    private Set<Post> downVotedPosts = new HashSet<>();
-    @ManyToMany
-    @JoinTable(
-            name = "users_up_voted_comments",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "comment_id")
-    )
-    private Set<Comment> upVotedComments = new HashSet<>();
-    @ManyToMany
-    @JoinTable(
-            name = "users_down_voted_comments",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "comment_id")
-    )
-    private Set<Comment> downVotedComments = new HashSet<>();
-    @ManyToMany
-    @JoinTable(
-            name = "users_saved_posts",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id")
-    )
-    private Set<Post> savedPosts = new HashSet<>();
-    @ManyToMany
-    @JoinTable(
-            name = "users_saved_comments",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "comment_id")
-    )
-    private Set<Comment> savedComments = new HashSet<>();
+    private Set<Content> saved = new HashSet<>();
 
     public RedditUser() {
     }
@@ -148,52 +118,21 @@ public class RedditUser {
     public void setModerated(Set<Subreddit> moderated) {
         this.moderated = moderated;
     }
-    public Set<Post> getUpVotedPosts() {
-        return upVotedPosts;
+
+    public Set<Vote> getVoted() {
+        return voted;
     }
 
-    public void setUpVotedPosts(Set<Post> upVotedPosts) {
-        this.upVotedPosts = upVotedPosts;
+    public void setVoted(Set<Vote> voted) {
+        this.voted = voted;
     }
 
-    public Set<Post> getDownVotedPosts() {
-        return downVotedPosts;
+    public Set<Content> getSaved() {
+        return saved;
     }
 
-    public void setDownVotedPosts(Set<Post> downVotedPosts) {
-        this.downVotedPosts = downVotedPosts;
-    }
-
-    public Set<Comment> getUpVotedComments() {
-        return upVotedComments;
-    }
-
-    public void setUpVotedComments(Set<Comment> upVotedComments) {
-        this.upVotedComments = upVotedComments;
-    }
-
-    public Set<Comment> getDownVotedComments() {
-        return downVotedComments;
-    }
-
-    public void setDownVotedComments(Set<Comment> downVotedComments) {
-        this.downVotedComments = downVotedComments;
-    }
-
-    public Set<Post> getSavedPosts() {
-        return savedPosts;
-    }
-
-    public void setSavedPosts(Set<Post> savedPosts) {
-        this.savedPosts = savedPosts;
-    }
-
-    public Set<Comment> getSavedComments() {
-        return savedComments;
-    }
-
-    public void setSavedComments(Set<Comment> savedComments) {
-        this.savedComments = savedComments;
+    public void setSaved(Set<Content> saved) {
+        this.saved = saved;
     }
 
     @Override
