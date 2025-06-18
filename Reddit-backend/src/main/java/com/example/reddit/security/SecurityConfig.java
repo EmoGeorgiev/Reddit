@@ -1,4 +1,4 @@
-package com.example.reddit.config;
+package com.example.reddit.security;
 
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;

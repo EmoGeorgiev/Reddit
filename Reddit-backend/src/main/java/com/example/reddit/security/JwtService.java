@@ -1,4 +1,4 @@
-package com.example.reddit.config;
+package com.example.reddit.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

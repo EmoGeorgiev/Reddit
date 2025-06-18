@@ -1,4 +1,4 @@
-package com.example.reddit.config;
+package com.example.reddit.security;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

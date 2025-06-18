@@ -1,5 +1,6 @@
-package com.example.reddit.user;
+package com.example.reddit.security;
 
+import com.example.reddit.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

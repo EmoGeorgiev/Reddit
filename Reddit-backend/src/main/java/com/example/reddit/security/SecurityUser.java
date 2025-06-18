@@ -1,5 +1,6 @@
-package com.example.reddit.user;
+package com.example.reddit.security;
 
+import com.example.reddit.user.RedditUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
