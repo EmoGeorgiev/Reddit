@@ -21,8 +21,6 @@ public class RedditUser {
     private String username;
     @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Post> posts = new HashSet<>();
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -77,14 +75,6 @@ public class RedditUser {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public Set<Post> getPosts() {

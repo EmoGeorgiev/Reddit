@@ -3,12 +3,9 @@ package com.example.reddit.post;
 import com.example.reddit.comment.Comment;
 import com.example.reddit.content.Content;
 import com.example.reddit.subreddit.Subreddit;
-import com.example.reddit.user.RedditUser;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
