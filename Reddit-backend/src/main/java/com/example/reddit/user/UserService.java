@@ -11,4 +11,8 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
+    public RedditUser getUserEntity(Long id) {
+        throw new UnsupportedOperationException();
+    }
 }

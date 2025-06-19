@@ -14,7 +14,7 @@ public class Comment extends Content {
     @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Comment> replies = new HashSet<>();
     @ManyToOne
-    @JoinColumn(name = "parent_id", nullable = false)
+    @JoinColumn(name = "parent_id")
     private Comment parent;
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)

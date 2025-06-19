@@ -11,4 +11,8 @@ public class PostService {
     public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
+
+    public Post getPostEntity(Long id) {
+        throw new UnsupportedOperationException();
+    }
 }
