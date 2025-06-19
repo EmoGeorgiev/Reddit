@@ -10,6 +10,7 @@ import java.util.Set;
 @Entity
 @Table(name = "comments")
 public class Comment extends Content {
+    public static final String DELETED_TEXT = "[deleted]";
     @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Comment> replies = new HashSet<>();
     @ManyToOne
@@ -18,6 +19,8 @@ public class Comment extends Content {
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 
     public Comment() {
     }
@@ -44,5 +47,13 @@ public class Comment extends Content {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

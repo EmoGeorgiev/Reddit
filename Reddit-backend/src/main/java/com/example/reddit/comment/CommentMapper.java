@@ -37,6 +37,7 @@ public class CommentMapper {
                 comment.getScore(),
                 votes,
                 savedBy,
+                comment.isDeleted(),
                 replies,
                 comment.getParent().getId(),
                 comment.getPost().getId()
@@ -53,6 +54,7 @@ public class CommentMapper {
         comment.setContentType(commentDto.contentType());
         comment.setCreated(commentDto.created());
         comment.setText(commentDto.text());
+        comment.setDeleted(commentDto.isDeleted());
 
         return comment;
     }

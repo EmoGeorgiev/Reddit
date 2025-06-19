@@ -15,6 +15,7 @@ public record CommentDto(
         Integer score,
         Set<VoteDto> votes,
         Set<Long> savedBy,
+        Boolean isDeleted,
         Set<CommentDto> replies,
         Long parentId,
         Long postId) {

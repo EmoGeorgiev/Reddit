@@ -14,6 +14,7 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "contents")
 public abstract class Content {
+    public static final int INITIAL_SCORE = 0;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,7 +29,7 @@ public abstract class Content {
     @Size(max = 5000)
     private String text;
     @Column(name = "score", nullable = false)
-    private int score = 0;
+    private int score = INITIAL_SCORE;
     @OneToMany(mappedBy = "content", cascade = CascadeType.ALL)
     private Set<Vote> votes = new HashSet<>();
     @ManyToMany(mappedBy = "saved")
