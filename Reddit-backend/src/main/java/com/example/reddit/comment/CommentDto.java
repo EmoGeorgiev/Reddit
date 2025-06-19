@@ -14,7 +14,7 @@ public record CommentDto(
         String text,
         Integer score,
         Set<VoteDto> votes,
-        Set<Integer> savedBy,
+        Set<Long> savedBy,
         Set<CommentDto> replies,
         Long parentId,
         Long postId) {

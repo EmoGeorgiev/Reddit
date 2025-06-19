@@ -16,7 +16,7 @@ public class VoteMapper {
                 vote.getVoteType());
     }
 
-    public static Vote voteDtoToVote(VoteDto voteDto, RedditUser user, Content content) {
+    public static Vote voteDtoToVote(VoteDto voteDto) {
         if (voteDto == null) {
             return null;
         }
@@ -24,8 +24,6 @@ public class VoteMapper {
         Vote vote = new Vote();
 
         vote.setId(voteDto.id());
-        vote.setUser(user);
-        vote.setContent(content);
         vote.setVoteType(voteDto.voteType());
 
         return vote;

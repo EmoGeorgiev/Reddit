@@ -1,11 +1,54 @@
 package com.example.reddit.subreddit;
 
+import com.example.reddit.post.PostDto;
+import com.example.reddit.post.PostMapper;
+import com.example.reddit.user.RedditUser;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class SubredditMapper {
     public static SubredditDto subredditToSubredditDto(Subreddit subreddit) {
-        return null;
+        if (subreddit == null) {
+            return null;
+        }
+
+        Set<PostDto> posts = subreddit
+                .getPosts()
+                .stream()
+                .map(PostMapper::postToPostDto)
+                .collect(Collectors.toSet());
+
+        Set<Long> users = subreddit
+                .getUsers()
+                .stream()
+                .map(RedditUser::getId)
+                .collect(Collectors.toSet());
+
+        Set<Long> moderators = subreddit
+                .getModerators()
+                .stream()
+                .map(RedditUser::getId)
+                .collect(Collectors.toSet());
+
+        return new SubredditDto(
+                subreddit.getId(),
+                subreddit.getTitle(),
+                posts,
+                users,
+                moderators
+        );
     }
 
     public static Subreddit subredditDtoToSubreddit(SubredditDto subredditDto) {
-        return null;
+        if (subredditDto == null) {
+            return null;
+        }
+
+        Subreddit subreddit = new Subreddit();
+        subreddit.setId(subredditDto.id());
+        subreddit.setTitle(subredditDto.title());
+
+        return subreddit;
     }
 }

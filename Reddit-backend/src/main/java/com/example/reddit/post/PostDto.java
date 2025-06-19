@@ -15,7 +15,7 @@ public record PostDto(
         String text,
         Integer score,
         Set<VoteDto> votes,
-        Set<Integer> savedBy,
+        Set<Long> savedBy,
         Long subredditId,
         String title,
         Set<CommentDto> comments) {

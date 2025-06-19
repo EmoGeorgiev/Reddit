@@ -6,7 +6,8 @@ import java.util.Set;
 
 public record SubredditDto(
         Long id,
+        String title,
         Set<PostDto> posts,
-        Set<Integer> userIds,
-        Set<Integer> moderatorIds) {
+        Set<Long> userIds,
+        Set<Long> moderatorIds) {
 }
