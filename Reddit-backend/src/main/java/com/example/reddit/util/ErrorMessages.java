@@ -6,6 +6,7 @@ public class ErrorMessages {
     public static final String CONTENT_NOT_FOUND = "There does not exist a content with this id";
     public static final String CONTENT_UPDATE_NOT_ALLOWED = "The user is not the owner of the content";
     public static final String POST_NOT_FOUND = "There does not exist a post with this id";
+    public static final String PASSWORDS_DO_NOT_MATCH = "The passwords do not match";
     public static final String SUBREDDIT_NOT_FOUND = "There does not exist a subreddit with this id";
     public static final String MISSING_MODERATOR_PRIVILEGES = "The user is missing moderator privileges";
     public static final String MODERATOR_CANNOT_REMOVE_HIMSELF = "A moderator cannot remove himself from a subreddit";

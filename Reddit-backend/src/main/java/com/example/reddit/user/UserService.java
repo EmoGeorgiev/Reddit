@@ -1,17 +1,26 @@
 package com.example.reddit.user;
 
+import com.example.reddit.authentication.SignUpDto;
+import com.example.reddit.exception.PasswordsDoNotMatchException;
 import com.example.reddit.exception.UserNotFoundException;
+import com.example.reddit.exception.UsernameAlreadyExistsException;
 import com.example.reddit.util.ErrorMessages;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
@@ -25,11 +34,66 @@ public class UserService {
         return UserMapper.userToUserDto(getUserEntity(id));
     }
 
-    public UserDto updateUser(UserDto userDto) {
-        throw new UnsupportedOperationException();
+    @Transactional(readOnly = true)
+    public List<UserDto> getUsers() {
+        return userRepository
+                .findAll()
+                .stream()
+                .map(UserMapper::userToUserDto)
+                .collect(Collectors.toList());
+    }
+
+    public UserDto addUser(SignUpDto signUpDto) {
+        RedditUser user = new RedditUser();
+        String username = signUpDto.username();
+
+        if (userRepository.findByUsername(username).isPresent()) {
+            throw new UsernameAlreadyExistsException(ErrorMessages.USERNAME_ALREADY_EXISTS);
+        }
+
+        String encodedPassword = passwordEncoder.encode(signUpDto.password());
+        user.setUsername(username);
+        user.setPassword(encodedPassword);
+
+        RedditUser savedUser = userRepository.save(user);
+
+        return UserMapper.userToUserDto(savedUser);
+    }
+
+    public UserDto updateUsername(UserDto userDto) {
+        RedditUser user = getUserEntity(userDto.id());
+        String username = userDto.username();
+
+        if (userRepository.findByUsername(username).isPresent()) {
+            throw new UsernameAlreadyExistsException(ErrorMessages.USERNAME_ALREADY_EXISTS);
+        }
+
+        user.setUsername(username);
+
+        RedditUser savedUser = userRepository.save(user);
+
+        return UserMapper.userToUserDto(savedUser);
+    }
+
+    public UserDto updatePassword(Long id, String oldPassword, String newPassword) {
+        RedditUser user = getUserEntity(id);
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new PasswordsDoNotMatchException(ErrorMessages.PASSWORDS_DO_NOT_MATCH);
+        }
+
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedNewPassword);
+
+        RedditUser savedUser = userRepository.save(user);
+
+        return UserMapper.userToUserDto(savedUser);
     }
 
     public void deleteUser(Long id) {
-        throw new UnsupportedOperationException();
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException(ErrorMessages.USER_NOT_FOUND);
+        }
+        userRepository.deleteById(id);
     }
 }

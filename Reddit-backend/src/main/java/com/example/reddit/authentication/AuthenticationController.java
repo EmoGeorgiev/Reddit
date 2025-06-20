@@ -1,7 +1,7 @@
 package com.example.reddit.authentication;
 
-import com.example.reddit.security.JpaUserDetailsService;
 import com.example.reddit.user.UserDto;
+import com.example.reddit.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
-    private final JpaUserDetailsService userDetailsService;
+    private final UserService userService;
 
-    public AuthenticationController(AuthenticationService authenticationService, JpaUserDetailsService userDetailsService) {
+    public AuthenticationController(AuthenticationService authenticationService, UserService userService) {
         this.authenticationService = authenticationService;
-        this.userDetailsService = userDetailsService;
+        this.userService = userService;
     }
 
     @PostMapping("/api/signup")
     public ResponseEntity<UserDto> signUpUser(@RequestBody @Valid SignUpDto signUpDto) {
-        UserDto userDto = userDetailsService.createUser(signUpDto);
+        UserDto userDto = userService.addUser(signUpDto);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
