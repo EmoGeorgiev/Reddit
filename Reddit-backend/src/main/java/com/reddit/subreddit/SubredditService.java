@@ -1,9 +1,6 @@
 package com.reddit.subreddit;
 
-import com.reddit.exception.MissingModeratorPrivilegesException;
-import com.reddit.exception.ModeratorCannotRemoveHimselfException;
-import com.reddit.exception.SubredditNotFoundException;
-import com.reddit.exception.UserNotSubscribedException;
+import com.reddit.exception.*;
 import com.reddit.user.RedditUser;
 import com.reddit.user.UserService;
 import com.reddit.util.ErrorMessages;
@@ -37,6 +34,10 @@ public class SubredditService {
 
     public SubredditDto addSubreddit(SubredditDto subredditDto, Long creatorId) {
         RedditUser user = userService.getUserEntity(creatorId);
+
+        if (subredditRepository.findByTitle(subredditDto.title()).isPresent()) {
+            throw new SubredditAlreadyExistsException(ErrorMessages.SUBREDDIT_ALREADY_EXISTS);
+        }
 
         Subreddit subreddit = new Subreddit();
         subreddit.setTitle(subredditDto.title());
