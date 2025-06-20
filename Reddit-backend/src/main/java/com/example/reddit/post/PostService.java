@@ -1,6 +1,5 @@
 package com.example.reddit.post;
 
-import com.example.reddit.comment.CommentService;
 import com.example.reddit.exception.ContentUpdateNotAllowedException;
 import com.example.reddit.exception.PostNotFoundException;
 import com.example.reddit.subreddit.Subreddit;
