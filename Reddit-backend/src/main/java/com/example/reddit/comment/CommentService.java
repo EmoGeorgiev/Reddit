@@ -1,8 +1,9 @@
 package com.example.reddit.comment;
 
 import com.example.reddit.content.Content;
-import com.example.reddit.exception.CommentCannotBeUpdatedException;
+import com.example.reddit.exception.CommentIsDeletedException;
 import com.example.reddit.exception.CommentNotFoundException;
+import com.example.reddit.exception.ContentUpdateNotAllowedException;
 import com.example.reddit.post.Post;
 import com.example.reddit.post.PostService;
 import com.example.reddit.user.RedditUser;
@@ -10,6 +11,8 @@ import com.example.reddit.user.UserService;
 import com.example.reddit.util.ErrorMessages;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -54,19 +57,20 @@ public class CommentService {
     }
 
     public CommentDto updateComment(CommentDto commentDto) {
-        /*Comment comment = getCommentEntity(commentDto.id());
+        Comment comment = getCommentEntity(commentDto.id());
 
+        if (!Objects.equals(comment.getUser().getId(), commentDto.userId())) {
+            throw new ContentUpdateNotAllowedException(ErrorMessages.CONTENT_UPDATE_NOT_ALLOWED);
+        }
         if (comment.isDeleted()) {
-            throw new CommentCannotBeUpdatedException(ErrorMessages.COMMENT_CANNOT_BE_UPDATED);
+            throw new CommentIsDeletedException(ErrorMessages.COMMENT_IS_DELETED);
         }
 
-        comment.setId(commentDto.id());
-
+        comment.setText(commentDto.text());
 
         Comment savedComment = commentRepository.save(comment);
 
-        return CommentMapper.commentToCommentDto(savedComment);*/
-        throw new UnsupportedOperationException();
+        return CommentMapper.commentToCommentDto(savedComment);
     }
 
     public CommentDto deleteComment(Long id) {
