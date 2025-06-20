@@ -29,4 +29,8 @@ public class SecurityUser implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("USER"));
     }
+
+    public Long getId() {
+        return user.getId();
+    }
 }

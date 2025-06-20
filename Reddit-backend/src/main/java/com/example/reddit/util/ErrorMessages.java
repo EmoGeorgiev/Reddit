@@ -8,4 +8,5 @@ public class ErrorMessages {
     public static final String POST_NOT_FOUND = "There does not exist a post with this id";
     public static final String SUBREDDIT_NOT_FOUND = "There does not exist a subreddit with this id";
     public static final String USER_NOT_FOUND = "There does not exist a user with this id";
+    public static final String USERNAME_ALREADY_EXISTS = "There already exists a user with this username";
 }
