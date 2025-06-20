@@ -14,6 +14,7 @@ public class ContentService {
         this.contentRepository = contentRepository;
     }
 
+    @Transactional(readOnly = true)
     public Content getContentEntity(Long id) {
         return contentRepository
                 .findById(id)

@@ -1,6 +1,7 @@
 package com.example.reddit.post;
 
 import com.example.reddit.comment.CommentService;
+import com.example.reddit.exception.ContentUpdateNotAllowedException;
 import com.example.reddit.exception.PostNotFoundException;
 import com.example.reddit.subreddit.Subreddit;
 import com.example.reddit.subreddit.SubredditService;
@@ -10,19 +11,19 @@ import com.example.reddit.util.ErrorMessages;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @Transactional
 public class PostService {
     private final PostRepository postRepository;
     private final UserService userService;
     private final SubredditService subredditService;
-    private final CommentService commentService;
 
-    public PostService(PostRepository postRepository, UserService userService, SubredditService subredditService, CommentService commentService) {
+    public PostService(PostRepository postRepository, UserService userService, SubredditService subredditService) {
         this.postRepository = postRepository;
         this.userService = userService;
         this.subredditService = subredditService;
-        this.commentService = commentService;
     }
 
     @Transactional(readOnly = true)
@@ -51,7 +52,18 @@ public class PostService {
     }
 
     public PostDto updatePost(PostDto postDto) {
-        throw new UnsupportedOperationException();
+        Post post = getPostEntity(postDto.id());
+
+        if (!Objects.equals(post.getUser().getId(), postDto.userId())) {
+            throw new ContentUpdateNotAllowedException(ErrorMessages.CONTENT_UPDATE_NOT_ALLOWED);
+        }
+
+        post.setText(postDto.text());
+        post.setTitle(postDto.title());
+
+        Post savedPost = postRepository.save(post);
+
+        return PostMapper.postToPostDto(savedPost);
     }
 
     public void deletePost(Long id) {
