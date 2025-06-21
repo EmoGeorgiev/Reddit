@@ -1,9 +1,11 @@
 package com.reddit.user;
 
 import com.reddit.authentication.SignUpDto;
+import com.reddit.comment.Comment;
 import com.reddit.exception.PasswordsDoNotMatchException;
 import com.reddit.exception.UserNotFoundException;
 import com.reddit.exception.UsernameAlreadyExistsException;
+import com.reddit.post.Post;
 import com.reddit.util.ErrorMessages;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -91,9 +93,14 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException(ErrorMessages.USER_NOT_FOUND);
-        }
+        RedditUser user = getUserEntity(id);
+
+        user.getComments()
+            .forEach(comment -> comment.setUser(null));
+
+        user.getPosts()
+            .forEach(post -> post.setUser(null));
+
         userRepository.deleteById(id);
     }
 }
