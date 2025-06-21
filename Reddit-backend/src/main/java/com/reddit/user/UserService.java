@@ -42,6 +42,15 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public List<UserDto> getUsersWhereUsernameContainsWord(String word) {
+        return userRepository
+                .findByUsernameContainingIgnoreCase(word)
+                .stream()
+                .map(UserMapper::userToUserDto)
+                .collect(Collectors.toList());
+    }
+
     public UserDto addUser(String username, String password) {
         RedditUser user = new RedditUser();
 
