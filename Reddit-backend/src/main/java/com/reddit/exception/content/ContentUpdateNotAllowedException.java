@@ -1,4 +1,4 @@
-package com.reddit.exception;
+package com.reddit.exception.content;
 
 public class ContentUpdateNotAllowedException extends RuntimeException {
     public ContentUpdateNotAllowedException() {

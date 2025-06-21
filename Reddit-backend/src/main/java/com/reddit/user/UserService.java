@@ -1,11 +1,9 @@
 package com.reddit.user;
 
 import com.reddit.authentication.SignUpDto;
-import com.reddit.comment.Comment;
-import com.reddit.exception.PasswordsDoNotMatchException;
-import com.reddit.exception.UserNotFoundException;
-import com.reddit.exception.UsernameAlreadyExistsException;
-import com.reddit.post.Post;
+import com.reddit.exception.user.PasswordsDoNotMatchException;
+import com.reddit.exception.user.UserNotFoundException;
+import com.reddit.exception.user.UsernameAlreadyExistsException;
 import com.reddit.util.ErrorMessages;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

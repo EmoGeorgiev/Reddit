@@ -1,4 +1,4 @@
-package com.reddit.exception;
+package com.reddit.exception.comment;
 
 public class CommentNotFoundException extends RuntimeException {
     public CommentNotFoundException() {

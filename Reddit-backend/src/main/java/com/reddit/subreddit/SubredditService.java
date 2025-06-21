@@ -1,6 +1,10 @@
 package com.reddit.subreddit;
 
-import com.reddit.exception.*;
+import com.reddit.exception.subreddit.MissingModeratorPrivilegesException;
+import com.reddit.exception.subreddit.ModeratorCannotRemoveHimselfException;
+import com.reddit.exception.subreddit.SubredditAlreadyExistsException;
+import com.reddit.exception.subreddit.SubredditNotFoundException;
+import com.reddit.exception.user.UserNotSubscribedException;
 import com.reddit.user.RedditUser;
 import com.reddit.user.UserService;
 import com.reddit.util.ErrorMessages;

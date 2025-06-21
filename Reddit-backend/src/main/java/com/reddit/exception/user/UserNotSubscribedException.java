@@ -1,4 +1,4 @@
-package com.reddit.exception;
+package com.reddit.exception.user;
 
 public class UserNotSubscribedException extends RuntimeException {
     public UserNotSubscribedException() {

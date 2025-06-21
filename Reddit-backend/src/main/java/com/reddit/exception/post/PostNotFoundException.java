@@ -1,4 +1,4 @@
-package com.reddit.exception;
+package com.reddit.exception.post;
 
 public class PostNotFoundException extends RuntimeException {
     public PostNotFoundException() {

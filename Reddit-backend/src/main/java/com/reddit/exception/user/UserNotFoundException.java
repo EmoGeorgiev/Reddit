@@ -1,4 +1,4 @@
-package com.reddit.exception;
+package com.reddit.exception.user;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException() {

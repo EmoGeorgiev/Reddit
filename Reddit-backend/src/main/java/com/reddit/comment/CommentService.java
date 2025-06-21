@@ -1,9 +1,9 @@
 package com.reddit.comment;
 
 import com.reddit.content.Content;
-import com.reddit.exception.CommentIsDeletedException;
-import com.reddit.exception.CommentNotFoundException;
-import com.reddit.exception.ContentUpdateNotAllowedException;
+import com.reddit.exception.comment.CommentIsDeletedException;
+import com.reddit.exception.comment.CommentNotFoundException;
+import com.reddit.exception.content.ContentUpdateNotAllowedException;
 import com.reddit.post.Post;
 import com.reddit.post.PostService;
 import com.reddit.user.RedditUser;

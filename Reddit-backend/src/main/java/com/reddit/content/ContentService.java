@@ -1,6 +1,6 @@
 package com.reddit.content;
 
-import com.reddit.exception.ContentNotFoundException;
+import com.reddit.exception.content.ContentNotFoundException;
 import com.reddit.util.ErrorMessages;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

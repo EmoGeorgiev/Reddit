@@ -1,4 +1,4 @@
-package com.reddit.exception;
+package com.reddit.exception.subreddit;
 
 public class MissingModeratorPrivilegesException extends RuntimeException {
     public MissingModeratorPrivilegesException() {
