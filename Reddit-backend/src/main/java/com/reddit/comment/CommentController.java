@@ -1,7 +1,9 @@
 package com.reddit.comment;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/comments")
@@ -10,5 +12,38 @@ public class CommentController {
 
     public CommentController(CommentService commentService) {
         this.commentService = commentService;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CommentDto> getComment(@PathVariable Long id) {
+        CommentDto commentDto = commentService.getComment(id);
+
+        return ResponseEntity
+                .ok()
+                .body(commentDto);
+    }
+
+    @PostMapping
+    public ResponseEntity<CommentDto> addComment(@RequestBody @Valid CommentDto commentDto) {
+        CommentDto resultCommentDto = commentService.addComment(commentDto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(resultCommentDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CommentDto> updateComment(@PathVariable Long id, @RequestBody @Valid CommentDto commentDto) {
+        CommentDto updatedCommentDto = commentService.updateComment(commentDto);
+        return ResponseEntity
+                .ok()
+                .body(updatedCommentDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CommentDto> deleteComment(@PathVariable Long id) {
+        CommentDto deletedComment = commentService.deleteComment(id);
+        return ResponseEntity
+                .ok()
+                .body(deletedComment);
     }
 }
