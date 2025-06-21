@@ -11,7 +11,9 @@ import com.reddit.util.ErrorMessages;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -34,6 +36,24 @@ public class SubredditService {
     @Transactional(readOnly = true)
     public SubredditDto getSubreddit(Long id) {
         return SubredditMapper.subredditToSubredditDto(getSubredditEntity(id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<SubredditDto> getSubredditsByUserId(Long userId) {
+        return subredditRepository
+                .findByUsers_Id(userId)
+                .stream()
+                .map(SubredditMapper::subredditToSubredditDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<SubredditDto> getSubredditsWhereTitleContainsWord(String word) {
+        return subredditRepository
+                .findByTitleContainingIgnoreCase(word)
+                .stream()
+                .map(SubredditMapper::subredditToSubredditDto)
+                .collect(Collectors.toList());
     }
 
     public SubredditDto addSubreddit(SubredditDto subredditDto, Long creatorId) {
