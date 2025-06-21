@@ -7,6 +7,8 @@ import com.reddit.subreddit.SubredditService;
 import com.reddit.user.RedditUser;
 import com.reddit.user.UserService;
 import com.reddit.util.ErrorMessages;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +37,20 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostDto getPost(Long id) {
         return PostMapper.postToPostDto(getPostEntity(id));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PostDto> getPosts(Pageable pageable) {
+        return postRepository
+                .findAll(pageable)
+                .map(PostMapper::postToPostDto);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PostDto> getPostsBySubredditId(Long subredditId, Pageable pageable) {
+        return postRepository
+                .findBySubredditId(subredditId, pageable)
+                .map(PostMapper::postToPostDto);
     }
 
     public PostDto addPost(PostDto postDto) {
