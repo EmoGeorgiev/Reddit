@@ -1,6 +1,5 @@
 package com.reddit.user;
 
-import com.reddit.authentication.SignUpDto;
 import com.reddit.exception.user.PasswordsDoNotMatchException;
 import com.reddit.exception.user.UserNotFoundException;
 import com.reddit.exception.user.UsernameAlreadyExistsException;
@@ -43,15 +42,14 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public UserDto addUser(SignUpDto signUpDto) {
+    public UserDto addUser(String username, String password) {
         RedditUser user = new RedditUser();
-        String username = signUpDto.username();
 
         if (userRepository.findByUsername(username).isPresent()) {
             throw new UsernameAlreadyExistsException(ErrorMessages.USERNAME_ALREADY_EXISTS);
         }
 
-        String encodedPassword = passwordEncoder.encode(signUpDto.password());
+        String encodedPassword = passwordEncoder.encode(password);
         user.setUsername(username);
         user.setPassword(encodedPassword);
 
