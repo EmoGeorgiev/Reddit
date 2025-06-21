@@ -56,8 +56,8 @@ public class CommentService {
         return CommentMapper.commentToCommentDto(savedComment);
     }
 
-    public CommentDto updateComment(CommentDto commentDto) {
-        Comment comment = getCommentEntity(commentDto.id());
+    public CommentDto updateComment(Long id, CommentDto commentDto) {
+        Comment comment = getCommentEntity(id);
 
         if (!Objects.equals(comment.getUser().getId(), commentDto.userId())) {
             throw new ContentUpdateNotAllowedException(ErrorMessages.CONTENT_UPDATE_NOT_ALLOWED);

@@ -50,8 +50,8 @@ public class PostService {
         return PostMapper.postToPostDto(savedPost);
     }
 
-    public PostDto updatePost(PostDto postDto) {
-        Post post = getPostEntity(postDto.id());
+    public PostDto updatePost(Long id, PostDto postDto) {
+        Post post = getPostEntity(id);
 
         if (!Objects.equals(post.getUser().getId(), postDto.userId())) {
             throw new ContentUpdateNotAllowedException(ErrorMessages.CONTENT_UPDATE_NOT_ALLOWED);
