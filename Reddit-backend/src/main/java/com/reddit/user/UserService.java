@@ -10,7 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Service
@@ -119,24 +121,25 @@ public class UserService {
     public void deleteUser(Long id) {
         RedditUser user = getUserEntity(id);
 
-        user.getComments()
-            .forEach(comment -> comment.setUser(null));
-
-        user.getPosts()
-            .forEach(post -> post.setUser(null));
-
-        user.getSubscribedTo()
-                .forEach(subreddit -> subreddit.getUsers().remove(user));
-        user.getSubscribedTo().clear();
-
-        user.getModerated()
-            .forEach(subreddit ->  subreddit.getModerators().remove(user));
-        user.getModerated().clear();
-
-        user.getSaved()
-            .forEach(content -> content.getSavedBy().remove(user));
-        user.getSaved().clear();
+        removeUser(user);
 
         userRepository.deleteById(id);
+    }
+
+    private void removeUser(RedditUser user) {
+        applyToCollection(user.getComments(), comment -> comment.setUser(null));
+        applyToCollection(user.getPosts(), post -> post.setUser(null));
+
+        removeUserFromCollection(user.getSubscribedTo(), subreddit -> subreddit.getUsers().remove(user));
+        removeUserFromCollection(user.getModerated(), subreddit -> subreddit.getModerators().remove(user));
+        removeUserFromCollection(user.getSaved(), content -> content.getSavedBy().remove(user));
+    }
+
+    private <T> void applyToCollection(Collection<T> collection, Consumer<T> applier) {
+        collection.forEach(applier);
+    }
+    private <T> void removeUserFromCollection(Collection<T> collection, Consumer<T> remover) {
+        applyToCollection(collection, remover);
+        collection.clear();
     }
 }
