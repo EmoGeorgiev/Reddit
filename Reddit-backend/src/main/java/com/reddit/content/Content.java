@@ -30,7 +30,7 @@ public abstract class Content {
     private String text;
     @Column(name = "score", nullable = false)
     private int score = INITIAL_SCORE;
-    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Vote> votes = new HashSet<>();
     @ManyToMany(mappedBy = "saved")
     private Set<RedditUser> savedBy = new HashSet<>();

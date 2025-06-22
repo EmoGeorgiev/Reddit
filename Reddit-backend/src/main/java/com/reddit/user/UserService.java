@@ -1,5 +1,7 @@
 package com.reddit.user;
 
+import com.reddit.content.Content;
+import com.reddit.content.ContentService;
 import com.reddit.exception.user.PasswordsDoNotMatchException;
 import com.reddit.exception.user.UserNotFoundException;
 import com.reddit.exception.user.UsernameAlreadyExistsException;
@@ -15,10 +17,12 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final ContentService contentService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, ContentService contentService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.contentService = contentService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -67,6 +71,21 @@ public class UserService {
         return UserMapper.userToUserDto(savedUser);
     }
 
+    public void toggleSaveContent(Long contentId, Long userId) {
+        Content content = contentService.getContentEntity(contentId);
+        RedditUser user = getUserEntity(userId);
+
+        if (!user.getSaved().contains(content)) {
+            user.getSaved().add(content);
+            content.getSavedBy().add(user);
+        } else {
+            user.getSaved().remove(content);
+            content.getSavedBy().remove(user);
+        }
+
+        userRepository.save(user);
+    }
+
     public UserDto updateUsername(UserDto userDto) {
         RedditUser user = getUserEntity(userDto.id());
         String username = userDto.username();
@@ -105,6 +124,18 @@ public class UserService {
 
         user.getPosts()
             .forEach(post -> post.setUser(null));
+
+        user.getSubscribedTo()
+                .forEach(subreddit -> subreddit.getUsers().remove(user));
+        user.getSubscribedTo().clear();
+
+        user.getModerated()
+            .forEach(subreddit ->  subreddit.getModerators().remove(user));
+        user.getModerated().clear();
+
+        user.getSaved()
+            .forEach(content -> content.getSavedBy().remove(user));
+        user.getSaved().clear();
 
         userRepository.deleteById(id);
     }

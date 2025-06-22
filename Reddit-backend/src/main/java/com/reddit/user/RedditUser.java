@@ -40,7 +40,7 @@ public class RedditUser {
     )
     private Set<Subreddit> moderated = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Vote> voted = new HashSet<>();
     @ManyToMany
     @JoinTable(
