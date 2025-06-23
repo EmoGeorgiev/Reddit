@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/subreddits")
 public class SubredditController {
@@ -32,6 +34,14 @@ public class SubredditController {
             @PageableDefault(size = 25, sort = "title", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<SubredditDto> subreddits = subredditService.getSubredditsWhereTitleContainsWord(word, pageable);
 
+        return ResponseEntity
+                .ok()
+                .body(subreddits);
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<List<SubredditDto>> getSubredditsByUserId(@PathVariable Long userId) {
+        List<SubredditDto> subreddits = subredditService.getSubredditsByUserId(userId);
         return ResponseEntity
                 .ok()
                 .body(subreddits);

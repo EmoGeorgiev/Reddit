@@ -50,7 +50,7 @@ public class PostController {
                 .ok()
                 .body(posts);
     }
-    
+
     @GetMapping("/users/{userId}")
     public ResponseEntity<Page<PostDto>> getPostsByUserId(
             @PathVariable Long userId,
