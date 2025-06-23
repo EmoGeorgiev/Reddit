@@ -30,7 +30,7 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<Page<PostDto>> getPosts(
-            @PageableDefault(size = 50, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(size = 50, sort = "created", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         Page<PostDto> posts = postService.getPosts(pageable);
 
@@ -42,9 +42,21 @@ public class PostController {
     @GetMapping("/subscriptions")
     public ResponseEntity<Page<PostDto>> getPostsByUserSubscriptions(
             @AuthenticationPrincipal SecurityUser user,
-            @PageableDefault(size = 25, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         Page<PostDto> posts = postService.getPostsByUserSubscriptions(user.getId(), pageable);
+
+        return ResponseEntity
+                .ok()
+                .body(posts);
+    }
+    
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<Page<PostDto>> getPostsByUserId(
+            @PathVariable Long userId,
+            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<PostDto> posts = postService.getPostsByUserId(userId, pageable);
 
         return ResponseEntity
                 .ok()
@@ -54,7 +66,7 @@ public class PostController {
     @GetMapping("/subreddits/{subredditId}")
     public ResponseEntity<Page<PostDto>> getPostsBySubredditId(
             @PathVariable Long subredditId,
-            @PageableDefault(size = 25, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         Page<PostDto> posts = postService.getPostsBySubredditId(subredditId, pageable);
 
