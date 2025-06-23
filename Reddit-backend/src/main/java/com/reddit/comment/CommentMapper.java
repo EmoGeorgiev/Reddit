@@ -1,6 +1,5 @@
 package com.reddit.comment;
 
-import com.reddit.user.RedditUser;
 import com.reddit.vote.VoteDto;
 import com.reddit.vote.VoteMapper;
 
@@ -15,18 +14,6 @@ public class CommentMapper {
             return null;
         }
 
-        Set<VoteDto> votes = comment
-                .getVotes()
-                .stream()
-                .map(VoteMapper::voteToVoteDto)
-                .collect(Collectors.toSet());
-
-        Set<Long> savedBy = comment
-                .getSavedBy()
-                .stream()
-                .map(RedditUser::getId)
-                .collect(Collectors.toSet());
-
         List<CommentDto> replies = mapRepliesToDto(comment.getReplies());
 
         return new CommentDto(
@@ -35,8 +22,6 @@ public class CommentMapper {
                 comment.getCreated(),
                 comment.getText(),
                 comment.getScore(),
-                votes,
-                savedBy,
                 comment.isDeleted(),
                 replies,
                 comment.getParent().getId(),

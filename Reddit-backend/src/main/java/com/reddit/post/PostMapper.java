@@ -13,27 +13,12 @@ public class PostMapper {
             return null;
         }
 
-        Set<VoteDto> votes = post
-                .getVotes()
-                .stream()
-                .map(VoteMapper::voteToVoteDto)
-                .collect(Collectors.toSet());
-
-        Set<Long> savedBy = post
-                .getSavedBy()
-                .stream()
-                .map(RedditUser::getId)
-                .collect(Collectors.toSet());
-
         return new PostDto(
             post.getId(),
             post.getUser().getId(),
-            post.getContentType(),
             post.getCreated(),
             post.getText(),
             post.getScore(),
-            votes,
-            savedBy,
             post.getSubreddit().getId(),
             post.getTitle()
         );
@@ -46,7 +31,6 @@ public class PostMapper {
 
         Post post = new Post();
         post.setId(postDto.id());
-        post.setContentType(postDto.contentType());
         post.setCreated(postDto.created());
         post.setText(postDto.text());
         post.setTitle(postDto.title());

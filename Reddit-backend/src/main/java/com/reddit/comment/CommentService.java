@@ -9,6 +9,8 @@ import com.reddit.post.PostService;
 import com.reddit.user.RedditUser;
 import com.reddit.user.UserService;
 import com.reddit.util.ErrorMessages;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +40,13 @@ public class CommentService {
     @Transactional(readOnly = true)
     public CommentDto getComment(Long id) {
         return CommentMapper.commentToCommentDto(getCommentEntity(id));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CommentDto> getCommentsByPostId(Long postId, Pageable pageable) {
+        return commentRepository
+                .findByPostId(postId, pageable)
+                .map(CommentMapper::commentToCommentDto);
     }
 
     public CommentDto addComment(CommentDto commentDto) {
