@@ -27,11 +27,23 @@ public class CommentController {
                 .body(commentDto);
     }
 
-    @GetMapping
+    @GetMapping("/posts/{postId}")
     public ResponseEntity<Page<CommentDto>> getCommentsByPostId(
-            @RequestParam Long postId,
+            @PathVariable Long postId,
             @PageableDefault(size = 200, sort = "score", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<CommentDto> comments = commentService.getCommentsByPostId(postId, pageable);
+
+        return ResponseEntity
+                .ok()
+                .body(comments);
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<Page<CommentDto>> getCommentsByUserId(
+            @PathVariable Long userId,
+            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<CommentDto> comments = commentService.getCommentsByUserId(userId, pageable);
 
         return ResponseEntity
                 .ok()
