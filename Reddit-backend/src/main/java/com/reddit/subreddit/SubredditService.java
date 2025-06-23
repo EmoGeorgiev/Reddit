@@ -38,7 +38,6 @@ public class SubredditService {
         return SubredditMapper.subredditToSubredditDto(getSubredditEntity(id));
     }
 
-
     @Transactional(readOnly = true)
     public List<SubredditDto> getSubredditsWhereTitleContainsWord(String word) {
         return subredditRepository

@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/subreddits")
 public class SubredditController {
@@ -20,6 +22,15 @@ public class SubredditController {
         return ResponseEntity
                 .ok()
                 .body(subredditDto);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<SubredditDto>> getSubredditsWhereTitleContainsWord(@RequestParam String word) {
+        List<SubredditDto> subreddits = subredditService.getSubredditsWhereTitleContainsWord(word);
+
+        return ResponseEntity
+                .ok()
+                .body(subreddits);
     }
 
     @PostMapping
