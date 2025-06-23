@@ -1,8 +1,14 @@
 package com.reddit.post;
 
+import com.reddit.security.SecurityUser;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +26,41 @@ public class PostController {
         return ResponseEntity
                 .ok()
                 .body(postDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<PostDto>> getPosts(
+            @PageableDefault(size = 50, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<PostDto> posts = postService.getPosts(pageable);
+
+        return ResponseEntity
+                .ok()
+                .body(posts);
+    }
+
+    @GetMapping("/subscriptions")
+    public ResponseEntity<Page<PostDto>> getPostsByUserSubscriptions(
+            @AuthenticationPrincipal SecurityUser user,
+            @PageableDefault(size = 25, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<PostDto> posts = postService.getPostsByUserSubscriptions(user.getId(), pageable);
+
+        return ResponseEntity
+                .ok()
+                .body(posts);
+    }
+
+    @GetMapping("/subreddits/{subredditId}")
+    public ResponseEntity<Page<PostDto>> getPostsBySubredditId(
+            @PathVariable Long subredditId,
+            @PageableDefault(size = 25, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<PostDto> posts = postService.getPostsBySubredditId(subredditId, pageable);
+
+        return ResponseEntity
+                .ok()
+                .body(posts);
     }
 
     @PostMapping
