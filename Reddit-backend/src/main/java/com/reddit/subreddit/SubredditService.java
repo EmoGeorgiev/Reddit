@@ -38,14 +38,6 @@ public class SubredditService {
         return SubredditMapper.subredditToSubredditDto(getSubredditEntity(id));
     }
 
-    @Transactional(readOnly = true)
-    public List<SubredditDto> getSubredditsByUserId(Long userId) {
-        return subredditRepository
-                .findByUsers_Id(userId)
-                .stream()
-                .map(SubredditMapper::subredditToSubredditDto)
-                .collect(Collectors.toList());
-    }
 
     @Transactional(readOnly = true)
     public List<SubredditDto> getSubredditsWhereTitleContainsWord(String word) {

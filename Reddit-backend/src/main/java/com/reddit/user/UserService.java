@@ -1,11 +1,24 @@
 package com.reddit.user;
 
+import com.reddit.comment.CommentDto;
+import com.reddit.comment.CommentMapper;
+import com.reddit.comment.CommentRepository;
 import com.reddit.content.Content;
+import com.reddit.content.ContentMapper;
 import com.reddit.content.ContentService;
+import com.reddit.content.SavedDto;
 import com.reddit.exception.user.PasswordsDoNotMatchException;
 import com.reddit.exception.user.UserNotFoundException;
 import com.reddit.exception.user.UsernameAlreadyExistsException;
+import com.reddit.post.PostDto;
+import com.reddit.post.PostMapper;
+import com.reddit.post.PostRepository;
+import com.reddit.subreddit.SubredditDto;
+import com.reddit.subreddit.SubredditMapper;
+import com.reddit.subreddit.SubredditRepository;
 import com.reddit.util.ErrorMessages;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +32,17 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
+    private final SubredditRepository subredditRepository;
     private final ContentService contentService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, ContentService contentService, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, CommentRepository commentRepository, PostRepository postRepository, SubredditRepository subredditRepository, ContentService contentService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
+        this.postRepository = postRepository;
+        this.subredditRepository = subredditRepository;
         this.contentService = contentService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -49,12 +68,40 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<UserDto> getUsersWhereUsernameContainsWord(String word) {
+    public Page<UserDto> getUsersWhereUsernameContainsWord(String word, Pageable pageable) {
         return userRepository
-                .findByUsernameContainingIgnoreCase(word)
+                .findByUsernameContainingIgnoreCase(word, pageable)
+                .map(UserMapper::userToUserDto);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CommentDto> getCommentsByUserId(Long userId, Pageable pageable) {
+        return commentRepository
+                .findByUserId(userId, pageable)
+                .map(CommentMapper::commentToCommentDto);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PostDto> getPostsByUserId(Long userId, Pageable pageable) {
+        return postRepository
+                .findByUserId(userId, pageable)
+                .map(PostMapper::postToPostDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SubredditDto> getSubredditsByUserId(Long userId) {
+        return subredditRepository
+                .findByUsers_Id(userId)
                 .stream()
-                .map(UserMapper::userToUserDto)
+                .map(SubredditMapper::subredditToSubredditDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<SavedDto> getSavedContent(Long userId, Pageable pageable) {
+        return userRepository
+                .findSavedContentByUserId(userId, pageable)
+                .map(ContentMapper::contentToSavedDto);
     }
 
     public UserDto addUser(String username, String password) {
@@ -121,12 +168,12 @@ public class UserService {
     public void deleteUser(Long id) {
         RedditUser user = getUserEntity(id);
 
-        removeUser(user);
+        removeUserFromCollections(user);
 
         userRepository.deleteById(id);
     }
 
-    private void removeUser(RedditUser user) {
+    private void removeUserFromCollections(RedditUser user) {
         applyToCollection(user.getComments(), comment -> comment.setUser(null));
         applyToCollection(user.getPosts(), post -> post.setUser(null));
 
@@ -138,6 +185,7 @@ public class UserService {
     private <T> void applyToCollection(Collection<T> collection, Consumer<T> applier) {
         collection.forEach(applier);
     }
+
     private <T> void removeUserFromCollection(Collection<T> collection, Consumer<T> remover) {
         applyToCollection(collection, remover);
         collection.clear();
