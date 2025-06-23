@@ -1,9 +1,12 @@
 package com.reddit.vote;
 
+import com.reddit.comment.Comment;
 import com.reddit.content.Content;
 import com.reddit.content.ContentService;
+import com.reddit.exception.comment.CommentIsDeletedException;
 import com.reddit.user.RedditUser;
 import com.reddit.user.UserService;
+import com.reddit.util.ErrorMessages;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,12 @@ public class VoteService {
         RedditUser user = userService.getUserEntity(voteDto.userId());
         Content content = contentService.getContentEntity(voteDto.contentId());
         VoteType voteType = voteDto.voteType();
+
+        if (content instanceof Comment c) {
+            if (c.isDeleted()) {
+                throw new CommentIsDeletedException(ErrorMessages.COMMENT_IS_DELETED);
+            }
+        }
 
         Optional<Vote> voteOptional = voteRepository.findByUserAndContent(user, content);
 
