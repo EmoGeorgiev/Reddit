@@ -8,6 +8,8 @@ import com.reddit.exception.user.UserNotSubscribedException;
 import com.reddit.user.RedditUser;
 import com.reddit.user.UserService;
 import com.reddit.util.ErrorMessages;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,12 +41,10 @@ public class SubredditService {
     }
 
     @Transactional(readOnly = true)
-    public List<SubredditDto> getSubredditsWhereTitleContainsWord(String word) {
+    public Page<SubredditDto> getSubredditsWhereTitleContainsWord(String word, Pageable pageable) {
         return subredditRepository
-                .findByTitleContainingIgnoreCase(word)
-                .stream()
-                .map(SubredditMapper::subredditToSubredditDto)
-                .collect(Collectors.toList());
+                .findByTitleContainingIgnoreCase(word, pageable)
+                .map(SubredditMapper::subredditToSubredditDto);
     }
 
     public SubredditDto addSubreddit(SubredditDto subredditDto, Long creatorId) {

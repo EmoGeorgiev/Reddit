@@ -1,11 +1,13 @@
 package com.reddit.subreddit;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/subreddits")
@@ -25,8 +27,10 @@ public class SubredditController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<SubredditDto>> getSubredditsWhereTitleContainsWord(@RequestParam String word) {
-        List<SubredditDto> subreddits = subredditService.getSubredditsWhereTitleContainsWord(word);
+    public ResponseEntity<Page<SubredditDto>> getSubredditsWhereTitleContainsWord(
+            @RequestParam String word,
+            @PageableDefault(size = 25, sort = "title", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<SubredditDto> subreddits = subredditService.getSubredditsWhereTitleContainsWord(word, pageable);
 
         return ResponseEntity
                 .ok()
