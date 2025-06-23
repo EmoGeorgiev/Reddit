@@ -1,8 +1,11 @@
 package com.reddit.user;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +30,17 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserDto>> getUsers() {
         List<UserDto> users = userService.getUsers();
+        return ResponseEntity
+                .ok()
+                .body(users);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<UserDto>> getUsersWhereUsernameContainsWord(
+            @RequestParam String word,
+            @PageableDefault(size = 25, sort = "username", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<UserDto> users = userService.getUsersWhereUsernameContainsWord(word, pageable);
+
         return ResponseEntity
                 .ok()
                 .body(users);

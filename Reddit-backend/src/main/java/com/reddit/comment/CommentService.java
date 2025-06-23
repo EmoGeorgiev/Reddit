@@ -49,6 +49,13 @@ public class CommentService {
                 .map(CommentMapper::commentToCommentDto);
     }
 
+    @Transactional(readOnly = true)
+    public Page<CommentDto> getCommentsByUserId(Long userId, Pageable pageable) {
+        return commentRepository
+                .findByUserId(userId, pageable)
+                .map(CommentMapper::commentToCommentDto);
+    }
+
     public CommentDto addComment(CommentDto commentDto) {
         RedditUser user = userService.getUserEntity(commentDto.userId());
         Post post = postService.getPostEntity(commentDto.postId());

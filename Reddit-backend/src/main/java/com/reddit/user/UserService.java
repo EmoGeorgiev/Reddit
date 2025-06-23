@@ -1,8 +1,5 @@
 package com.reddit.user;
 
-import com.reddit.comment.CommentDto;
-import com.reddit.comment.CommentMapper;
-import com.reddit.comment.CommentRepository;
 import com.reddit.content.Content;
 import com.reddit.content.ContentMapper;
 import com.reddit.content.ContentService;
@@ -10,12 +7,6 @@ import com.reddit.content.SavedDto;
 import com.reddit.exception.user.PasswordsDoNotMatchException;
 import com.reddit.exception.user.UserNotFoundException;
 import com.reddit.exception.user.UsernameAlreadyExistsException;
-import com.reddit.post.PostDto;
-import com.reddit.post.PostMapper;
-import com.reddit.post.PostRepository;
-import com.reddit.subreddit.SubredditDto;
-import com.reddit.subreddit.SubredditMapper;
-import com.reddit.subreddit.SubredditRepository;
 import com.reddit.util.ErrorMessages;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,17 +23,11 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
-    private final CommentRepository commentRepository;
-    private final PostRepository postRepository;
-    private final SubredditRepository subredditRepository;
     private final ContentService contentService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, CommentRepository commentRepository, PostRepository postRepository, SubredditRepository subredditRepository, ContentService contentService, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, ContentService contentService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.commentRepository = commentRepository;
-        this.postRepository = postRepository;
-        this.subredditRepository = subredditRepository;
         this.contentService = contentService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -72,29 +57,6 @@ public class UserService {
         return userRepository
                 .findByUsernameContainingIgnoreCase(word, pageable)
                 .map(UserMapper::userToUserDto);
-    }
-
-    @Transactional(readOnly = true)
-    public Page<CommentDto> getCommentsByUserId(Long userId, Pageable pageable) {
-        return commentRepository
-                .findByUserId(userId, pageable)
-                .map(CommentMapper::commentToCommentDto);
-    }
-
-    @Transactional(readOnly = true)
-    public Page<PostDto> getPostsByUserId(Long userId, Pageable pageable) {
-        return postRepository
-                .findByUserId(userId, pageable)
-                .map(PostMapper::postToPostDto);
-    }
-
-    @Transactional(readOnly = true)
-    public List<SubredditDto> getSubredditsByUserId(Long userId) {
-        return subredditRepository
-                .findByUsers_Id(userId)
-                .stream()
-                .map(SubredditMapper::subredditToSubredditDto)
-                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

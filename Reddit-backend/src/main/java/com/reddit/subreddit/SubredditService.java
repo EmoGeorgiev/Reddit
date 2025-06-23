@@ -47,6 +47,15 @@ public class SubredditService {
                 .map(SubredditMapper::subredditToSubredditDto);
     }
 
+    @Transactional(readOnly = true)
+    public List<SubredditDto> getSubredditsByUserId(Long userId) {
+        return subredditRepository
+                .findByUsers_Id(userId)
+                .stream()
+                .map(SubredditMapper::subredditToSubredditDto)
+                .collect(Collectors.toList());
+    }
+
     public SubredditDto addSubreddit(SubredditDto subredditDto, Long creatorId) {
         RedditUser user = userService.getUserEntity(creatorId);
 

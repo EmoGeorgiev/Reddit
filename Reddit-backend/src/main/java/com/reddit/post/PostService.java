@@ -55,6 +55,13 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
+    public Page<PostDto> getPostsByUserId(Long userId, Pageable pageable) {
+        return postRepository
+                .findByUserId(userId, pageable)
+                .map(PostMapper::postToPostDto);
+    }
+
+    @Transactional(readOnly = true)
     public Page<PostDto> getPostsBySubredditId(Long subredditId, Pageable pageable) {
         return postRepository
                 .findBySubredditId(subredditId, pageable)
