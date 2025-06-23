@@ -1,6 +1,10 @@
 package com.reddit.comment;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +25,17 @@ public class CommentController {
         return ResponseEntity
                 .ok()
                 .body(commentDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<CommentDto>> getCommentsByPostId(
+            @RequestParam Long postId,
+            @PageableDefault(size = 200, sort = "score", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<CommentDto> comments = commentService.getCommentsByPostId(postId, pageable);
+
+        return ResponseEntity
+                .ok()
+                .body(comments);
     }
 
     @PostMapping
