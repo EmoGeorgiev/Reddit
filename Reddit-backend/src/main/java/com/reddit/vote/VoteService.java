@@ -22,7 +22,7 @@ public class VoteService {
         this.contentService = contentService;
     }
 
-    public void voteForContent(VoteDto voteDto) {
+    public VoteDto toggleVote(VoteDto voteDto) {
         RedditUser user = userService.getUserEntity(voteDto.userId());
         Content content = contentService.getContentEntity(voteDto.contentId());
         VoteType voteType = voteDto.voteType();
@@ -30,25 +30,45 @@ public class VoteService {
         Optional<Vote> voteOptional = voteRepository.findByUserAndContent(user, content);
 
         if (voteOptional.isEmpty()) {
-            Vote vote = new Vote();
-            vote.setUser(user);
-            vote.setContent(content);
-            vote.setVoteType(voteType);
-
-            voteRepository.save(vote);
-
-            content.setScore(content.getScore() + voteType.getScore());
-            return;
+            return createVote(user, content, voteType);
         }
         Vote vote = voteOptional.get();
 
         if (vote.getVoteType() == voteType) {
-            content.setScore(content.getScore() - voteType.getScore());
-            voteRepository.deleteById(vote.getId());
-        } else {
-            content.setScore(content.getScore() - vote.getVoteType().getScore() + voteType.getScore());
-            vote.setVoteType(voteType);
-            voteRepository.save(vote);
+            return removeVote(content, vote, voteType);
         }
+
+        return changeVote(content, vote, voteType);
+    }
+
+    private VoteDto createVote(RedditUser user, Content content, VoteType voteType) {
+        Vote vote = new Vote();
+        vote.setUser(user);
+        vote.setContent(content);
+        vote.setVoteType(voteType);
+        content.setScore(content.getScore() + voteType.getScore());
+
+        Vote savedVote = voteRepository.save(vote);
+
+        return VoteMapper.voteToVoteDto(savedVote);
+    }
+
+    private VoteDto removeVote(Content content, Vote vote, VoteType voteType) {
+        content.setScore(content.getScore() - voteType.getScore());
+
+        VoteDto voteDto = VoteMapper.voteToVoteDto(vote);
+
+        voteRepository.deleteById(vote.getId());
+
+        return voteDto;
+    }
+
+    private VoteDto changeVote(Content content, Vote vote, VoteType voteType) {
+        content.setScore(content.getScore() - vote.getVoteType().getScore() + voteType.getScore());
+        vote.setVoteType(voteType);
+
+        Vote savedVote = voteRepository.save(vote);
+
+        return VoteMapper.voteToVoteDto(savedVote);
     }
 }

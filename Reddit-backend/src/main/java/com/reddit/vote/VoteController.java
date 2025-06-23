@@ -15,10 +15,10 @@ public class VoteController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> voteForContent(@RequestBody @Valid VoteDto voteDto) {
-        voteService.voteForContent(voteDto);
+    public ResponseEntity<VoteDto> toggleVote(@RequestBody @Valid VoteDto voteDto) {
+        VoteDto result = voteService.toggleVote(voteDto);
         return ResponseEntity
-                .noContent()
-                .build();
+                .ok()
+                .body(result);
     }
 }
