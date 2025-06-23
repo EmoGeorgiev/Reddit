@@ -4,7 +4,8 @@ import com.reddit.user.RedditUser;
 import com.reddit.vote.VoteDto;
 import com.reddit.vote.VoteMapper;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,12 +27,11 @@ public class CommentMapper {
                 .map(RedditUser::getId)
                 .collect(Collectors.toSet());
 
-        Set<CommentDto> replies = mapRepliesToDto(comment.getReplies());
+        List<CommentDto> replies = mapRepliesToDto(comment.getReplies());
 
         return new CommentDto(
                 comment.getId(),
                 comment.getUser().getId(),
-                comment.getContentType(),
                 comment.getCreated(),
                 comment.getText(),
                 comment.getScore(),
@@ -51,7 +51,6 @@ public class CommentMapper {
 
         Comment comment = new Comment();
         comment.setId(commentDto.id());
-        comment.setContentType(commentDto.contentType());
         comment.setCreated(commentDto.created());
         comment.setText(commentDto.text());
         comment.setDeleted(commentDto.isDeleted());
@@ -59,13 +58,13 @@ public class CommentMapper {
         return comment;
     }
 
-    private static Set<CommentDto> mapRepliesToDto(Set<Comment> replies) {
+    private static List<CommentDto> mapRepliesToDto(List<Comment> replies) {
         if (replies == null) {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
         return replies
                 .stream()
                 .map(CommentMapper::commentToCommentDto)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 }

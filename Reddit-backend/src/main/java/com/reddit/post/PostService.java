@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Service
@@ -58,6 +59,7 @@ public class PostService {
         Subreddit subreddit = subredditService.getSubredditEntity(postDto.subredditId());
 
         Post post = PostMapper.postDtoToPost(postDto);
+        post.setCreated(LocalDateTime.now());
         post.setUser(user);
         post.setSubreddit(subreddit);
 

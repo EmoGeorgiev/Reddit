@@ -4,15 +4,15 @@ import com.reddit.content.Content;
 import com.reddit.post.Post;
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "comments")
 public class Comment extends Content {
     public static final String DELETED_TEXT = "[deleted]";
     @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Comment> replies = new HashSet<>();
+    private List<Comment> replies = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private Comment parent;
@@ -25,11 +25,11 @@ public class Comment extends Content {
     public Comment() {
     }
 
-    public Set<Comment> getReplies() {
+    public List<Comment> getReplies() {
         return replies;
     }
 
-    public void setReplies(Set<Comment> replies) {
+    public void setReplies(List<Comment> replies) {
         this.replies = replies;
     }
 

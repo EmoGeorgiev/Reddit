@@ -1,7 +1,6 @@
 package com.reddit.subreddit;
 
 import com.reddit.post.PostDto;
-import com.reddit.post.PostMapper;
 import com.reddit.user.RedditUser;
 
 import java.util.Set;
@@ -12,12 +11,6 @@ public class SubredditMapper {
         if (subreddit == null) {
             return null;
         }
-
-        Set<PostDto> posts = subreddit
-                .getPosts()
-                .stream()
-                .map(PostMapper::postToPostDto)
-                .collect(Collectors.toSet());
 
         Set<Long> users = subreddit
                 .getUsers()
@@ -34,7 +27,6 @@ public class SubredditMapper {
         return new SubredditDto(
                 subreddit.getId(),
                 subreddit.getTitle(),
-                posts,
                 users,
                 moderators
         );

@@ -12,6 +12,7 @@ import com.reddit.util.ErrorMessages;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Service
@@ -47,6 +48,7 @@ public class CommentService {
                 : null;
 
         Comment comment = CommentMapper.commentDtoToComment(commentDto);
+        comment.setCreated(LocalDateTime.now());
         comment.setUser(user);
         comment.setParent(parent);
         comment.setPost(post);
