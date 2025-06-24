@@ -1,6 +1,6 @@
 package com.reddit.content;
 
-import com.reddit.user.UserDto;
+import com.reddit.user.dto.UserDto;
 
 import java.time.LocalDateTime;
 

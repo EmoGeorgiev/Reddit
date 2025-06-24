@@ -2,6 +2,7 @@ package com.reddit.post;
 
 import com.reddit.exception.content.ContentUpdateNotAllowedException;
 import com.reddit.exception.post.PostNotFoundException;
+import com.reddit.post.dto.PostDto;
 import com.reddit.subreddit.Subreddit;
 import com.reddit.subreddit.SubredditService;
 import com.reddit.user.RedditUser;

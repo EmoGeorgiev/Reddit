@@ -7,6 +7,7 @@ import com.reddit.content.SavedDto;
 import com.reddit.exception.user.PasswordsDoNotMatchException;
 import com.reddit.exception.user.UserNotFoundException;
 import com.reddit.exception.user.UsernameAlreadyExistsException;
+import com.reddit.user.dto.UserDto;
 import com.reddit.util.ErrorMessages;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

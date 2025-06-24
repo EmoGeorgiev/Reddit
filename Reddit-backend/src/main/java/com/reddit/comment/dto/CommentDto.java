@@ -1,4 +1,4 @@
-package com.reddit.comment;
+package com.reddit.comment.dto;
 
 
 import java.time.LocalDateTime;

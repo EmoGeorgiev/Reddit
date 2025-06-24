@@ -1,4 +1,4 @@
-package com.reddit.user;
+package com.reddit.user.dto;
 
 public record UpdatePasswordDto(
         String oldPassword,

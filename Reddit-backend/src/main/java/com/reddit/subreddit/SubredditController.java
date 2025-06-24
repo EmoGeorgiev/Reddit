@@ -1,5 +1,8 @@
 package com.reddit.subreddit;
 
+import com.reddit.subreddit.dto.ModeratorUpdateDto;
+import com.reddit.subreddit.dto.SubredditDto;
+import com.reddit.subreddit.dto.SubredditUpdateTitleDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

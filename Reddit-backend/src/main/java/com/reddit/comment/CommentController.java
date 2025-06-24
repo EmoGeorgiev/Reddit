@@ -1,5 +1,6 @@
 package com.reddit.comment;
 
+import com.reddit.comment.dto.CommentDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

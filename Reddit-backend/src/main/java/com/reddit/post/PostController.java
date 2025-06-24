@@ -1,5 +1,6 @@
 package com.reddit.post;
 
+import com.reddit.post.dto.PostDto;
 import com.reddit.security.SecurityUser;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;

@@ -1,5 +1,7 @@
 package com.reddit.user;
 
+import com.reddit.user.dto.UpdatePasswordDto;
+import com.reddit.user.dto.UserDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

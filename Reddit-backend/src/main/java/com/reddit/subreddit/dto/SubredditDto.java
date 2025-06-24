@@ -1,4 +1,4 @@
-package com.reddit.subreddit;
+package com.reddit.subreddit.dto;
 
 import java.util.Set;
 

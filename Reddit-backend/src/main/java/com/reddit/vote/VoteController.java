@@ -1,5 +1,6 @@
 package com.reddit.vote;
 
+import com.reddit.vote.dto.VoteDto;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

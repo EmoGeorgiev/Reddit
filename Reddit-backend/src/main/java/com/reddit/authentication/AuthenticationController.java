@@ -1,6 +1,8 @@
 package com.reddit.authentication;
 
-import com.reddit.user.UserDto;
+import com.reddit.authentication.dto.LoginResponseDto;
+import com.reddit.authentication.dto.SignUpDto;
+import com.reddit.user.dto.UserDto;
 import com.reddit.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

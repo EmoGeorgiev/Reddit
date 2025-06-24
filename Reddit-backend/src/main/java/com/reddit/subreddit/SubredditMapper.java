@@ -1,6 +1,6 @@
 package com.reddit.subreddit;
 
-import com.reddit.post.PostDto;
+import com.reddit.subreddit.dto.SubredditDto;
 import com.reddit.user.RedditUser;
 
 import java.util.Set;

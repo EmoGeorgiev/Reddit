@@ -1,4 +1,6 @@
-package com.reddit.vote;
+package com.reddit.vote.dto;
+
+import com.reddit.vote.VoteType;
 
 public record VoteDto(
         Long id,

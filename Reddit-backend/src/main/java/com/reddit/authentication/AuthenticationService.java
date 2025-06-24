@@ -1,5 +1,6 @@
 package com.reddit.authentication;
 
+import com.reddit.authentication.dto.LoginResponseDto;
 import com.reddit.security.JwtService;
 import com.reddit.security.SecurityUser;
 import org.springframework.security.core.Authentication;

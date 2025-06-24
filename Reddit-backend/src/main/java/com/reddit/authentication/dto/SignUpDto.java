@@ -1,4 +1,4 @@
-package com.reddit.authentication;
+package com.reddit.authentication.dto;
 
 public record SignUpDto(
         String username,

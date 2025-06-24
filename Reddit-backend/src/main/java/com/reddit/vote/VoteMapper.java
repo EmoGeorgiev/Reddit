@@ -2,6 +2,7 @@ package com.reddit.vote;
 
 import com.reddit.content.Content;
 import com.reddit.user.RedditUser;
+import com.reddit.vote.dto.VoteDto;
 
 public class VoteMapper {
     public static VoteDto voteToVoteDto(Vote vote) {

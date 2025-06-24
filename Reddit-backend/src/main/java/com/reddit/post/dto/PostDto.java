@@ -1,4 +1,4 @@
-package com.reddit.post;
+package com.reddit.post.dto;
 
 import java.time.LocalDateTime;
 

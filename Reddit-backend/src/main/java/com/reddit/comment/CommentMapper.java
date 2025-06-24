@@ -1,11 +1,9 @@
 package com.reddit.comment;
 
-import com.reddit.vote.VoteDto;
-import com.reddit.vote.VoteMapper;
+import com.reddit.comment.dto.CommentDto;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CommentMapper {

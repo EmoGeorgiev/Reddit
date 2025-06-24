@@ -1,11 +1,6 @@
 package com.reddit.post;
 
-import com.reddit.user.RedditUser;
-import com.reddit.vote.VoteDto;
-import com.reddit.vote.VoteMapper;
-
-import java.util.Set;
-import java.util.stream.Collectors;
+import com.reddit.post.dto.PostDto;
 
 public class PostMapper {
     public static PostDto postToPostDto(Post post) {

@@ -7,6 +7,7 @@ import com.reddit.exception.comment.CommentIsDeletedException;
 import com.reddit.user.RedditUser;
 import com.reddit.user.UserService;
 import com.reddit.util.ErrorMessages;
+import com.reddit.vote.dto.VoteDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
