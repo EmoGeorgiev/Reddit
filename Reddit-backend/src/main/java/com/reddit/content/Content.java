@@ -1,5 +1,6 @@
 package com.reddit.content;
 
+import com.reddit.savedcontent.SavedContent;
 import com.reddit.user.RedditUser;
 import com.reddit.vote.Vote;
 import jakarta.persistence.*;
@@ -32,8 +33,8 @@ public abstract class Content {
     private int score = INITIAL_SCORE;
     @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Vote> votes = new HashSet<>();
-    @ManyToMany(mappedBy = "saved")
-    private Set<RedditUser> savedBy = new HashSet<>();
+    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SavedContent> savedContent = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -91,12 +92,12 @@ public abstract class Content {
         this.votes = votes;
     }
 
-    public Set<RedditUser> getSavedBy() {
-        return savedBy;
+    public Set<SavedContent> getSavedContent() {
+        return savedContent;
     }
 
-    public void setSavedBy(Set<RedditUser> savedBy) {
-        this.savedBy = savedBy;
+    public void setSavedContent(Set<SavedContent> savedContent) {
+        this.savedContent = savedContent;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.reddit.user;
 import com.reddit.comment.Comment;
 import com.reddit.content.Content;
 import com.reddit.post.Post;
+import com.reddit.savedcontent.SavedContent;
 import com.reddit.subreddit.Subreddit;
 import com.reddit.vote.Vote;
 import jakarta.persistence.*;
@@ -42,13 +43,8 @@ public class RedditUser {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Vote> voted = new HashSet<>();
-    @ManyToMany
-    @JoinTable(
-            name = "users_saved",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "saved_id")
-    )
-    private Set<Content> saved = new HashSet<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SavedContent> savedContent = new HashSet<>();
 
     public RedditUser() {
     }
@@ -117,12 +113,12 @@ public class RedditUser {
         this.voted = voted;
     }
 
-    public Set<Content> getSaved() {
-        return saved;
+    public Set<SavedContent> getSavedContent() {
+        return savedContent;
     }
 
-    public void setSaved(Set<Content> saved) {
-        this.saved = saved;
+    public void setSavedContent(Set<SavedContent> savedContent) {
+        this.savedContent = savedContent;
     }
 
     @Override

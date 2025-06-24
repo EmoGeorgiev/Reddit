@@ -1,9 +1,5 @@
 package com.reddit.user;
 
-import com.reddit.content.Content;
-import com.reddit.content.ContentMapper;
-import com.reddit.content.ContentService;
-import com.reddit.content.dto.ContentDto;
 import com.reddit.exception.user.PasswordsDoNotMatchException;
 import com.reddit.exception.user.UserNotFoundException;
 import com.reddit.exception.user.UsernameAlreadyExistsException;
@@ -24,12 +20,10 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
-    private final ContentService contentService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, ContentService contentService, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.contentService = contentService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -120,7 +114,6 @@ public class UserService {
 
         removeUserFromCollection(user.getSubscribedTo(), subreddit -> subreddit.getUsers().remove(user));
         removeUserFromCollection(user.getModerated(), subreddit -> subreddit.getModerators().remove(user));
-        removeUserFromCollection(user.getSaved(), content -> content.getSavedBy().remove(user));
     }
 
     private <T> void applyToCollection(Collection<T> collection, Consumer<T> applier) {

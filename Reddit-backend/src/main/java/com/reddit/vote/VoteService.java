@@ -58,6 +58,7 @@ public class VoteService {
         if (voteOptional.isEmpty()) {
             return createVote(user, content, voteType);
         }
+
         Vote vote = voteOptional.get();
 
         if (vote.getVoteType() == voteType) {

@@ -11,28 +11,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 public class ContentService {
     private final ContentRepository contentRepository;
-    private final UserService userService;
 
-    public ContentService(ContentRepository contentRepository, UserService userService) {
+    public ContentService(ContentRepository contentRepository) {
         this.contentRepository = contentRepository;
-        this.userService = userService;
     }
 
-    @Transactional(readOnly = true)
     public Content getContentEntity(Long id) {
         return contentRepository
                 .findById(id)
                 .orElseThrow(() -> new ContentNotFoundException(ErrorMessages.CONTENT_NOT_FOUND));
-    }
-
-    @Transactional(readOnly = true)
-    public Page<ContentDto> getSavedContent(Long userId, Pageable pageable) {
-        return contentRepository
-                .findSavedContentByUserId(userId, pageable)
-                .map(ContentMapper::contentToContentDto);
     }
 
     public void toggleSaveContent(Long contentId, Long userId) {
