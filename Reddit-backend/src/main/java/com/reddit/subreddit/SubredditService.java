@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,12 +48,21 @@ public class SubredditService {
     }
 
     @Transactional(readOnly = true)
-    public List<SubredditDto> getSubredditsByUserId(Long userId) {
+    public Set<SubredditDto> getSubredditsByUserId(Long userId) {
         return subredditRepository
                 .findByUsers_Id(userId)
                 .stream()
                 .map(SubredditMapper::subredditToSubredditDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
+    }
+
+    @Transactional(readOnly = true)
+    public Set<SubredditDto> getSubredditsByModeratorId(Long moderatorId) {
+        return subredditRepository
+                .findByModerators_Id(moderatorId)
+                .stream()
+                .map(SubredditMapper::subredditToSubredditDto)
+                .collect(Collectors.toSet());
     }
 
     public SubredditDto addSubreddit(SubredditDto subredditDto, Long creatorId) {
