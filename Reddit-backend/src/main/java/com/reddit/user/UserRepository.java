@@ -12,6 +12,4 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<RedditUser, Long> {
     Optional<RedditUser> findByUsername(String username);
     Page<RedditUser> findByUsernameContainingIgnoreCase(String word, Pageable pageable);
-    @Query("SELECT c FROM RedditUser u JOIN u.saved c WHERE u.id = :userId")
-    Page<Content> findSavedContentByUserId(@Param("userId") Long userId, Pageable pageable);
 }

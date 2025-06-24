@@ -60,13 +60,6 @@ public class UserService {
                 .map(UserMapper::userToUserDto);
     }
 
-    @Transactional(readOnly = true)
-    public Page<ContentDto> getSavedContent(Long userId, Pageable pageable) {
-        return userRepository
-                .findSavedContentByUserId(userId, pageable)
-                .map(ContentMapper::contentToContentDto);
-    }
-
     public UserDto addUser(String username, String password) {
         RedditUser user = new RedditUser();
 
@@ -81,21 +74,6 @@ public class UserService {
         RedditUser savedUser = userRepository.save(user);
 
         return UserMapper.userToUserDto(savedUser);
-    }
-
-    public void toggleSaveContent(Long contentId, Long userId) {
-        Content content = contentService.getContentEntity(contentId);
-        RedditUser user = getUserEntity(userId);
-
-        if (!user.getSaved().contains(content)) {
-            user.getSaved().add(content);
-            content.getSavedBy().add(user);
-        } else {
-            user.getSaved().remove(content);
-            content.getSavedBy().remove(user);
-        }
-
-        userRepository.save(user);
     }
 
     public UserDto updateUsername(UserDto userDto) {
