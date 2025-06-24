@@ -3,7 +3,7 @@ package com.reddit.user;
 import com.reddit.content.Content;
 import com.reddit.content.ContentMapper;
 import com.reddit.content.ContentService;
-import com.reddit.content.SavedDto;
+import com.reddit.content.dto.ContentDto;
 import com.reddit.exception.user.PasswordsDoNotMatchException;
 import com.reddit.exception.user.UserNotFoundException;
 import com.reddit.exception.user.UsernameAlreadyExistsException;
@@ -61,10 +61,10 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Page<SavedDto> getSavedContent(Long userId, Pageable pageable) {
+    public Page<ContentDto> getSavedContent(Long userId, Pageable pageable) {
         return userRepository
                 .findSavedContentByUserId(userId, pageable)
-                .map(ContentMapper::contentToSavedDto);
+                .map(ContentMapper::contentToContentDto);
     }
 
     public UserDto addUser(String username, String password) {

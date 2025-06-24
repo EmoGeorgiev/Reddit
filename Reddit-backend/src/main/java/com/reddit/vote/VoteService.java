@@ -8,9 +8,12 @@ import com.reddit.user.RedditUser;
 import com.reddit.user.UserService;
 import com.reddit.util.ErrorMessages;
 import com.reddit.vote.dto.VoteDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -26,9 +29,22 @@ public class VoteService {
         this.contentService = contentService;
     }
 
+    @Transactional(readOnly = true)
+    public Page<VoteDto> getUpVotedByUserId(Long userId, Pageable pageable) {
+        return voteRepository
+                .findByUserIdAndVoteType(userId, VoteType.UP_VOTE, pageable)
+                .map(VoteMapper::voteToVoteDto);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<VoteDto> getDownVotedByUserId(Long userId, Pageable pageable) {
+        return voteRepository
+                .findByUserIdAndVoteType(userId, VoteType.DOWN_VOTE, pageable)
+                .map(VoteMapper::voteToVoteDto);
+    }
     public VoteDto toggleVote(VoteDto voteDto) {
         RedditUser user = userService.getUserEntity(voteDto.userId());
-        Content content = contentService.getContentEntity(voteDto.contentId());
+        Content content = contentService.getContentEntity(voteDto.contentDto().id());
         VoteType voteType = voteDto.voteType();
 
         if (content instanceof Comment c) {
@@ -53,6 +69,7 @@ public class VoteService {
 
     private VoteDto createVote(RedditUser user, Content content, VoteType voteType) {
         Vote vote = new Vote();
+        vote.setCreated(LocalDateTime.now());
         vote.setUser(user);
         vote.setContent(content);
         vote.setVoteType(voteType);

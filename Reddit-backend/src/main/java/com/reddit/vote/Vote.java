@@ -4,6 +4,7 @@ import com.reddit.content.Content;
 import com.reddit.user.RedditUser;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -12,6 +13,8 @@ public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "created", nullable = false)
+    private LocalDateTime created;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private RedditUser user;
@@ -30,6 +33,14 @@ public class Vote {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
     }
 
     public RedditUser getUser() {

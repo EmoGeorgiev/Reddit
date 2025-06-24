@@ -1,6 +1,7 @@
 package com.reddit.vote;
 
 import com.reddit.content.Content;
+import com.reddit.content.ContentMapper;
 import com.reddit.user.RedditUser;
 import com.reddit.vote.dto.VoteDto;
 
@@ -12,8 +13,9 @@ public class VoteMapper {
 
         return new VoteDto(
                 vote.getId(),
+                vote.getCreated(),
                 vote.getUser().getId(),
-                vote.getContent().getId(),
+                ContentMapper.contentToContentDto(vote.getContent()),
                 vote.getVoteType());
     }
 
@@ -25,6 +27,7 @@ public class VoteMapper {
         Vote vote = new Vote();
 
         vote.setId(voteDto.id());
+        vote.setCreated(voteDto.created());
         vote.setUser(user);
         vote.setContent(content);
         vote.setVoteType(voteDto.voteType());

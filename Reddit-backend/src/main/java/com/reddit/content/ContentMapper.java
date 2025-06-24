@@ -1,17 +1,18 @@
 package com.reddit.content;
 
 import com.reddit.comment.Comment;
+import com.reddit.content.dto.ContentDto;
 import com.reddit.post.Post;
 import com.reddit.user.UserMapper;
 
 public class ContentMapper {
     private static final String EMPTY_TITLE = "[empty]";
-    public static SavedDto contentToSavedDto(Content content) {
+    public static ContentDto contentToContentDto(Content content) {
         if (content == null) {
             return null;
         }
 
-        return new SavedDto(
+        return new ContentDto(
                 content.getId(),
                 UserMapper.userToUserDto(content.getUser()),
                 content.getCreated(),

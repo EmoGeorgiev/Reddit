@@ -1,10 +1,10 @@
-package com.reddit.content;
+package com.reddit.content.dto;
 
 import com.reddit.user.dto.UserDto;
 
 import java.time.LocalDateTime;
 
-public record SavedDto(
+public record ContentDto(
         Long id,
         UserDto userDto,
         LocalDateTime created,
