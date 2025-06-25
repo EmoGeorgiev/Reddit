@@ -33,8 +33,7 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<Page<PostDto>> getPosts(
-            @PageableDefault(size = 50, sort = "created", direction = Sort.Direction.DESC) Pageable pageable
-    ) {
+            @PageableDefault(size = 50, sort = "created", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<PostDto> posts = postService.getPosts(pageable);
 
         return ResponseEntity
@@ -45,8 +44,7 @@ public class PostController {
     @GetMapping("/subscriptions/{userId}")
     public ResponseEntity<Page<PostDto>> getPostsByUserSubscriptions(
             @PathVariable Long userId,
-            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable
-    ) {
+            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<PostDto> posts = postService.getPostsByUserSubscriptions(userId, pageable);
 
         return ResponseEntity
@@ -57,8 +55,7 @@ public class PostController {
     @GetMapping("/users/{userId}")
     public ResponseEntity<Page<PostDto>> getPostsByUserId(
             @PathVariable Long userId,
-            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable
-    ) {
+            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<PostDto> posts = postService.getPostsByUserId(userId, pageable);
 
         return ResponseEntity
@@ -69,8 +66,7 @@ public class PostController {
     @GetMapping("/subreddits/{subredditId}")
     public ResponseEntity<Page<PostDto>> getPostsBySubredditId(
             @PathVariable Long subredditId,
-            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable
-    ) {
+            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<PostDto> posts = postService.getPostsBySubredditId(subredditId, pageable);
 
         return ResponseEntity

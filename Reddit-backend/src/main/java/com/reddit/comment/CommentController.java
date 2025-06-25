@@ -42,8 +42,7 @@ public class CommentController {
     @GetMapping("/users/{userId}")
     public ResponseEntity<Page<CommentDto>> getCommentsByUserId(
             @PathVariable Long userId,
-            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable
-    ) {
+            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<CommentDto> comments = commentService.getCommentsByUserId(userId, pageable);
 
         return ResponseEntity

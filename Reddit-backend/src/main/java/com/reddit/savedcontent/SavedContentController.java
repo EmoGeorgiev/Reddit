@@ -1,6 +1,7 @@
 package com.reddit.savedcontent;
 
 import com.reddit.savedcontent.dto.SavedContentDto;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,8 +21,7 @@ public class SavedContentController {
     @GetMapping("/{userId}")
     public ResponseEntity<Page<SavedContentDto>> getSavedContentByUserId(
             @PathVariable Long userId,
-            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable
-    ) {
+            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<SavedContentDto> savedContents = savedContentService.getSavedContentByUserId(userId, pageable);
 
         return ResponseEntity
@@ -30,7 +30,7 @@ public class SavedContentController {
     }
 
     @PostMapping
-    public ResponseEntity<SavedContentDto> toggleSavedContent(SavedContentDto savedContentDto) {
+    public ResponseEntity<SavedContentDto> toggleSavedContent(@RequestBody @Valid SavedContentDto savedContentDto) {
         SavedContentDto result = savedContentService.toggleSavedContent(savedContentDto);
         return ResponseEntity
                 .ok()
