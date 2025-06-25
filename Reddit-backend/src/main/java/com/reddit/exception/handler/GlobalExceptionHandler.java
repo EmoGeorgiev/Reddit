@@ -6,7 +6,6 @@ import com.reddit.exception.content.ContentNotFoundException;
 import com.reddit.exception.content.ContentUpdateNotAllowedException;
 import com.reddit.exception.post.PostNotFoundException;
 import com.reddit.exception.subreddit.MissingModeratorPrivilegesException;
-import com.reddit.exception.subreddit.ModeratorCannotRemoveHimselfException;
 import com.reddit.exception.subreddit.SubredditAlreadyExistsException;
 import com.reddit.exception.subreddit.SubredditNotFoundException;
 import com.reddit.exception.user.PasswordsDoNotMatchException;
@@ -53,11 +52,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MissingModeratorPrivilegesException.class)
     public ResponseEntity<ErrorObject> handleMissingModeratorPrivilegesException(MissingModeratorPrivilegesException ex) {
         return buildResponse(ex.getMessage(), HttpStatus.FORBIDDEN);
-    }
-
-    @ExceptionHandler(ModeratorCannotRemoveHimselfException.class)
-    public ResponseEntity<ErrorObject> handleModeratorCannotRemoveHimselfException(ModeratorCannotRemoveHimselfException ex) {
-        return buildResponse(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(PasswordsDoNotMatchException.class)

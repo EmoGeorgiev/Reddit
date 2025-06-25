@@ -1,7 +1,6 @@
 package com.reddit.subreddit;
 
 import com.reddit.exception.subreddit.MissingModeratorPrivilegesException;
-import com.reddit.exception.subreddit.ModeratorCannotRemoveHimselfException;
 import com.reddit.exception.subreddit.SubredditAlreadyExistsException;
 import com.reddit.exception.subreddit.SubredditNotFoundException;
 import com.reddit.exception.user.UserNotSubscribedException;
@@ -14,7 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Service
@@ -123,11 +124,7 @@ public class SubredditService {
         RedditUser moderator = userService.getUserEntity(moderatorId);
         RedditUser removedModerator = userService.getUserEntity(removedModeratorId);
 
-        if (moderator.equals(removedModerator)) {
-            throw new ModeratorCannotRemoveHimselfException(ErrorMessages.MODERATOR_CANNOT_REMOVE_HIMSELF);
-        }
-
-        if (!subreddit.getModerators().containsAll(Set.of(moderator, removedModerator))) {
+        if (!subreddit.getModerators().contains(moderator) || !subreddit.getModerators().contains(removedModerator)) {
             throw new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES);
         }
 
@@ -138,10 +135,26 @@ public class SubredditService {
         return SubredditMapper.subredditToSubredditDto(subreddit);
     }
 
-    public void deleteSubreddit(Long id) {
-        if (!subredditRepository.existsById(id)) {
-            throw new SubredditNotFoundException(ErrorMessages.SUBREDDIT_NOT_FOUND);
+    public void deleteSubreddit(Long subredditId, Long moderatorId) {
+        Subreddit subreddit = getSubredditEntity(subredditId);
+        RedditUser moderator = userService.getUserEntity(moderatorId);
+
+        if (!subreddit.getModerators().contains(moderator)) {
+            throw new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES);
         }
-        subredditRepository.deleteById(id);
+
+        removeSubredditFromCollections(subreddit);
+
+        subredditRepository.deleteById(subredditId);
+    }
+
+    private void removeSubredditFromCollections(Subreddit subreddit) {
+        removeSubredditFromCollection(subreddit.getUsers(), user -> user.getSubscribedTo().remove(subreddit));
+        removeSubredditFromCollection(subreddit.getModerators(), moderator -> moderator.getModerated().remove(subreddit));
+    }
+
+    private <T> void removeSubredditFromCollection(Collection<T> collection, Consumer<T> remover) {
+        collection.forEach(remover);
+        collection.clear();
     }
 }

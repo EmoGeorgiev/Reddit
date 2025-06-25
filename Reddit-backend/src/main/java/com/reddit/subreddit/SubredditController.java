@@ -91,8 +91,8 @@ public class SubredditController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSubreddit(@PathVariable Long id) {
-        subredditService.deleteSubreddit(id);
+    public ResponseEntity<Void> deleteSubreddit(@PathVariable Long id, @RequestParam Long moderatorId) {
+        subredditService.deleteSubreddit(id, moderatorId);
         return ResponseEntity
                 .noContent()
                 .build();
