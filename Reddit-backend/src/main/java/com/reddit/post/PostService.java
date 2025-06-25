@@ -2,6 +2,7 @@ package com.reddit.post;
 
 import com.reddit.exception.content.ContentUpdateNotAllowedException;
 import com.reddit.exception.post.PostNotFoundException;
+import com.reddit.exception.subreddit.MissingModeratorPrivilegesException;
 import com.reddit.post.dto.PostDto;
 import com.reddit.subreddit.Subreddit;
 import com.reddit.subreddit.SubredditService;
@@ -96,10 +97,17 @@ public class PostService {
         return PostMapper.postToPostDto(post);
     }
 
-    public void deletePost(Long id) {
-        if (!postRepository.existsById(id)) {
-            throw new PostNotFoundException(ErrorMessages.POST_NOT_FOUND);
+    public void deletePost(Long postId, Long userId) {
+        Post post = getPostEntity(postId);
+        RedditUser user = userService.getUserEntity(userId);
+        Subreddit subreddit = post.getSubreddit();
+
+        if (!post.getUser().equals(user)) {
+            if (!subreddit.getModerators().contains(user)) {
+                throw new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES);
+            }
         }
-        postRepository.deleteById(id);
+
+        postRepository.deleteById(postId);
     }
 }

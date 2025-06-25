@@ -90,9 +90,9 @@ public class PostController {
                 .body(updatedPostDto);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long id) {
-        postService.deletePost(id);
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> deletePost(@PathVariable Long postId, @RequestParam Long userId) {
+        postService.deletePost(postId, userId);
         return ResponseEntity
                 .noContent()
                 .build();

@@ -5,8 +5,10 @@ import com.reddit.content.Content;
 import com.reddit.exception.comment.CommentIsDeletedException;
 import com.reddit.exception.comment.CommentNotFoundException;
 import com.reddit.exception.content.ContentUpdateNotAllowedException;
+import com.reddit.exception.subreddit.MissingModeratorPrivilegesException;
 import com.reddit.post.Post;
 import com.reddit.post.PostService;
+import com.reddit.subreddit.Subreddit;
 import com.reddit.user.RedditUser;
 import com.reddit.user.UserService;
 import com.reddit.util.ErrorMessages;
@@ -90,15 +92,22 @@ public class CommentService {
         return CommentMapper.commentToCommentDto(comment);
     }
 
-    public CommentDto deleteComment(Long id) {
-        Comment comment = getCommentEntity(id);
+    public CommentDto deleteComment(Long commentId, Long userId) {
+        Comment comment = getCommentEntity(commentId);
+        RedditUser user = userService.getUserEntity(userId);
+        Subreddit subreddit = comment.getPost().getSubreddit();
+
+        if (!comment.getUser().equals(user)) {
+            if (!subreddit.getModerators().contains(user)) {
+                throw new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES);
+            }
+        }
 
         if (comment.isDeleted()) {
             return CommentMapper.commentToCommentDto(comment);
         }
 
         comment.setText(Comment.DELETED_TEXT);
-        comment.setScore(Content.INITIAL_SCORE);
         comment.getVotes().clear();
         comment.setDeleted(true);
 
