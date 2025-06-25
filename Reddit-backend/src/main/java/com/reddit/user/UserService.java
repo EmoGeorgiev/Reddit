@@ -80,9 +80,7 @@ public class UserService {
 
         user.setUsername(username);
 
-        RedditUser savedUser = userRepository.save(user);
-
-        return UserMapper.userToUserDto(savedUser);
+        return UserMapper.userToUserDto(user);
     }
 
     public UserDto updatePassword(Long id, String oldPassword, String newPassword) {
@@ -95,9 +93,7 @@ public class UserService {
         String encodedNewPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedNewPassword);
 
-        RedditUser savedUser = userRepository.save(user);
-
-        return UserMapper.userToUserDto(savedUser);
+        return UserMapper.userToUserDto(user);
     }
 
     public void deleteUser(Long id) {

@@ -93,9 +93,7 @@ public class PostService {
         post.setText(postDto.text());
         post.setTitle(postDto.title());
 
-        Post savedPost = postRepository.save(post);
-
-        return PostMapper.postToPostDto(savedPost);
+        return PostMapper.postToPostDto(post);
     }
 
     public void deletePost(Long id) {

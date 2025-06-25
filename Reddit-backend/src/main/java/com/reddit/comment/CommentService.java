@@ -87,9 +87,7 @@ public class CommentService {
 
         comment.setText(commentDto.text());
 
-        Comment savedComment = commentRepository.save(comment);
-
-        return CommentMapper.commentToCommentDto(savedComment);
+        return CommentMapper.commentToCommentDto(comment);
     }
 
     public CommentDto deleteComment(Long id) {
@@ -104,8 +102,6 @@ public class CommentService {
         comment.getVotes().clear();
         comment.setDeleted(true);
 
-        Comment savedComment = commentRepository.save(comment);
-
-        return CommentMapper.commentToCommentDto(savedComment);
+        return CommentMapper.commentToCommentDto(comment);
     }
 }
