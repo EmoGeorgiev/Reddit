@@ -9,7 +9,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,12 +42,12 @@ public class PostController {
                 .body(posts);
     }
 
-    @GetMapping("/subscriptions")
+    @GetMapping("/subscriptions/{userId}")
     public ResponseEntity<Page<PostDto>> getPostsByUserSubscriptions(
-            @AuthenticationPrincipal SecurityUser user,
+            @PathVariable Long userId,
             @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        Page<PostDto> posts = postService.getPostsByUserSubscriptions(user.getId(), pageable);
+        Page<PostDto> posts = postService.getPostsByUserSubscriptions(userId, pageable);
 
         return ResponseEntity
                 .ok()

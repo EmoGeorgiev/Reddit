@@ -77,6 +77,9 @@ public class SubredditService {
         subreddit.getUsers().add(user);
         subreddit.getModerators().add(user);
 
+        user.getSubscribedTo().add(subreddit);
+        user.getModerated().add(subreddit);
+
         Subreddit savedSubreddit = subredditRepository.save(subreddit);
 
         return SubredditMapper.subredditToSubredditDto(savedSubreddit);
@@ -92,9 +95,7 @@ public class SubredditService {
 
         subreddit.setTitle(newTitle);
 
-        Subreddit savedSubreddit = subredditRepository.save(subreddit);
-
-        return SubredditMapper.subredditToSubredditDto(savedSubreddit);
+        return SubredditMapper.subredditToSubredditDto(subreddit);
     }
 
     public SubredditDto addSubredditModerator(Long subredditId, Long moderatorId, Long newModeratorId) {
@@ -112,9 +113,9 @@ public class SubredditService {
 
         subreddit.getModerators().add(newModerator);
 
-        Subreddit savedSubreddit = subredditRepository.save(subreddit);
+        newModerator.getModerated().add(subreddit);
 
-        return SubredditMapper.subredditToSubredditDto(savedSubreddit);
+        return SubredditMapper.subredditToSubredditDto(subreddit);
     }
 
     public SubredditDto removeSubredditModerator(Long subredditId, Long moderatorId, Long removedModeratorId) {
@@ -132,9 +133,9 @@ public class SubredditService {
 
         subreddit.getModerators().remove(removedModerator);
 
-        Subreddit savedSubreddit = subredditRepository.save(subreddit);
+        moderator.getModerated().remove(subreddit);
 
-        return SubredditMapper.subredditToSubredditDto(savedSubreddit);
+        return SubredditMapper.subredditToSubredditDto(subreddit);
     }
 
     public void deleteSubreddit(Long id) {
