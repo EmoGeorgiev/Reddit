@@ -108,7 +108,6 @@ public class CommentService {
         }
 
         comment.setText(Comment.DELETED_TEXT);
-        comment.getVotes().clear();
         comment.setDeleted(true);
 
         return CommentMapper.commentToCommentDto(comment);

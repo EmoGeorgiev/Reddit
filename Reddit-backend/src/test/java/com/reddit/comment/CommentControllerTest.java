@@ -2,8 +2,10 @@ package com.reddit.comment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reddit.comment.dto.CommentDto;
-import com.reddit.content.Content;
+import com.reddit.exception.comment.CommentIsDeletedException;
 import com.reddit.exception.comment.CommentNotFoundException;
+import com.reddit.exception.content.ContentUpdateNotAllowedException;
+import com.reddit.exception.subreddit.MissingModeratorPrivilegesException;
 import com.reddit.util.ErrorMessages;
 import com.reddit.util.ValidationConstants;
 import org.junit.jupiter.api.Test;
@@ -22,8 +24,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CommentController.class)
@@ -38,12 +39,12 @@ public class CommentControllerTest {
     private MessageSource messageSource;
     @MockitoBean
     private CommentService commentService;
-    private final Long invalidId = -1L;
     private final Long id = 1L;
-    private final CommentDto commentDto = new CommentDto(id, id, null, "text", Content.INITIAL_SCORE, false, new ArrayList<>(), null, id);
+    private final CommentDto commentDto = new CommentDto(id, id, null, "text", Comment.INITIAL_SCORE, false, new ArrayList<>(), null, id);
 
     @Test
     public void shouldReturnNotFoundForInvalidId() throws Exception {
+        Long invalidId = -1L;
         when(commentService.getComment(invalidId))
                 .thenThrow(new CommentNotFoundException(ErrorMessages.COMMENT_NOT_FOUND));
 
@@ -181,8 +182,8 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnBadRequestWhenCreatingCommentForBlankText() throws Exception {
-        String blankText = "";
-        CommentDto blankTextCommentDto = new CommentDto(id, id, null, blankText, Content.INITIAL_SCORE, false, new ArrayList<>(), null, id);
+        String blankText = "          ";
+        CommentDto blankTextCommentDto = new CommentDto(id, id, null, blankText, Comment.INITIAL_SCORE, false, new ArrayList<>(), null, id);
 
         String expectedMessage = messageSource.getMessage("text.required", null, LocaleContextHolder.getLocale());
 
@@ -199,7 +200,7 @@ public class CommentControllerTest {
         int length = ValidationConstants.TEXT_MAX + 1;
         String text = "a".repeat(length);
 
-        CommentDto blankTextCommentDto = new CommentDto(id, id, null, text, Content.INITIAL_SCORE, false, new ArrayList<>(), null, id);
+        CommentDto overMaxTextSizeCommentDto = new CommentDto(id, id, null, text, Comment.INITIAL_SCORE, false, new ArrayList<>(), null, id);
 
         Object[] args = new Object[] { String.valueOf(ValidationConstants.TEXT_MIN), String.valueOf(ValidationConstants.TEXT_MAX) };
         String expectedMessage = messageSource.getMessage("text.size.test", args, LocaleContextHolder.getLocale());
@@ -207,21 +208,21 @@ public class CommentControllerTest {
         mockMvc
                 .perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(blankTextCommentDto)))
+                        .content(objectMapper.writeValueAsString(overMaxTextSizeCommentDto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.text").value(expectedMessage));
     }
 
     @Test
     public void shouldReturnBadRequestWhenCreatingCommentForNullPostId() throws Exception {
-        CommentDto blankTextCommentDto = new CommentDto(id, id, null, "text", Content.INITIAL_SCORE, false, new ArrayList<>(), null, null);
+        CommentDto nullPostIdCommentDto = new CommentDto(id, id, null, "text", Comment.INITIAL_SCORE, false, new ArrayList<>(), null, null);
 
         String expectedMessage = messageSource.getMessage("postId.required", null, LocaleContextHolder.getLocale());
 
         mockMvc
                 .perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(blankTextCommentDto)))
+                        .content(objectMapper.writeValueAsString(nullPostIdCommentDto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.postId").value(expectedMessage));
     }
@@ -248,5 +249,102 @@ public class CommentControllerTest {
 
         verify(commentService)
                 .addComment(commentDto);
+    }
+
+    @Test
+    public void shouldReturnConflictForNonMatchingUserIdAndCreatorIdWhenUpdatingComment() throws Exception {
+        when(commentService.updateComment(id, commentDto))
+                .thenThrow(new ContentUpdateNotAllowedException(ErrorMessages.CONTENT_UPDATE_NOT_ALLOWED));
+
+        mockMvc
+                .perform(put(BASE_URL + "/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(commentDto)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value(ErrorMessages.CONTENT_UPDATE_NOT_ALLOWED));
+
+
+        verify(commentService)
+                .updateComment(id, commentDto);
+    }
+
+    @Test
+    public void shouldReturnConflictForDeletedCommentWhenUpdatingComment() throws Exception {
+        when(commentService.updateComment(id, commentDto))
+                .thenThrow(new CommentIsDeletedException(ErrorMessages.COMMENT_IS_DELETED));
+
+        mockMvc
+                .perform(put(BASE_URL + "/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(commentDto)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value(ErrorMessages.COMMENT_IS_DELETED));
+
+
+        verify(commentService)
+                .updateComment(id, commentDto);
+    }
+
+    @Test
+    public void shouldReturnUpdatedTitleCommentWhenUpdatingComment() throws Exception {
+        when(commentService.updateComment(id, commentDto))
+                .thenReturn(commentDto);
+
+        mockMvc
+                .perform(put(BASE_URL + "/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(commentDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(commentDto.id()))
+                .andExpect(jsonPath("$.userId").value(commentDto.userId()))
+                .andExpect(jsonPath("$.created").value(commentDto.created()))
+                .andExpect(jsonPath("$.text").value(commentDto.text()))
+                .andExpect(jsonPath("$.score").value(commentDto.score()))
+                .andExpect(jsonPath("$.isDeleted").value(commentDto.isDeleted()))
+                .andExpect(jsonPath("$.replies").value(commentDto.replies()))
+                .andExpect(jsonPath("$.parentId").value(commentDto.parentId()))
+                .andExpect(jsonPath("$.postId").value(commentDto.postId()));
+
+
+        verify(commentService)
+                .updateComment(id, commentDto);
+    }
+
+    @Test
+    public void shouldReturnForbiddenForMissingModeratorPrivilegesWhenDeletingComment() throws Exception {
+        when(commentService.deleteComment(id, id))
+                .thenThrow(new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES));
+
+        mockMvc
+                .perform(delete(BASE_URL + "/" + id + "?userId=" + id))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value(ErrorMessages.MISSING_MODERATOR_PRIVILEGES));
+
+        verify(commentService)
+                .deleteComment(id, id);
+    }
+
+    @Test
+    public void shouldReturnDeletedCommentCommentWhenDeletingComment() throws Exception {
+        CommentDto deletedCommentDto = new CommentDto(id, id, null, Comment.DELETED_TEXT, Comment.INITIAL_SCORE, true, null, null, id);
+
+        when(commentService.deleteComment(id, id))
+                .thenReturn(deletedCommentDto);
+
+        mockMvc
+                .perform(delete(BASE_URL + "/" + id + "?userId=" + id))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(deletedCommentDto.id()))
+                .andExpect(jsonPath("$.userId").value(deletedCommentDto.userId()))
+                .andExpect(jsonPath("$.created").value(deletedCommentDto.created()))
+                .andExpect(jsonPath("$.text").value(deletedCommentDto.text()))
+                .andExpect(jsonPath("$.score").value(deletedCommentDto.score()))
+                .andExpect(jsonPath("$.isDeleted").value(deletedCommentDto.isDeleted()))
+                .andExpect(jsonPath("$.replies").value(deletedCommentDto.replies()))
+                .andExpect(jsonPath("$.parentId").value(deletedCommentDto.parentId()))
+                .andExpect(jsonPath("$.postId").value(deletedCommentDto.postId()));
+
+        verify(commentService)
+                .deleteComment(id, id);
     }
 }
