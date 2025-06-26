@@ -11,7 +11,7 @@ public record CommentDto(
         Long id,
         Long userId,
         LocalDateTime created,
-        @NotBlank
+        @NotBlank(message = "Text must not be blank")
         @Size(min = 1, max = 5000, message = "Text must be between 1 and 5000 characters")
         String text,
         Integer score,
