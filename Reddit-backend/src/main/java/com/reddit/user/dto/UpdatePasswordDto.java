@@ -1,13 +1,20 @@
 package com.reddit.user.dto;
 
+import com.reddit.util.ValidationConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record UpdatePasswordDto(
-        @NotBlank(message = "Old password must not be blank")
-        @Size(min = 3, max = 30, message = "Old password must be between 3 and 30 characters")
+        @NotBlank(message = "{password.required}")
+        @Size(
+                min = ValidationConstants.PASSWORD_MIN,
+                max = ValidationConstants.PASSWORD_MAX,
+                message = "{password.size}")
         String oldPassword,
-        @NotBlank(message = "New password must not be blank")
-        @Size(min = 3, max = 30, message = "New password must be between 3 and 30 characters")
+        @NotBlank(message = "{password.required}")
+        @Size(
+                min = ValidationConstants.PASSWORD_MIN,
+                max = ValidationConstants.PASSWORD_MAX,
+                message = "{password.size}")
         String newPassword) {
 }

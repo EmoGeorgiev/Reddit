@@ -1,5 +1,6 @@
 package com.reddit.subreddit.dto;
 
+import com.reddit.util.ValidationConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -7,8 +8,11 @@ import java.util.Set;
 
 public record SubredditDto(
         Long id,
-        @NotBlank(message = "Title must not be blank")
-        @Size(min = 1, max = 100, message = "Title must be between 1 and 100 characters")
+        @NotBlank(message = "{title.required}")
+        @Size(
+                min = ValidationConstants.TITLE_MIN,
+                max = ValidationConstants.TITLE_MAX,
+                message = "{title.size}")
         String title,
         Set<Long> userIds,
         Set<Long> moderatorIds) {

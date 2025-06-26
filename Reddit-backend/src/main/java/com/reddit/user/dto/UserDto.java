@@ -1,11 +1,15 @@
 package com.reddit.user.dto;
 
+import com.reddit.util.ValidationConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record UserDto(
         Long id,
-        @NotBlank(message = "Username must not be blank")
-        @Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters")
+        @NotBlank(message = "{username.required}")
+        @Size(
+                min = ValidationConstants.USERNAME_MIN,
+                max = ValidationConstants.USERNAME_MAX,
+                message = "{username.size}")
         String username) {
 }

@@ -1,5 +1,6 @@
 package com.reddit.post.dto;
 
+import com.reddit.util.ValidationConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -10,13 +11,19 @@ public record PostDto(
         Long id,
         Long userId,
         LocalDateTime created,
-        @NotBlank(message = "Text must not be blank")
-        @Size(min = 1, max = 5000, message = "Text must be between 1 and 5000 characters")
+        @NotBlank(message = "{text.required}")
+        @Size(
+                min = ValidationConstants.TEXT_MIN,
+                max = ValidationConstants.TEXT_MAX,
+                message = "{text.size}")
         String text,
         Integer score,
-        @NotNull(message = "Subreddit id cannot be null")
+        @NotNull(message = "{subredditId.required}")
         Long subredditId,
-        @NotBlank(message = "Title must not be blank")
-        @Size(min = 1, max = 100, message = "Title must be between 1 and 100 characters")
+        @NotBlank(message = "{title.required}")
+        @Size(
+                min = ValidationConstants.TITLE_MIN,
+                max = ValidationConstants.TITLE_MAX,
+                message = "{title.size}")
         String title) {
 }

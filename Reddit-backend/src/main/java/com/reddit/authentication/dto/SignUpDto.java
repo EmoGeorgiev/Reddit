@@ -1,13 +1,20 @@
 package com.reddit.authentication.dto;
 
+import com.reddit.util.ValidationConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record SignUpDto(
-        @NotBlank(message = "Username must not be blank")
-        @Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters")
+        @NotBlank(message = "{username.required}")
+        @Size(
+                min = ValidationConstants.USERNAME_MIN,
+                max = ValidationConstants.USERNAME_MAX,
+                message = "{username.size}")
         String username,
-        @NotBlank(message = "Password must not be blank")
-        @Size(min = 3, max = 30, message = "Password must be between 3 and 30 characters")
+        @NotBlank(message = "{password.required}")
+        @Size(
+                min = ValidationConstants.PASSWORD_MIN,
+                max = ValidationConstants.PASSWORD_MAX,
+                message = "{password.size}")
         String password) {
 }

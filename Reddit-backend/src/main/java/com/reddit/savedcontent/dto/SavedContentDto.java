@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 public record SavedContentDto(
         Long id,
         LocalDateTime created,
-        @NotNull(message = "User id cannot be null")
+        @NotNull(message = "{userId.required}")
         Long userId,
-        @NotNull(message = "ContentDto cannot be null")
+        @NotNull(message = "{contentDto.required}")
         ContentDto contentDto) {
 }

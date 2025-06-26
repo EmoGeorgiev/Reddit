@@ -1,6 +1,8 @@
 package com.reddit.util;
 
-public class ErrorMessages {
+public final class ErrorMessages {
+    private ErrorMessages() {
+    }
     public static final String COMMENT_NOT_FOUND = "There does not exist a comment with this id";
     public static final String COMMENT_IS_DELETED = "The comment you are trying access is deleted";
     public static final String CONTENT_NOT_FOUND = "There does not exist a content with this id";

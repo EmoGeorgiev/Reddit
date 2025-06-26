@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 public record VoteDto(
         Long id,
         LocalDateTime created,
-        @NotNull(message = "User id cannot be null")
+        @NotNull(message = "{userId.required}")
         Long userId,
-        @NotNull(message = "ContentDto cannot be null")
+        @NotNull(message = "{contentDto.required}")
         ContentDto contentDto,
-        @NotNull(message = "VoteType cannot be null")
+        @NotNull(message = "{voteType.required}")
         VoteType voteType) {
 }
