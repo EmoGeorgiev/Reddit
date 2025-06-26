@@ -181,7 +181,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequestWhenCreatingCommentForBlankText() throws Exception {
+    public void shouldReturnBadRequestForBlankTextWhenCreatingComment() throws Exception {
         String blankText = "          ";
         CommentDto blankTextCommentDto = new CommentDto(id, id, null, blankText, Comment.INITIAL_SCORE, false, new ArrayList<>(), null, id);
 
@@ -196,7 +196,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequestWhenCreatingCommentForNotValidText() throws Exception {
+    public void shouldReturnBadRequestForNotValidTextWhenCreatingComment() throws Exception {
         int length = ValidationConstants.TEXT_MAX + 1;
         String text = "a".repeat(length);
 
@@ -214,7 +214,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequestWhenCreatingCommentForNullPostId() throws Exception {
+    public void shouldReturnBadRequestForNullPostIdWhenCreatingComment() throws Exception {
         CommentDto nullPostIdCommentDto = new CommentDto(id, id, null, "text", Comment.INITIAL_SCORE, false, new ArrayList<>(), null, null);
 
         String expectedMessage = messageSource.getMessage("postId.required", null, LocaleContextHolder.getLocale());
@@ -228,7 +228,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    public void shouldCreateCommentAndReturnTheCommentResult() throws Exception {
+    public void shouldReturnCommentResultWhenCreatingComment() throws Exception {
         when(commentService.addComment(commentDto))
                 .thenReturn(commentDto);
 
