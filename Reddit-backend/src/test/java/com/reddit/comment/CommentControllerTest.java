@@ -83,7 +83,10 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnEmptyPageWhenPostDoesNotHaveComments() throws Exception {
-        Pageable pageable = PageRequest.of(0, PaginationConstants.COMMENT_BY_POST_ID_SIZE, Sort.by(PaginationConstants.COMMENT_BY_POST_ID_SORT).descending());
+        Pageable pageable = PageRequest.of(
+                0,
+                PaginationConstants.COMMENT_BY_POST_ID_SIZE,
+                Sort.by(PaginationConstants.COMMENT_BY_POST_ID_SORT).descending());
         Page<CommentDto> emptyPage = Page.empty();
 
         when(commentService.getCommentsByPostId(id, pageable))
@@ -105,7 +108,10 @@ public class CommentControllerTest {
     @Test
     public void shouldReturnPageWithOneCommentWhenPostHasOneComment() throws Exception {
         List<CommentDto> comments = List.of(commentDto);
-        Pageable pageable = PageRequest.of(0, PaginationConstants.COMMENT_BY_POST_ID_SIZE, Sort.by(PaginationConstants.COMMENT_BY_POST_ID_SORT).descending());
+        Pageable pageable = PageRequest.of(
+                0,
+                PaginationConstants.COMMENT_BY_POST_ID_SIZE,
+                Sort.by(PaginationConstants.COMMENT_BY_POST_ID_SORT).descending());
         Page<CommentDto> pageWithOneElement  = new PageImpl<>(comments, pageable, comments.size());
 
         when(commentService.getCommentsByPostId(id, pageable))
@@ -133,7 +139,10 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnEmptyPageWhenUserDoesNotHaveComments() throws Exception {
-        Pageable pageable = PageRequest.of(0, PaginationConstants.COMMENT_BY_USER_ID_SIZE, Sort.by(PaginationConstants.COMMENT_BY_USER_ID_SORT).descending());
+        Pageable pageable = PageRequest.of(
+                0,
+                PaginationConstants.COMMENT_BY_USER_ID_SIZE,
+                Sort.by(PaginationConstants.COMMENT_BY_USER_ID_SORT).descending());
         Page<CommentDto> emptyPage = Page.empty();
 
         when(commentService.getCommentsByUserId(id, pageable))
@@ -155,7 +164,10 @@ public class CommentControllerTest {
     @Test
     public void shouldReturnPageWithOneCommentWhenUserHasOneComment() throws Exception {
         List<CommentDto> comments = List.of(commentDto);
-        Pageable pageable = PageRequest.of(0, PaginationConstants.COMMENT_BY_USER_ID_SIZE, Sort.by(PaginationConstants.COMMENT_BY_USER_ID_SORT).descending());
+        Pageable pageable = PageRequest.of(
+                0,
+                PaginationConstants.COMMENT_BY_USER_ID_SIZE,
+                Sort.by(PaginationConstants.COMMENT_BY_USER_ID_SORT).descending());
         Page<CommentDto> pageWithOneElement  = new PageImpl<>(comments, pageable, comments.size());
 
         when(commentService.getCommentsByUserId(id, pageable))
