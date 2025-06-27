@@ -76,7 +76,7 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnEmptyPageWhenPostDoesNotHaveComments() throws Exception {
-        int expectedTotalPage = 1;
+        int expectedTotalPages = 1;
         int count = 0;
         Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_POST_ID_SIZE, PaginationConstants.COMMENT_BY_POST_ID_SORT);
         Page<CommentDto> emptyPage = getPage(commentDto, count, pageable);
@@ -90,7 +90,7 @@ public class CommentControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isEmpty())
                 .andExpect(jsonPath("$.totalElements").value(count))
-                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage));
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPages));
 
         verify(commentService)
                 .getCommentsByPostId(id, pageable);
@@ -98,7 +98,7 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnPageWithOneCommentWhenPostHasOneComment() throws Exception {
-        int expectedTotalPage = 1;
+        int expectedTotalPages = 1;
         int count = 1;
         Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_POST_ID_SIZE, PaginationConstants.COMMENT_BY_POST_ID_SORT);
         Page<CommentDto> pageWithOneElement = getPage(commentDto, count, pageable);
@@ -111,7 +111,7 @@ public class CommentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.totalElements").value(count))
-                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage))
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPages))
                 .andExpectAll(commentDtoMatchers("$.content[0].", commentDto));
 
         verify(commentService)
@@ -120,7 +120,7 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnEmptyPageWhenUserDoesNotHaveComments() throws Exception {
-        int expectedTotalPage = 1;
+        int expectedTotalPages = 1;
         int count = 0;
         Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_USER_ID_SIZE, PaginationConstants.COMMENT_BY_USER_ID_SORT);
         Page<CommentDto> emptyPage = getPage(commentDto, count, pageable);
@@ -134,7 +134,7 @@ public class CommentControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isEmpty())
                 .andExpect(jsonPath("$.totalElements").value(count))
-                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage));
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPages));
 
         verify(commentService)
                 .getCommentsByUserId(id, pageable);
@@ -142,7 +142,7 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnPageWithOneCommentWhenUserHasOneComment() throws Exception {
-        int expectedTotalPage = 1;
+        int expectedTotalPages = 1;
         int count = 1;
         Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_USER_ID_SIZE, PaginationConstants.COMMENT_BY_USER_ID_SORT);
         Page<CommentDto> pageWithOneElement = getPage(commentDto, count, pageable);
@@ -155,7 +155,7 @@ public class CommentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.totalElements").value(count))
-                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage))
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPages))
                 .andExpectAll(commentDtoMatchers("$.content[0].", commentDto));
 
         verify(commentService)

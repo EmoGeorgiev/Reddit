@@ -73,7 +73,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnEmptyPageForNoPostWhenGettingPosts() throws Exception {
-        int expectedTotalPage = 1;
+        int expectedTotalPages = 1;
         int count = 0;
         Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
         Page<PostDto> emptyPage = getPage(postDto, count, pageable);
@@ -87,7 +87,7 @@ public class PostControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isEmpty())
                 .andExpect(jsonPath("$.totalElements").value(count))
-                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage));
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPages));
 
         verify(postService)
                 .getPosts(pageable);
@@ -95,7 +95,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnPageWithOnePostForOnePostWhenGettingPosts() throws Exception {
-        int expectedTotalPage = 1;
+        int expectedTotalPages = 1;
         int count = 1;
         Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
         Page<PostDto> pageWithOneElement = getPage(postDto, count, pageable);
@@ -108,7 +108,7 @@ public class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.totalElements").value(count))
-                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage))
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPages))
                 .andExpectAll(postDtoMatchers("$.content[0].", postDto));
 
         verify(postService)
@@ -117,7 +117,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnEmptyPageForNoPostWhenGettingPostsByUserSubscriptions() throws Exception {
-        int expectedTotalPage = 1;
+        int expectedTotalPages = 1;
         int count = 0;
         Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
         Page<PostDto> emptyPage = getPage(postDto, count, pageable);
@@ -131,7 +131,7 @@ public class PostControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isEmpty())
                 .andExpect(jsonPath("$.totalElements").value(count))
-                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage));
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPages));
 
         verify(postService)
                 .getPostsByUserSubscriptions(id, pageable);
@@ -139,7 +139,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnPageWithOnePostForOnePostWhenGettingPostsByUserSubscriptions() throws Exception {
-        int expectedTotalPage = 1;
+        int expectedTotalPages = 1;
         int count = 1;
         Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
         Page<PostDto> pageWithOneElement  = getPage(postDto, count, pageable);
@@ -152,7 +152,7 @@ public class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.totalElements").value(count))
-                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage))
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPages))
                 .andExpectAll(postDtoMatchers("$.content[0].", postDto));
 
         verify(postService)
@@ -161,7 +161,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnEmptyPageForNoPostWhenGettingPostsByUserId() throws Exception {
-        int expectedTotalPage = 1;
+        int expectedTotalPages = 1;
         int count = 0;
         Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
         Page<PostDto> emptyPage = getPage(postDto, count, pageable);
@@ -175,7 +175,7 @@ public class PostControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isEmpty())
                 .andExpect(jsonPath("$.totalElements").value(count))
-                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage));
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPages));
 
         verify(postService)
                 .getPostsByUserId(id, pageable);
@@ -183,7 +183,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnPageWithOnePostForOnePostWhenGettingPostsByUserId() throws Exception {
-        int expectedTotalPage = 1;
+        int expectedTotalPages = 1;
         int count = 1;
         Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
         Page<PostDto> pageWithOneElement = getPage(postDto, count, pageable);
@@ -196,7 +196,7 @@ public class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.totalElements").value(count))
-                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage))
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPages))
                 .andExpectAll(postDtoMatchers("$.content[0].", postDto));
 
         verify(postService)
@@ -205,7 +205,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnEmptyPageForNoPostWhenGettingPostsBySubredditId() throws Exception {
-        int expectedTotalPage = 1;
+        int expectedTotalPages = 1;
         int count = 0;
         Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
         Page<PostDto> emptyPage = getPage(postDto, count, pageable);
@@ -219,7 +219,7 @@ public class PostControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isEmpty())
                 .andExpect(jsonPath("$.totalElements").value(count))
-                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage));
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPages));
 
         verify(postService)
                 .getPostsBySubredditId(id, pageable);
@@ -227,7 +227,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnPageWithOnePostForOnePostWhenGettingPostsBySubredditId() throws Exception {
-        int expectedTotalPage = 1;
+        int expectedTotalPages = 1;
         int count = 1;
         Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
         Page<PostDto> pageWithOneElement = getPage(postDto, count, pageable);
@@ -240,7 +240,7 @@ public class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.totalElements").value(count))
-                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage))
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPages))
                 .andExpectAll(postDtoMatchers("$.content[0].", postDto));
 
         verify(postService)
@@ -265,7 +265,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequestForNotValidTextWhenCreatingPost() throws Exception {
+    public void shouldReturnBadRequestForNonValidTextWhenCreatingPost() throws Exception {
         String text = getStringWithFixedLength(ValidationConstants.TEXT_MAX + 1);
 
         PostDto overMaxTextSizePostDto = new PostDto(id, id, null, text, Post.INITIAL_SCORE, id, "title");
@@ -302,7 +302,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequestForNotValidTitleWhenCreatingPost() throws Exception {
+    public void shouldReturnBadRequestForNonValidTitleWhenCreatingPost() throws Exception {
         String title = getStringWithFixedLength(ValidationConstants.TITLE_MAX + 1);
 
         PostDto overMaxTitleSizePostDto = new PostDto(id, id, null, "text", Post.INITIAL_SCORE, id, title);

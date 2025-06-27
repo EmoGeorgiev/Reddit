@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 
 public record SubredditUpdateTitleDto(
         @NotBlank(message = "{title.required}")
-        @Size(min = 1, max = 100, message = "Title must be between 1 and 100 characters")
+        @Size(min = 1, max = 100, message = "{title.size}")
         String title,
         @NotNull(message = "{moderatorId.required}")
         Long moderatorId) {
