@@ -17,6 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.reddit.util.TestUtils.*;
+import static com.reddit.util.TestUtils.getStringWithFixedLength;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -59,10 +61,12 @@ public class AuthenticationControllerWithoutFiltersTest {
 
     @Test
     public void shouldReturnBadRequestForBlankUsernameWhenCreatingUser() throws Exception {
-        String blankUsername = "       ";
-        SignUpDto notValidSignUpDto = new SignUpDto(blankUsername, password);
+        SignUpDto notValidSignUpDto = new SignUpDto(BLANK_STRING, password);
 
-        String expectedMessage = messageSource.getMessage("username.required", null, LocaleContextHolder.getLocale());
+        String expectedMessage = messageSource.getMessage(
+                "username.required",
+                null,
+                LocaleContextHolder.getLocale());
 
         mockMvc
                 .perform(post(BASE_URL)
@@ -74,13 +78,15 @@ public class AuthenticationControllerWithoutFiltersTest {
 
     @Test
     public void shouldReturnBadRequestForNotValidUsernameWhenCreatingUser() throws Exception {
-        int length = ValidationConstants.USERNAME_MAX + 1;
-        String overMaxSizeUsername = "a".repeat(length);
+        String overMaxSizeUsername = getStringWithFixedLength(ValidationConstants.USERNAME_MAX + 1);
 
         SignUpDto notValidSignUpDto = new SignUpDto(overMaxSizeUsername, password);
 
-        Object[] args = new Object[] { String.valueOf(ValidationConstants.USERNAME_MIN), String.valueOf(ValidationConstants.USERNAME_MAX) };
-        String expectedMessage = messageSource.getMessage("username.size.test", args, LocaleContextHolder.getLocale());
+        Object[] args = getArgs(ValidationConstants.USERNAME_MIN, ValidationConstants.USERNAME_MAX);
+        String expectedMessage = messageSource.getMessage(
+                "username.size.test",
+                args,
+                LocaleContextHolder.getLocale());
 
         mockMvc
                 .perform(post(BASE_URL)
@@ -92,10 +98,12 @@ public class AuthenticationControllerWithoutFiltersTest {
 
     @Test
     public void shouldReturnBadRequestForBlankPasswordWhenCreatingUser() throws Exception {
-        String blankPassword = "       ";
-        SignUpDto notValidSignUpDto = new SignUpDto(username, blankPassword);
+        SignUpDto notValidSignUpDto = new SignUpDto(username, BLANK_STRING);
 
-        String expectedMessage = messageSource.getMessage("password.required", null, LocaleContextHolder.getLocale());
+        String expectedMessage = messageSource.getMessage(
+                "password.required",
+                null,
+                LocaleContextHolder.getLocale());
 
         mockMvc
                 .perform(post(BASE_URL)
@@ -107,13 +115,15 @@ public class AuthenticationControllerWithoutFiltersTest {
 
     @Test
     public void shouldReturnBadRequestForNotValidPasswordWhenCreatingUser() throws Exception {
-        int length = ValidationConstants.PASSWORD_MAX + 1;
-        String overMaxSizePassword = "a".repeat(length);
+        String overMaxSizePassword = getStringWithFixedLength(ValidationConstants.PASSWORD_MAX + 1);
 
         SignUpDto notValidSignUpDto = new SignUpDto(username, overMaxSizePassword);
 
-        Object[] args = new Object[] { String.valueOf(ValidationConstants.PASSWORD_MIN), String.valueOf(ValidationConstants.PASSWORD_MAX) };
-        String expectedMessage = messageSource.getMessage("password.size.test", args, LocaleContextHolder.getLocale());
+        Object[] args = getArgs(ValidationConstants.PASSWORD_MIN, ValidationConstants.PASSWORD_MAX);
+        String expectedMessage = messageSource.getMessage(
+                "password.size.test",
+                args,
+                LocaleContextHolder.getLocale());
 
         mockMvc
                 .perform(post(BASE_URL)
