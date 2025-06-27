@@ -19,10 +19,11 @@ import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import static com.reddit.util.TestUtils.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -67,15 +68,7 @@ public class CommentControllerTest {
                 .perform(get(BASE_URL + "/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("id").value(commentDto.id()))
-                .andExpect(jsonPath("userId").value(commentDto.userId()))
-                .andExpect(jsonPath("created").value(commentDto.created()))
-                .andExpect(jsonPath("text").value(commentDto.text()))
-                .andExpect(jsonPath("score").value(commentDto.score()))
-                .andExpect(jsonPath("isDeleted").value(commentDto.isDeleted()))
-                .andExpect(jsonPath("replies").value(commentDto.replies()))
-                .andExpect(jsonPath("parentId").value(commentDto.parentId()))
-                .andExpect(jsonPath("postId").value(commentDto.postId()));
+                .andExpectAll(commentDtoMatchers("$.", commentDto));
 
         verify(commentService)
                 .getComment(id);
@@ -83,11 +76,10 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnEmptyPageWhenPostDoesNotHaveComments() throws Exception {
-        Pageable pageable = PageRequest.of(
-                0,
-                PaginationConstants.COMMENT_BY_POST_ID_SIZE,
-                Sort.by(PaginationConstants.COMMENT_BY_POST_ID_SORT).descending());
-        Page<CommentDto> emptyPage = Page.empty();
+        int expectedTotalPage = 1;
+        int count = 0;
+        Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_POST_ID_SIZE, PaginationConstants.COMMENT_BY_POST_ID_SORT);
+        Page<CommentDto> emptyPage = getPage(commentDto, count, pageable);
 
         when(commentService.getCommentsByPostId(id, pageable))
                 .thenReturn(emptyPage);
@@ -97,9 +89,8 @@ public class CommentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isEmpty())
-                .andExpect(jsonPath("$.totalElements").value(0))
-                .andExpect(jsonPath("$.totalPages").value(1));
-
+                .andExpect(jsonPath("$.totalElements").value(count))
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage));
 
         verify(commentService)
                 .getCommentsByPostId(id, pageable);
@@ -107,12 +98,10 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnPageWithOneCommentWhenPostHasOneComment() throws Exception {
-        List<CommentDto> comments = List.of(commentDto);
-        Pageable pageable = PageRequest.of(
-                0,
-                PaginationConstants.COMMENT_BY_POST_ID_SIZE,
-                Sort.by(PaginationConstants.COMMENT_BY_POST_ID_SORT).descending());
-        Page<CommentDto> pageWithOneElement  = new PageImpl<>(comments, pageable, comments.size());
+        int expectedTotalPage = 1;
+        int count = 1;
+        Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_POST_ID_SIZE, PaginationConstants.COMMENT_BY_POST_ID_SORT);
+        Page<CommentDto> pageWithOneElement = getPage(commentDto, count, pageable);
 
         when(commentService.getCommentsByPostId(id, pageable))
                 .thenReturn(pageWithOneElement);
@@ -121,17 +110,9 @@ public class CommentControllerTest {
                 .perform(get(BASE_URL + "/posts/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.totalElements").value(1))
-                .andExpect(jsonPath("$.totalPages").value(1))
-                .andExpect(jsonPath("$.content[0].id").value(commentDto.id()))
-                .andExpect(jsonPath("$.content[0].userId").value(commentDto.userId()))
-                .andExpect(jsonPath("$.content[0].created").value(commentDto.created()))
-                .andExpect(jsonPath("$.content[0].text").value(commentDto.text()))
-                .andExpect(jsonPath("$.content[0].score").value(commentDto.score()))
-                .andExpect(jsonPath("$.content[0].isDeleted").value(commentDto.isDeleted()))
-                .andExpect(jsonPath("$.content[0].replies").value(commentDto.replies()))
-                .andExpect(jsonPath("$.content[0].parentId").value(commentDto.parentId()))
-                .andExpect(jsonPath("$.content[0].postId").value(commentDto.postId()));
+                .andExpect(jsonPath("$.totalElements").value(count))
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage))
+                .andExpectAll(commentDtoMatchers("$.content[0].", commentDto));
 
         verify(commentService)
                 .getCommentsByPostId(id, pageable);
@@ -139,11 +120,10 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnEmptyPageWhenUserDoesNotHaveComments() throws Exception {
-        Pageable pageable = PageRequest.of(
-                0,
-                PaginationConstants.COMMENT_BY_USER_ID_SIZE,
-                Sort.by(PaginationConstants.COMMENT_BY_USER_ID_SORT).descending());
-        Page<CommentDto> emptyPage = Page.empty();
+        int expectedTotalPage = 1;
+        int count = 0;
+        Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_USER_ID_SIZE, PaginationConstants.COMMENT_BY_USER_ID_SORT);
+        Page<CommentDto> emptyPage = getPage(commentDto, count, pageable);
 
         when(commentService.getCommentsByUserId(id, pageable))
                 .thenReturn(emptyPage);
@@ -153,9 +133,8 @@ public class CommentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isEmpty())
-                .andExpect(jsonPath("$.totalElements").value(0))
-                .andExpect(jsonPath("$.totalPages").value(1));
-
+                .andExpect(jsonPath("$.totalElements").value(count))
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage));
 
         verify(commentService)
                 .getCommentsByUserId(id, pageable);
@@ -163,12 +142,10 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnPageWithOneCommentWhenUserHasOneComment() throws Exception {
-        List<CommentDto> comments = List.of(commentDto);
-        Pageable pageable = PageRequest.of(
-                0,
-                PaginationConstants.COMMENT_BY_USER_ID_SIZE,
-                Sort.by(PaginationConstants.COMMENT_BY_USER_ID_SORT).descending());
-        Page<CommentDto> pageWithOneElement  = new PageImpl<>(comments, pageable, comments.size());
+        int expectedTotalPage = 1;
+        int count = 1;
+        Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_USER_ID_SIZE, PaginationConstants.COMMENT_BY_USER_ID_SORT);
+        Page<CommentDto> pageWithOneElement = getPage(commentDto, count, pageable);
 
         when(commentService.getCommentsByUserId(id, pageable))
                 .thenReturn(pageWithOneElement);
@@ -177,17 +154,9 @@ public class CommentControllerTest {
                 .perform(get(BASE_URL + "/users/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.totalElements").value(1))
-                .andExpect(jsonPath("$.totalPages").value(1))
-                .andExpect(jsonPath("$.content[0].id").value(commentDto.id()))
-                .andExpect(jsonPath("$.content[0].userId").value(commentDto.userId()))
-                .andExpect(jsonPath("$.content[0].created").value(commentDto.created()))
-                .andExpect(jsonPath("$.content[0].text").value(commentDto.text()))
-                .andExpect(jsonPath("$.content[0].score").value(commentDto.score()))
-                .andExpect(jsonPath("$.content[0].isDeleted").value(commentDto.isDeleted()))
-                .andExpect(jsonPath("$.content[0].replies").value(commentDto.replies()))
-                .andExpect(jsonPath("$.content[0].parentId").value(commentDto.parentId()))
-                .andExpect(jsonPath("$.content[0].postId").value(commentDto.postId()));
+                .andExpect(jsonPath("$.totalElements").value(count))
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPage))
+                .andExpectAll(commentDtoMatchers("$.content[0].", commentDto));
 
         verify(commentService)
                 .getCommentsByUserId(id, pageable);
@@ -195,8 +164,7 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnBadRequestForBlankTextWhenCreatingComment() throws Exception {
-        String blankText = "          ";
-        CommentDto blankTextCommentDto = new CommentDto(id, id, null, blankText, Comment.INITIAL_SCORE, false, new ArrayList<>(), null, id);
+        CommentDto blankTextCommentDto = new CommentDto(id, id, null, BLANK_STRING, Comment.INITIAL_SCORE, false, new ArrayList<>(), null, id);
 
         String expectedMessage = messageSource.getMessage("text.required", null, LocaleContextHolder.getLocale());
 
@@ -210,13 +178,15 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnBadRequestForNotValidTextWhenCreatingComment() throws Exception {
-        int length = ValidationConstants.TEXT_MAX + 1;
-        String text = "a".repeat(length);
+        String text = getStringWithFixedLength(ValidationConstants.TEXT_MAX + 1);
 
         CommentDto overMaxTextSizeCommentDto = new CommentDto(id, id, null, text, Comment.INITIAL_SCORE, false, new ArrayList<>(), null, id);
 
-        Object[] args = new Object[] { String.valueOf(ValidationConstants.TEXT_MIN), String.valueOf(ValidationConstants.TEXT_MAX) };
-        String expectedMessage = messageSource.getMessage("text.size.test", args, LocaleContextHolder.getLocale());
+        Object[] args = getArgs(ValidationConstants.TEXT_MIN, ValidationConstants.TEXT_MAX);
+        String expectedMessage = messageSource.getMessage(
+                "text.size.test",
+                args,
+                LocaleContextHolder.getLocale());
 
         mockMvc
                 .perform(post(BASE_URL)
@@ -230,7 +200,10 @@ public class CommentControllerTest {
     public void shouldReturnBadRequestForNullPostIdWhenCreatingComment() throws Exception {
         CommentDto nullPostIdCommentDto = new CommentDto(id, id, null, "text", Comment.INITIAL_SCORE, false, new ArrayList<>(), null, null);
 
-        String expectedMessage = messageSource.getMessage("postId.required", null, LocaleContextHolder.getLocale());
+        String expectedMessage = messageSource.getMessage(
+                "postId.required",
+                null,
+                LocaleContextHolder.getLocale());
 
         mockMvc
                 .perform(post(BASE_URL)
@@ -250,15 +223,7 @@ public class CommentControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(commentDto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(commentDto.id()))
-                .andExpect(jsonPath("$.userId").value(commentDto.userId()))
-                .andExpect(jsonPath("$.created").value(commentDto.created()))
-                .andExpect(jsonPath("$.text").value(commentDto.text()))
-                .andExpect(jsonPath("$.score").value(commentDto.score()))
-                .andExpect(jsonPath("$.isDeleted").value(commentDto.isDeleted()))
-                .andExpect(jsonPath("$.replies").value(commentDto.replies()))
-                .andExpect(jsonPath("$.parentId").value(commentDto.parentId()))
-                .andExpect(jsonPath("$.postId").value(commentDto.postId()));
+                .andExpectAll(commentDtoMatchers("$.", commentDto));
 
         verify(commentService)
                 .addComment(commentDto);
@@ -276,7 +241,6 @@ public class CommentControllerTest {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value(ErrorMessages.CONTENT_UPDATE_NOT_ALLOWED));
 
-
         verify(commentService)
                 .updateComment(id, commentDto);
     }
@@ -293,7 +257,6 @@ public class CommentControllerTest {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value(ErrorMessages.COMMENT_IS_DELETED));
 
-
         verify(commentService)
                 .updateComment(id, commentDto);
     }
@@ -308,16 +271,7 @@ public class CommentControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(commentDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(commentDto.id()))
-                .andExpect(jsonPath("$.userId").value(commentDto.userId()))
-                .andExpect(jsonPath("$.created").value(commentDto.created()))
-                .andExpect(jsonPath("$.text").value(commentDto.text()))
-                .andExpect(jsonPath("$.score").value(commentDto.score()))
-                .andExpect(jsonPath("$.isDeleted").value(commentDto.isDeleted()))
-                .andExpect(jsonPath("$.replies").value(commentDto.replies()))
-                .andExpect(jsonPath("$.parentId").value(commentDto.parentId()))
-                .andExpect(jsonPath("$.postId").value(commentDto.postId()));
-
+                .andExpectAll(commentDtoMatchers("$.", commentDto));
 
         verify(commentService)
                 .updateComment(id, commentDto);
@@ -347,17 +301,23 @@ public class CommentControllerTest {
         mockMvc
                 .perform(delete(BASE_URL + "/" + id + "?userId=" + id))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(deletedCommentDto.id()))
-                .andExpect(jsonPath("$.userId").value(deletedCommentDto.userId()))
-                .andExpect(jsonPath("$.created").value(deletedCommentDto.created()))
-                .andExpect(jsonPath("$.text").value(deletedCommentDto.text()))
-                .andExpect(jsonPath("$.score").value(deletedCommentDto.score()))
-                .andExpect(jsonPath("$.isDeleted").value(deletedCommentDto.isDeleted()))
-                .andExpect(jsonPath("$.replies").value(deletedCommentDto.replies()))
-                .andExpect(jsonPath("$.parentId").value(deletedCommentDto.parentId()))
-                .andExpect(jsonPath("$.postId").value(deletedCommentDto.postId()));
+                .andExpectAll(commentDtoMatchers("$.", deletedCommentDto));
 
         verify(commentService)
                 .deleteComment(id, id);
+    }
+
+    private ResultMatcher[] commentDtoMatchers(String prefix, CommentDto dto) {
+        return new ResultMatcher[] {
+                jsonPath(prefix + "id").value(dto.id()),
+                jsonPath(prefix + "userId").value(dto.userId()),
+                jsonPath(prefix + "created").value(dto.created()),
+                jsonPath(prefix + "text").value(dto.text()),
+                jsonPath(prefix + "score").value(dto.score()),
+                jsonPath(prefix + "isDeleted").value(dto.isDeleted()),
+                jsonPath(prefix + "replies").value(dto.replies()),
+                jsonPath(prefix + "parentId").value(dto.parentId()),
+                jsonPath(prefix + "postId").value(dto.postId())
+        };
     }
 }
