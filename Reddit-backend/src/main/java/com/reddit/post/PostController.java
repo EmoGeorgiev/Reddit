@@ -1,7 +1,7 @@
 package com.reddit.post;
 
 import com.reddit.post.dto.PostDto;
-import com.reddit.security.SecurityUser;
+import com.reddit.util.PaginationConstants;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,9 +9,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,7 +30,10 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<Page<PostDto>> getPosts(
-            @PageableDefault(size = 50, sort = "created", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(
+                    size = PaginationConstants.POST_DEFAULT_SIZE,
+                    sort = PaginationConstants.POST_DEFAULT_SORT,
+                    direction = Sort.Direction.DESC) Pageable pageable) {
         Page<PostDto> posts = postService.getPosts(pageable);
 
         return ResponseEntity
@@ -44,7 +44,10 @@ public class PostController {
     @GetMapping("/subscriptions/{userId}")
     public ResponseEntity<Page<PostDto>> getPostsByUserSubscriptions(
             @PathVariable Long userId,
-            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(
+                    size = PaginationConstants.POST_DEFAULT_SIZE,
+                    sort = PaginationConstants.POST_DEFAULT_SORT,
+                    direction = Sort.Direction.DESC) Pageable pageable) {
         Page<PostDto> posts = postService.getPostsByUserSubscriptions(userId, pageable);
 
         return ResponseEntity
@@ -55,7 +58,10 @@ public class PostController {
     @GetMapping("/users/{userId}")
     public ResponseEntity<Page<PostDto>> getPostsByUserId(
             @PathVariable Long userId,
-            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(
+                    size = PaginationConstants.POST_DEFAULT_SIZE,
+                    sort = PaginationConstants.POST_DEFAULT_SORT,
+                    direction = Sort.Direction.DESC) Pageable pageable) {
         Page<PostDto> posts = postService.getPostsByUserId(userId, pageable);
 
         return ResponseEntity
@@ -66,7 +72,10 @@ public class PostController {
     @GetMapping("/subreddits/{subredditId}")
     public ResponseEntity<Page<PostDto>> getPostsBySubredditId(
             @PathVariable Long subredditId,
-            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(
+                    size = PaginationConstants.POST_DEFAULT_SIZE,
+                    sort = PaginationConstants.POST_DEFAULT_SORT,
+                    direction = Sort.Direction.DESC) Pageable pageable) {
         Page<PostDto> posts = postService.getPostsBySubredditId(subredditId, pageable);
 
         return ResponseEntity

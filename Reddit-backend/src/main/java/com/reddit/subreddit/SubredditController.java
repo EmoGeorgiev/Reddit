@@ -3,6 +3,7 @@ package com.reddit.subreddit;
 import com.reddit.subreddit.dto.ModeratorUpdateDto;
 import com.reddit.subreddit.dto.SubredditDto;
 import com.reddit.subreddit.dto.SubredditUpdateTitleDto;
+import com.reddit.util.PaginationConstants;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +35,10 @@ public class SubredditController {
     @GetMapping("/search")
     public ResponseEntity<Page<SubredditDto>> getSubredditsWhereTitleContainsWord(
             @RequestParam String word,
-            @PageableDefault(size = 25, sort = "title", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(
+                    size = PaginationConstants.SUBREDDIT_BY_TITLE_CONTAINS_SIZE,
+                    sort = PaginationConstants.SUBREDDIT_BY_TITLE_CONTAINS_SORT,
+                    direction = Sort.Direction.DESC) Pageable pageable) {
         Page<SubredditDto> subreddits = subredditService.getSubredditsWhereTitleContainsWord(word, pageable);
 
         return ResponseEntity

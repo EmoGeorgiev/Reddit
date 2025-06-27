@@ -2,6 +2,7 @@ package com.reddit.user;
 
 import com.reddit.user.dto.UpdatePasswordDto;
 import com.reddit.user.dto.UserDto;
+import com.reddit.util.PaginationConstants;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +41,10 @@ public class UserController {
     @GetMapping("/search")
     public ResponseEntity<Page<UserDto>> getUsersWhereUsernameContainsWord(
             @RequestParam String word,
-            @PageableDefault(size = 25, sort = "username", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(
+                    size = PaginationConstants.USER_BY_TITLE_CONTAINS_SIZE,
+                    sort = PaginationConstants.USER_BY_TITLE_CONTAINS_SORT,
+                    direction = Sort.Direction.DESC) Pageable pageable) {
         Page<UserDto> users = userService.getUsersWhereUsernameContainsWord(word, pageable);
 
         return ResponseEntity

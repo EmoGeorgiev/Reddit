@@ -1,6 +1,7 @@
 package com.reddit.comment;
 
 import com.reddit.comment.dto.CommentDto;
+import com.reddit.util.PaginationConstants;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +32,10 @@ public class CommentController {
     @GetMapping("/posts/{postId}")
     public ResponseEntity<Page<CommentDto>> getCommentsByPostId(
             @PathVariable Long postId,
-            @PageableDefault(size = 200, sort = "score", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(
+                    size = PaginationConstants.COMMENT_BY_POST_ID_SIZE,
+                    sort = PaginationConstants.COMMENT_BY_POST_ID_SORT,
+                    direction = Sort.Direction.DESC) Pageable pageable) {
         Page<CommentDto> comments = commentService.getCommentsByPostId(postId, pageable);
 
         return ResponseEntity
@@ -42,7 +46,10 @@ public class CommentController {
     @GetMapping("/users/{userId}")
     public ResponseEntity<Page<CommentDto>> getCommentsByUserId(
             @PathVariable Long userId,
-            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(
+                    size = PaginationConstants.COMMENT_BY_USER_ID_SIZE,
+                    sort = PaginationConstants.COMMENT_BY_USER_ID_SORT,
+                    direction = Sort.Direction.DESC) Pageable pageable) {
         Page<CommentDto> comments = commentService.getCommentsByUserId(userId, pageable);
 
         return ResponseEntity

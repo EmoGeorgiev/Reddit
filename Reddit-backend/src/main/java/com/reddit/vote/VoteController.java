@@ -1,5 +1,6 @@
 package com.reddit.vote;
 
+import com.reddit.util.PaginationConstants;
 import com.reddit.vote.dto.VoteDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,10 @@ public class VoteController {
     @GetMapping("/up-voted/users/{userId}")
     public ResponseEntity<Page<VoteDto>> getUpVotedByUserId(
             @PathVariable Long userId,
-            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(
+                    size = PaginationConstants.VOTE_DEFAULT_SIZE,
+                    sort = PaginationConstants.VOTE_DEFAULT_SORT,
+                    direction = Sort.Direction.DESC) Pageable pageable) {
         Page<VoteDto> votes = voteService.getUpVotedByUserId(userId, pageable);
 
         return ResponseEntity
@@ -32,7 +36,10 @@ public class VoteController {
     @GetMapping("/down-voted/users/{userId}")
     public ResponseEntity<Page<VoteDto>> getDownVotedByUserId(
             @PathVariable Long userId,
-            @PageableDefault(size = 25, sort = "created", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(
+                    size = PaginationConstants.VOTE_DEFAULT_SIZE,
+                    sort = PaginationConstants.VOTE_DEFAULT_SORT,
+                    direction = Sort.Direction.DESC) Pageable pageable) {
         Page<VoteDto> votes = voteService.getDownVotedByUserId(userId, pageable);
 
         return ResponseEntity
