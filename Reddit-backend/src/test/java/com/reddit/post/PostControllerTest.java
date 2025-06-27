@@ -18,7 +18,9 @@ import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -37,9 +39,9 @@ public class PostControllerTest {
     private MessageSource messageSource;
     @MockitoBean
     private PostService postService;
+    private final String blankString = "         ";
     private final Long id = 1L;
     private final PostDto postDto = new PostDto(id, id, null, "text", Post.INITIAL_SCORE, id, "title");
-
 
     @Test
     public void shouldReturnNotFoundForInvalidIdWhenGettingPost() throws Exception {
@@ -66,13 +68,7 @@ public class PostControllerTest {
                 .perform(get(BASE_URL + "/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("id").value(postDto.id()))
-                .andExpect(jsonPath("userId").value(postDto.userId()))
-                .andExpect(jsonPath("created").value(postDto.created()))
-                .andExpect(jsonPath("text").value(postDto.text()))
-                .andExpect(jsonPath("score").value(postDto.score()))
-                .andExpect(jsonPath("subredditId").value(postDto.subredditId()))
-                .andExpect(jsonPath("title").value(postDto.title()));
+                .andExpectAll(postDtoMatchers("$.", postDto));
 
         verify(postService)
                 .getPost(id);
@@ -80,10 +76,9 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnEmptyPageForNoPostWhenGettingPosts() throws Exception {
-        Pageable pageable = PageRequest.of(0,
-                PaginationConstants.POST_DEFAULT_SIZE,
-                Sort.by(PaginationConstants.POST_DEFAULT_SORT).descending());
-        Page<PostDto> emptyPage = Page.empty();
+        int count = 0;
+        Pageable pageable = defaultPageable();
+        Page<PostDto> emptyPage = postPage(count, pageable);
 
         when(postService.getPosts(pageable))
                 .thenReturn(emptyPage);
@@ -93,9 +88,8 @@ public class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isEmpty())
-                .andExpect(jsonPath("$.totalElements").value(0))
+                .andExpect(jsonPath("$.totalElements").value(count))
                 .andExpect(jsonPath("$.totalPages").value(1));
-
 
         verify(postService)
                 .getPosts(pageable);
@@ -103,12 +97,9 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnPageWithOnePostForOnePostWhenGettingPosts() throws Exception {
-        List<PostDto> posts = List.of(postDto);
-        Pageable pageable = PageRequest.of(
-                0,
-                PaginationConstants.POST_DEFAULT_SIZE,
-                Sort.by(PaginationConstants.POST_DEFAULT_SORT).descending());
-        Page<PostDto> pageWithOneElement  = new PageImpl<>(posts, pageable, posts.size());
+        int count = 1;
+        Pageable pageable = defaultPageable();
+        Page<PostDto> pageWithOneElement  = postPage(count, pageable);
 
         when(postService.getPosts(pageable))
                 .thenReturn(pageWithOneElement);
@@ -117,15 +108,9 @@ public class PostControllerTest {
                 .perform(get(BASE_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.totalElements").value(count))
                 .andExpect(jsonPath("$.totalPages").value(1))
-                .andExpect(jsonPath("$.content[0].id").value(postDto.id()))
-                .andExpect(jsonPath("$.content[0].userId").value(postDto.userId()))
-                .andExpect(jsonPath("$.content[0].created").value(postDto.created()))
-                .andExpect(jsonPath("$.content[0].text").value(postDto.text()))
-                .andExpect(jsonPath("$.content[0].score").value(postDto.score()))
-                .andExpect(jsonPath("$.content[0].subredditId").value(postDto.subredditId()))
-                .andExpect(jsonPath("$.content[0].title").value(postDto.title()));
+                .andExpectAll(postDtoMatchers("$.content[0]", postDto));
 
         verify(postService)
                 .getPosts(pageable);
@@ -133,10 +118,9 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnEmptyPageForNoPostWhenGettingPostsByUserSubscriptions() throws Exception {
-        Pageable pageable = PageRequest.of(0,
-                PaginationConstants.POST_DEFAULT_SIZE,
-                Sort.by(PaginationConstants.POST_DEFAULT_SORT).descending());
-        Page<PostDto> emptyPage = Page.empty();
+        int count = 0;
+        Pageable pageable = defaultPageable();
+        Page<PostDto> emptyPage = postPage(count, pageable);
 
         when(postService.getPostsByUserSubscriptions(id, pageable))
                 .thenReturn(emptyPage);
@@ -146,9 +130,8 @@ public class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isEmpty())
-                .andExpect(jsonPath("$.totalElements").value(0))
+                .andExpect(jsonPath("$.totalElements").value(count))
                 .andExpect(jsonPath("$.totalPages").value(1));
-
 
         verify(postService)
                 .getPostsByUserSubscriptions(id, pageable);
@@ -156,12 +139,9 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnPageWithOnePostForOnePostWhenGettingPostsByUserSubscriptions() throws Exception {
-        List<PostDto> posts = List.of(postDto);
-        Pageable pageable = PageRequest.of(
-                0,
-                PaginationConstants.POST_DEFAULT_SIZE,
-                Sort.by(PaginationConstants.POST_DEFAULT_SORT).descending());
-        Page<PostDto> pageWithOneElement  = new PageImpl<>(posts, pageable, posts.size());
+        int count = 1;
+        Pageable pageable = defaultPageable();
+        Page<PostDto> pageWithOneElement  = postPage(count, pageable);
 
         when(postService.getPostsByUserSubscriptions(id, pageable))
                 .thenReturn(pageWithOneElement);
@@ -170,15 +150,9 @@ public class PostControllerTest {
                 .perform(get(BASE_URL + "/subscriptions/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.totalElements").value(count))
                 .andExpect(jsonPath("$.totalPages").value(1))
-                .andExpect(jsonPath("$.content[0].id").value(postDto.id()))
-                .andExpect(jsonPath("$.content[0].userId").value(postDto.userId()))
-                .andExpect(jsonPath("$.content[0].created").value(postDto.created()))
-                .andExpect(jsonPath("$.content[0].text").value(postDto.text()))
-                .andExpect(jsonPath("$.content[0].score").value(postDto.score()))
-                .andExpect(jsonPath("$.content[0].subredditId").value(postDto.subredditId()))
-                .andExpect(jsonPath("$.content[0].title").value(postDto.title()));
+                .andExpectAll(postDtoMatchers("$.content[0]", postDto));
 
         verify(postService)
                 .getPostsByUserSubscriptions(id, pageable);
@@ -186,10 +160,9 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnEmptyPageForNoPostWhenGettingPostsByUserId() throws Exception {
-        Pageable pageable = PageRequest.of(0,
-                PaginationConstants.POST_DEFAULT_SIZE,
-                Sort.by(PaginationConstants.POST_DEFAULT_SORT).descending());
-        Page<PostDto> emptyPage = Page.empty();
+        int count = 0;
+        Pageable pageable = defaultPageable();
+        Page<PostDto> emptyPage = postPage(count, pageable);
 
         when(postService.getPostsByUserId(id, pageable))
                 .thenReturn(emptyPage);
@@ -199,9 +172,8 @@ public class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isEmpty())
-                .andExpect(jsonPath("$.totalElements").value(0))
+                .andExpect(jsonPath("$.totalElements").value(count))
                 .andExpect(jsonPath("$.totalPages").value(1));
-
 
         verify(postService)
                 .getPostsByUserId(id, pageable);
@@ -209,12 +181,9 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnPageWithOnePostForOnePostWhenGettingPostsByUserId() throws Exception {
-        List<PostDto> posts = List.of(postDto);
-        Pageable pageable = PageRequest.of(
-                0,
-                PaginationConstants.POST_DEFAULT_SIZE,
-                Sort.by(PaginationConstants.POST_DEFAULT_SORT).descending());
-        Page<PostDto> pageWithOneElement  = new PageImpl<>(posts, pageable, posts.size());
+        int count = 1;
+        Pageable pageable = defaultPageable();
+        Page<PostDto> pageWithOneElement  = postPage(count, pageable);
 
         when(postService.getPostsByUserId(id, pageable))
                 .thenReturn(pageWithOneElement);
@@ -223,15 +192,9 @@ public class PostControllerTest {
                 .perform(get(BASE_URL + "/users/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.totalElements").value(count))
                 .andExpect(jsonPath("$.totalPages").value(1))
-                .andExpect(jsonPath("$.content[0].id").value(postDto.id()))
-                .andExpect(jsonPath("$.content[0].userId").value(postDto.userId()))
-                .andExpect(jsonPath("$.content[0].created").value(postDto.created()))
-                .andExpect(jsonPath("$.content[0].text").value(postDto.text()))
-                .andExpect(jsonPath("$.content[0].score").value(postDto.score()))
-                .andExpect(jsonPath("$.content[0].subredditId").value(postDto.subredditId()))
-                .andExpect(jsonPath("$.content[0].title").value(postDto.title()));
+                .andExpectAll(postDtoMatchers("$.content[0]", postDto));
 
         verify(postService)
                 .getPostsByUserId(id, pageable);
@@ -239,10 +202,9 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnEmptyPageForNoPostWhenGettingPostsBySubredditId() throws Exception {
-        Pageable pageable = PageRequest.of(0,
-                PaginationConstants.POST_DEFAULT_SIZE,
-                Sort.by(PaginationConstants.POST_DEFAULT_SORT).descending());
-        Page<PostDto> emptyPage = Page.empty();
+        int count = 0;
+        Pageable pageable = defaultPageable();
+        Page<PostDto> emptyPage = postPage(count, pageable);
 
         when(postService.getPostsBySubredditId(id, pageable))
                 .thenReturn(emptyPage);
@@ -252,9 +214,8 @@ public class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isEmpty())
-                .andExpect(jsonPath("$.totalElements").value(0))
+                .andExpect(jsonPath("$.totalElements").value(count))
                 .andExpect(jsonPath("$.totalPages").value(1));
-
 
         verify(postService)
                 .getPostsBySubredditId(id, pageable);
@@ -262,12 +223,9 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnPageWithOnePostForOnePostWhenGettingPostsBySubredditId() throws Exception {
-        List<PostDto> posts = List.of(postDto);
-        Pageable pageable = PageRequest.of(
-                0,
-                PaginationConstants.POST_DEFAULT_SIZE,
-                Sort.by(PaginationConstants.POST_DEFAULT_SORT).descending());
-        Page<PostDto> pageWithOneElement  = new PageImpl<>(posts, pageable, posts.size());
+        int count = 1;
+        Pageable pageable = defaultPageable();
+        Page<PostDto> pageWithOneElement  = postPage(count, pageable);
 
         when(postService.getPostsBySubredditId(id, pageable))
                 .thenReturn(pageWithOneElement);
@@ -276,15 +234,9 @@ public class PostControllerTest {
                 .perform(get(BASE_URL + "/subreddits/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.totalElements").value(count))
                 .andExpect(jsonPath("$.totalPages").value(1))
-                .andExpect(jsonPath("$.content[0].id").value(postDto.id()))
-                .andExpect(jsonPath("$.content[0].userId").value(postDto.userId()))
-                .andExpect(jsonPath("$.content[0].created").value(postDto.created()))
-                .andExpect(jsonPath("$.content[0].text").value(postDto.text()))
-                .andExpect(jsonPath("$.content[0].score").value(postDto.score()))
-                .andExpect(jsonPath("$.content[0].subredditId").value(postDto.subredditId()))
-                .andExpect(jsonPath("$.content[0].title").value(postDto.title()));
+                .andExpectAll(postDtoMatchers("$.content[0]", postDto));
 
         verify(postService)
                 .getPostsBySubredditId(id, pageable);
@@ -292,10 +244,12 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnBadRequestForBlankTextWhenCreatingPost() throws Exception {
-        String blankText = "          ";
-        PostDto blankTextPostDto = new PostDto(id, id, null, blankText, Post.INITIAL_SCORE, id, "title");
+        PostDto blankTextPostDto = new PostDto(id, id, null, blankString, Post.INITIAL_SCORE, id, "title");
 
-        String expectedMessage = messageSource.getMessage("text.required", null, LocaleContextHolder.getLocale());
+        String expectedMessage = messageSource.getMessage(
+                "text.required",
+                null,
+                LocaleContextHolder.getLocale());
 
         mockMvc
                 .perform(post(BASE_URL)
@@ -307,13 +261,15 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnBadRequestForNotValidTextWhenCreatingPost() throws Exception {
-        int length = ValidationConstants.TEXT_MAX + 1;
-        String text = "a".repeat(length);
+        String text = getStringWithFixedLength(ValidationConstants.TEXT_MAX + 1);
 
         PostDto overMaxTextSizePostDto = new PostDto(id, id, null, text, Post.INITIAL_SCORE, id, "title");
 
-        Object[] args = new Object[] { String.valueOf(ValidationConstants.TEXT_MIN), String.valueOf(ValidationConstants.TEXT_MAX) };
-        String expectedMessage = messageSource.getMessage("text.size.test", args, LocaleContextHolder.getLocale());
+        Object[] args = getArgs(ValidationConstants.TEXT_MIN, ValidationConstants.TEXT_MAX);
+        String expectedMessage = messageSource.getMessage(
+                "text.size.test",
+                args,
+                LocaleContextHolder.getLocale());
 
         mockMvc
                 .perform(post(BASE_URL)
@@ -325,10 +281,12 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnBadRequestForBlankTitleWhenCreatingPost() throws Exception {
-        String blankTitle = "          ";
-        PostDto blankTitlePostDto = new PostDto(id, id, null, "text", Post.INITIAL_SCORE, id, blankTitle);
+        PostDto blankTitlePostDto = new PostDto(id, id, null, "text", Post.INITIAL_SCORE, id, blankString);
 
-        String expectedMessage = messageSource.getMessage("title.required", null, LocaleContextHolder.getLocale());
+        String expectedMessage = messageSource.getMessage(
+                "title.required",
+                null,
+                LocaleContextHolder.getLocale());
 
         mockMvc
                 .perform(post(BASE_URL)
@@ -340,13 +298,15 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnBadRequestForNotValidTitleWhenCreatingPost() throws Exception {
-        int length = ValidationConstants.TITLE_MAX + 1;
-        String title = "a".repeat(length);
+        String title = getStringWithFixedLength(ValidationConstants.TITLE_MAX + 1);
 
         PostDto overMaxTitleSizePostDto = new PostDto(id, id, null, "text", Post.INITIAL_SCORE, id, title);
 
-        Object[] args = new Object[] { String.valueOf(ValidationConstants.TITLE_MIN), String.valueOf(ValidationConstants.TITLE_MAX) };
-        String expectedMessage = messageSource.getMessage("title.size.test", args, LocaleContextHolder.getLocale());
+        Object[] args = getArgs(ValidationConstants.TITLE_MIN, ValidationConstants.TITLE_MAX);
+        String expectedMessage = messageSource.getMessage(
+                "title.size.test",
+                args,
+                LocaleContextHolder.getLocale());
 
         mockMvc
                 .perform(post(BASE_URL)
@@ -360,7 +320,10 @@ public class PostControllerTest {
     public void shouldReturnBadRequestForNullSubredditIdWhenCreatingPost() throws Exception {
         PostDto nullSubredditIdPostDto = new PostDto(id, id, null, "text", Post.INITIAL_SCORE, null, "title");
 
-        String expectedMessage = messageSource.getMessage("subredditId.required", null, LocaleContextHolder.getLocale());
+        String expectedMessage = messageSource.getMessage(
+                "subredditId.required",
+                null,
+                LocaleContextHolder.getLocale());
 
         mockMvc
                 .perform(post(BASE_URL)
@@ -380,13 +343,7 @@ public class PostControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postDto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(postDto.id()))
-                .andExpect(jsonPath("$.userId").value(postDto.userId()))
-                .andExpect(jsonPath("$.created").value(postDto.created()))
-                .andExpect(jsonPath("$.text").value(postDto.text()))
-                .andExpect(jsonPath("$.score").value(postDto.score()))
-                .andExpect(jsonPath("$.subredditId").value(postDto.subredditId()))
-                .andExpect(jsonPath("$.title").value(postDto.title()));
+                .andExpectAll(postDtoMatchers("$.", postDto));
 
         verify(postService)
                 .addPost(postDto);
@@ -402,7 +359,7 @@ public class PostControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postDto)))
                 .andExpect(status().isConflict())
-                        .andExpect(jsonPath("$.message").value(ErrorMessages.CONTENT_UPDATE_NOT_ALLOWED));
+                .andExpect(jsonPath("$.message").value(ErrorMessages.CONTENT_UPDATE_NOT_ALLOWED));
 
         verify(postService)
                 .updatePost(id, postDto);
@@ -418,13 +375,7 @@ public class PostControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(postDto.id()))
-                .andExpect(jsonPath("$.userId").value(postDto.userId()))
-                .andExpect(jsonPath("$.created").value(postDto.created()))
-                .andExpect(jsonPath("$.text").value(postDto.text()))
-                .andExpect(jsonPath("$.score").value(postDto.score()))
-                .andExpect(jsonPath("$.subredditId").value(postDto.subredditId()))
-                .andExpect(jsonPath("$.title").value(postDto.title()));
+                .andExpectAll(postDtoMatchers("$.", postDto));
 
         verify(postService)
                 .updatePost(id, postDto);
@@ -455,8 +406,52 @@ public class PostControllerTest {
                 .perform(delete(BASE_URL + "/" + id + "?userId=" + id))
                 .andExpect(status().isNoContent());
 
-
         verify(postService)
                 .deletePost(id, id);
+    }
+
+    private ResultMatcher[] postDtoMatchers(String prefix, PostDto dto) {
+        return new ResultMatcher[] {
+                jsonPath(prefix + "id").value(dto.id()),
+                jsonPath(prefix + "userId").value(dto.userId()),
+                jsonPath(prefix + "created").value(dto.created()),
+                jsonPath(prefix + "text").value(dto.text()),
+                jsonPath(prefix + "score").value(dto.score()),
+                jsonPath(prefix + "subredditId").value(dto.subredditId()),
+                jsonPath(prefix + "title").value(dto.title())
+        };
+    }
+
+    private Pageable defaultPageable() {
+        return PageRequest.of(
+                0,
+                PaginationConstants.POST_DEFAULT_SIZE,
+                Sort.by(PaginationConstants.POST_DEFAULT_SORT).descending()
+        );
+    }
+
+    private Page<PostDto> postPage(int size, Pageable pageable) {
+        if (size == 0) {
+            return Page.empty();
+        }
+
+        List<PostDto> posts = new ArrayList<>();
+
+        for (int i = 0; i < size; i++) {
+            posts.add(postDto);
+        }
+
+        return new PageImpl<>(posts, pageable, posts.size());
+    }
+
+    private Object[] getArgs(int firstArg, int secondArg) {
+        return new Object[] {
+                String.valueOf(firstArg),
+                String.valueOf(secondArg)
+        };
+    }
+
+    private String getStringWithFixedLength(int length) {
+        return "a".repeat(length);
     }
 }
