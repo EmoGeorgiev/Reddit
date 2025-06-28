@@ -23,8 +23,8 @@ public final class PaginationConstants {
     public static final String SUBREDDIT_BY_TITLE_CONTAINS_SORT = "title";
 
     //User constants
-    public static final int USER_BY_TITLE_CONTAINS_SIZE = 25;
-    public static final String USER_BY_TITLE_CONTAINS_SORT = "username";
+    public static final int USER_DEFAULT_SIZE = 25;
+    public static final String USER_DEFAULT_SORT = "username";
 
     //Vote constants
     public static final int VOTE_DEFAULT_SIZE = 25;

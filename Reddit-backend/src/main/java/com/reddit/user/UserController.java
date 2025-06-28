@@ -11,8 +11,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -31,8 +29,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> getUsers() {
-        List<UserDto> users = userService.getUsers();
+    public ResponseEntity<Page<UserDto>> getUsers(
+            @PageableDefault(
+                    size = PaginationConstants.USER_DEFAULT_SIZE,
+                    sort = PaginationConstants.USER_DEFAULT_SORT,
+                    direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<UserDto> users = userService.getUsers(pageable);
         return ResponseEntity
                 .ok()
                 .body(users);
@@ -42,8 +44,8 @@ public class UserController {
     public ResponseEntity<Page<UserDto>> getUsersWhereUsernameContainsWord(
             @RequestParam String word,
             @PageableDefault(
-                    size = PaginationConstants.USER_BY_TITLE_CONTAINS_SIZE,
-                    sort = PaginationConstants.USER_BY_TITLE_CONTAINS_SORT,
+                    size = PaginationConstants.USER_DEFAULT_SIZE,
+                    sort = PaginationConstants.USER_DEFAULT_SORT,
                     direction = Sort.Direction.DESC) Pageable pageable) {
         Page<UserDto> users = userService.getUsersWhereUsernameContainsWord(word, pageable);
 

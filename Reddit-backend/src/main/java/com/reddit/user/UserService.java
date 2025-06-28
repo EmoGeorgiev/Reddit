@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -39,12 +37,10 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<UserDto> getUsers() {
+    public Page<UserDto> getUsers(Pageable pageable) {
         return userRepository
-                .findAll()
-                .stream()
-                .map(UserMapper::userToUserDto)
-                .collect(Collectors.toList());
+                .findAll(pageable)
+                .map(UserMapper::userToUserDto);
     }
 
     @Transactional(readOnly = true)
