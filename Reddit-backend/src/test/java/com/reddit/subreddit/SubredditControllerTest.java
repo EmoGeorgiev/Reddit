@@ -95,6 +95,7 @@ public class SubredditControllerTest {
                 .perform(get(BASE_URL + "/search?word=" + word))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.content").isEmpty())
                 .andExpect(jsonPath("$.totalElements").value(count))
                 .andExpect(jsonPath("$.totalPages").value(expectedTotalPages));
 
@@ -552,6 +553,7 @@ public class SubredditControllerTest {
         verify(subredditService)
                 .deleteSubreddit(id, id);
     }
+
     private ResultMatcher[] subredditDtoMatchers(String prefix, SubredditDto dto) {
         return new ResultMatcher[] {
                 jsonPath(prefix + "id").value(dto.id()),
