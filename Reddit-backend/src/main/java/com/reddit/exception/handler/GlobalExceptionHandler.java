@@ -8,10 +8,7 @@ import com.reddit.exception.post.PostNotFoundException;
 import com.reddit.exception.subreddit.MissingModeratorPrivilegesException;
 import com.reddit.exception.subreddit.SubredditAlreadyExistsException;
 import com.reddit.exception.subreddit.SubredditNotFoundException;
-import com.reddit.exception.user.PasswordsDoNotMatchException;
-import com.reddit.exception.user.UserNotFoundException;
-import com.reddit.exception.user.UserNotSubscribedException;
-import com.reddit.exception.user.UsernameAlreadyExistsException;
+import com.reddit.exception.user.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,10 +22,6 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    private ResponseEntity<ErrorObject> buildResponse(String message, HttpStatus status) {
-        return new ResponseEntity<>(new ErrorObject(message, status.value()), status);
-    }
-
     @ExceptionHandler(CommentIsDeletedException.class)
     public ResponseEntity<ErrorObject> handleCommentIsDeletedException(CommentIsDeletedException ex) {
         return buildResponse(ex.getMessage(), HttpStatus.CONFLICT);
@@ -57,6 +50,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PasswordsDoNotMatchException.class)
     public ResponseEntity<ErrorObject> handlePasswordsDoNotMatchException(PasswordsDoNotMatchException ex) {
         return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NewPassWordCannotBeOldPasswordException.class)
+    public ResponseEntity<ErrorObject> handlePasswordsDoNotMatchException(NewPassWordCannotBeOldPasswordException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(PostNotFoundException.class)
@@ -103,5 +101,9 @@ public class GlobalExceptionHandler {
                 .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    private ResponseEntity<ErrorObject> buildResponse(String message, HttpStatus status) {
+        return new ResponseEntity<>(new ErrorObject(message, status.value()), status);
     }
 }

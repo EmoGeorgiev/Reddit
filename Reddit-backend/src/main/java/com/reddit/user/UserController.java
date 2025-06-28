@@ -56,7 +56,7 @@ public class UserController {
 
     @PutMapping("/{id}/username")
     public ResponseEntity<UserDto> updateUsername(@PathVariable Long id, @RequestBody @Valid UserDto userDto) {
-        UserDto updatedUser = userService.updateUsername(userDto);
+        UserDto updatedUser = userService.updateUsername(id, userDto);
         return ResponseEntity
                 .ok()
                 .body(updatedUser);
@@ -64,7 +64,7 @@ public class UserController {
 
     @PutMapping("/{id}/password")
     public ResponseEntity<UserDto> updatePassword(@PathVariable Long id, @RequestBody @Valid UpdatePasswordDto updatePasswordDto) {
-        UserDto userDto = userService.updatePassword(id, updatePasswordDto.oldPassword(), updatePasswordDto.newPassword());
+        UserDto userDto = userService.updatePassword(id, updatePasswordDto);
         return ResponseEntity
                 .ok()
                 .body(userDto);
