@@ -4,7 +4,9 @@ import com.reddit.exception.subreddit.MissingModeratorPrivilegesException;
 import com.reddit.exception.subreddit.SubredditAlreadyExistsException;
 import com.reddit.exception.subreddit.SubredditNotFoundException;
 import com.reddit.exception.user.UserNotSubscribedException;
+import com.reddit.subreddit.dto.ModeratorUpdateDto;
 import com.reddit.subreddit.dto.SubredditDto;
+import com.reddit.subreddit.dto.SubredditUpdateTitleDto;
 import com.reddit.user.RedditUser;
 import com.reddit.user.UserService;
 import com.reddit.util.ErrorMessages;
@@ -86,7 +88,10 @@ public class SubredditService {
         return SubredditMapper.subredditToSubredditDto(savedSubreddit);
     }
 
-    public SubredditDto updateSubredditTitle(Long subredditId, String newTitle, Long moderatorId) {
+    public SubredditDto updateSubredditTitle(Long subredditId, SubredditUpdateTitleDto subredditUpdateTitleDto) {
+        String newTitle = subredditUpdateTitleDto.title();
+        Long moderatorId = subredditUpdateTitleDto.moderatorId();
+
         Subreddit subreddit = getSubredditEntity(subredditId);
         RedditUser user = userService.getUserEntity(moderatorId);
 
@@ -99,7 +104,10 @@ public class SubredditService {
         return SubredditMapper.subredditToSubredditDto(subreddit);
     }
 
-    public SubredditDto addSubredditModerator(Long subredditId, Long moderatorId, Long newModeratorId) {
+    public SubredditDto addSubredditModerator(Long subredditId, ModeratorUpdateDto moderatorUpdateDto) {
+        Long moderatorId = moderatorUpdateDto.moderatorId();
+        Long newModeratorId = moderatorUpdateDto.updatedModeratorId();
+
         Subreddit subreddit = getSubredditEntity(subredditId);
         RedditUser moderator = userService.getUserEntity(moderatorId);
         RedditUser newModerator = userService.getUserEntity(newModeratorId);
@@ -119,7 +127,10 @@ public class SubredditService {
         return SubredditMapper.subredditToSubredditDto(subreddit);
     }
 
-    public SubredditDto removeSubredditModerator(Long subredditId, Long moderatorId, Long removedModeratorId) {
+    public SubredditDto removeSubredditModerator(Long subredditId, ModeratorUpdateDto moderatorUpdateDto) {
+        Long moderatorId = moderatorUpdateDto.moderatorId();
+        Long removedModeratorId = moderatorUpdateDto.updatedModeratorId();
+
         Subreddit subreddit = getSubredditEntity(subredditId);
         RedditUser moderator = userService.getUserEntity(moderatorId);
         RedditUser removedModerator = userService.getUserEntity(removedModeratorId);

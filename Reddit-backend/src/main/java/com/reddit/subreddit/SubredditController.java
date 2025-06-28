@@ -72,7 +72,7 @@ public class SubredditController {
 
     @PutMapping("/{subredditId}/title")
     public ResponseEntity<SubredditDto> updateSubredditTitle(@PathVariable Long subredditId, @RequestBody @Valid SubredditUpdateTitleDto subredditUpdateTitleDto) {
-        SubredditDto subredditDto = subredditService.updateSubredditTitle(subredditId, subredditUpdateTitleDto.title(), subredditUpdateTitleDto.moderatorId());
+        SubredditDto subredditDto = subredditService.updateSubredditTitle(subredditId, subredditUpdateTitleDto);
         return ResponseEntity
                 .ok()
                 .body(subredditDto);
@@ -80,7 +80,7 @@ public class SubredditController {
 
     @PutMapping("/{subredditId}/moderators/add")
     public ResponseEntity<SubredditDto> addSubredditModerator(@PathVariable Long subredditId, @RequestBody @Valid ModeratorUpdateDto moderatorUpdateDto) {
-        SubredditDto subredditDto = subredditService.addSubredditModerator(subredditId, moderatorUpdateDto.moderatorId(), moderatorUpdateDto.updatedModeratorId());
+        SubredditDto subredditDto = subredditService.addSubredditModerator(subredditId, moderatorUpdateDto);
         return ResponseEntity
                 .ok()
                 .body(subredditDto);
@@ -88,7 +88,7 @@ public class SubredditController {
 
     @PutMapping("/{subredditId}/moderators/remove")
     public ResponseEntity<SubredditDto> removeSubredditModerator(@PathVariable Long subredditId, @RequestBody @Valid ModeratorUpdateDto moderatorUpdateDto) {
-        SubredditDto subredditDto = subredditService.removeSubredditModerator(subredditId, moderatorUpdateDto.moderatorId(), moderatorUpdateDto.updatedModeratorId());
+        SubredditDto subredditDto = subredditService.removeSubredditModerator(subredditId, moderatorUpdateDto);
         return ResponseEntity
                 .ok()
                 .body(subredditDto);

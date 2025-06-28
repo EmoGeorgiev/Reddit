@@ -296,7 +296,9 @@ public class SubredditControllerTest {
 
     @Test
     public void shouldReturnForbiddenForUserNotBeingAModeratorWhenUpdatingSubredditTitle() throws Exception {
-        when(subredditService.updateSubredditTitle(id,title, id))
+        SubredditUpdateTitleDto subredditUpdateTitleDto1 = new SubredditUpdateTitleDto(title, id);
+
+        when(subredditService.updateSubredditTitle(id, subredditUpdateTitleDto1))
                 .thenThrow(new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES));
 
         mockMvc
@@ -307,12 +309,14 @@ public class SubredditControllerTest {
                 .andExpect(jsonPath("$.message").value(ErrorMessages.MISSING_MODERATOR_PRIVILEGES));
 
         verify(subredditService)
-                .updateSubredditTitle(id, title, id);
+                .updateSubredditTitle(id, subredditUpdateTitleDto1);
     }
 
     @Test
     public void shouldReturnUpdateSubredditForValidModeratorPrivilegesWhenUpdatingSubredditTitle() throws Exception {
-        when(subredditService.updateSubredditTitle(id,title, id))
+        SubredditUpdateTitleDto subredditUpdateTitleDto1 = new SubredditUpdateTitleDto(title, id);
+
+        when(subredditService.updateSubredditTitle(id, subredditUpdateTitleDto1))
                 .thenReturn(subredditDto);
 
         mockMvc
@@ -324,7 +328,7 @@ public class SubredditControllerTest {
                 .andExpectAll(subredditDtoMatchers("$.", subredditDto));
 
         verify(subredditService)
-                .updateSubredditTitle(id, title, id);
+                .updateSubredditTitle(id, subredditUpdateTitleDto1);
     }
 
     @Test
@@ -383,7 +387,7 @@ public class SubredditControllerTest {
     public void shouldReturnForbiddenForUserMissingModeratorPrivilegesWhenAddingSubredditModerator() throws Exception {
         ModeratorUpdateDto moderatorUpdateDto = new ModeratorUpdateDto(id, id);
 
-        when(subredditService.addSubredditModerator(id, id, id))
+        when(subredditService.addSubredditModerator(id, moderatorUpdateDto))
                 .thenThrow(new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES));
 
         mockMvc
@@ -394,14 +398,14 @@ public class SubredditControllerTest {
                 .andExpect(jsonPath("$.message").value(ErrorMessages.MISSING_MODERATOR_PRIVILEGES));
 
         verify(subredditService)
-                .addSubredditModerator(id, id, id);
+                .addSubredditModerator(id, moderatorUpdateDto);
     }
 
     @Test
     public void shouldReturnBadRequestForUserWhoIsNotSubscribedToTheSubredditWhenAddingSubredditModerator() throws Exception {
         ModeratorUpdateDto moderatorUpdateDto = new ModeratorUpdateDto(id, id);
 
-        when(subredditService.addSubredditModerator(id, id, id))
+        when(subredditService.addSubredditModerator(id, moderatorUpdateDto))
                 .thenThrow(new UserNotSubscribedException(ErrorMessages.USER_NOT_SUBSCRIBED));
 
         mockMvc
@@ -412,7 +416,7 @@ public class SubredditControllerTest {
                 .andExpect(jsonPath("$.message").value(ErrorMessages.USER_NOT_SUBSCRIBED));
 
         verify(subredditService)
-                .addSubredditModerator(id, id, id);
+                .addSubredditModerator(id, moderatorUpdateDto);
     }
 
     @Test
@@ -420,7 +424,7 @@ public class SubredditControllerTest {
         Long secondId = 2L;
         ModeratorUpdateDto moderatorUpdateDto = new ModeratorUpdateDto(id, secondId);
 
-        when(subredditService.addSubredditModerator(id, id, secondId))
+        when(subredditService.addSubredditModerator(id, moderatorUpdateDto))
                 .thenReturn(subredditDto);
 
         mockMvc
@@ -432,7 +436,7 @@ public class SubredditControllerTest {
                 .andExpectAll(subredditDtoMatchers("$.", subredditDto));
 
         verify(subredditService)
-                .addSubredditModerator(id, id, secondId);
+                .addSubredditModerator(id, moderatorUpdateDto);
     }
 
     @Test
@@ -490,7 +494,7 @@ public class SubredditControllerTest {
     public void shouldReturnForbiddenForUserMissingModeratorPrivilegesWhenRemovingSubredditModerator() throws Exception {
         ModeratorUpdateDto moderatorUpdateDto = new ModeratorUpdateDto(id, id);
 
-        when(subredditService.removeSubredditModerator(id, id, id))
+        when(subredditService.removeSubredditModerator(id, moderatorUpdateDto))
                 .thenThrow(new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES));
 
         mockMvc
@@ -501,7 +505,7 @@ public class SubredditControllerTest {
                 .andExpect(jsonPath("$.message").value(ErrorMessages.MISSING_MODERATOR_PRIVILEGES));
 
         verify(subredditService)
-                .removeSubredditModerator(id, id, id);
+                .removeSubredditModerator(id, moderatorUpdateDto);
     }
 
     @Test
@@ -509,7 +513,7 @@ public class SubredditControllerTest {
         Long secondId = 2L;
         ModeratorUpdateDto moderatorUpdateDto = new ModeratorUpdateDto(id, secondId);
 
-        when(subredditService.removeSubredditModerator(id, id, secondId))
+        when(subredditService.removeSubredditModerator(id, moderatorUpdateDto))
                 .thenReturn(subredditDto);
 
         mockMvc
@@ -521,7 +525,7 @@ public class SubredditControllerTest {
                 .andExpectAll(subredditDtoMatchers("$.", subredditDto));
 
         verify(subredditService)
-                .removeSubredditModerator(id, id, secondId);
+                .removeSubredditModerator(id, moderatorUpdateDto);
     }
 
     @Test
