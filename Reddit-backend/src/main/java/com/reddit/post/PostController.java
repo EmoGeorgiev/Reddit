@@ -41,6 +41,20 @@ public class PostController {
                 .body(posts);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<Page<PostDto>> getPostsWhereTitleContainsWord(
+            @RequestParam String word,
+            @PageableDefault(
+                    size = PaginationConstants.POST_DEFAULT_SIZE,
+                    sort = PaginationConstants.POST_DEFAULT_SORT,
+                    direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<PostDto> posts = postService.getPostsWhereTitleContainsWord(word, pageable);
+
+        return ResponseEntity
+                .ok()
+                .body(posts);
+    }
+
     @GetMapping("/subscriptions/{userId}")
     public ResponseEntity<Page<PostDto>> getPostsByUserSubscriptions(
             @PathVariable Long userId,

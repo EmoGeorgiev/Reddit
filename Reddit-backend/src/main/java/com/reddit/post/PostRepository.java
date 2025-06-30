@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
+    Page<Post> findByTitleContainingIgnoreCase(String word, Pageable pageable);
     Page<Post> findBySubredditId(Long subredditId, Pageable pageable);
     Page<Post> findByUserId(Long userId, Pageable pageable);
     @Query("""

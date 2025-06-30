@@ -50,6 +50,13 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
+    public Page<PostDto> getPostsWhereTitleContainsWord(String word, Pageable pageable) {
+        return postRepository
+                .findByTitleContainingIgnoreCase(word, pageable)
+                .map(PostMapper::postToPostDto);
+    }
+
+    @Transactional(readOnly = true)
     public Page<PostDto> getPostsByUserSubscriptions(Long userId, Pageable pageable) {
         return postRepository
                 .findPostsByUserSubscriptions(userId, pageable)

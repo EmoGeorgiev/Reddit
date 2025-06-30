@@ -116,6 +116,54 @@ public class PostControllerTest {
     }
 
     @Test
+    public void shouldReturnEmptyPageForNoPostTitleContainingWordWhenGettingPostsWhereTitleContainsWord() throws Exception {
+        int expectedTotalPages = 1;
+        int count = 0;
+        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
+        Page<PostDto> emptyPage = getPage(postDto, count, pageable);
+
+        String word = "word";
+
+        when(postService.getPostsWhereTitleContainsWord(word, pageable))
+                .thenReturn(emptyPage);
+
+        mockMvc
+                .perform(get(BASE_URL + "/search?word=" + word))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.content").isEmpty())
+                .andExpect(jsonPath("$.totalElements").value(count))
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPages));
+
+        verify(postService)
+                .getPostsWhereTitleContainsWord(word, pageable);
+    }
+
+    @Test
+    public void shouldReturnPageWithOnePostForOnePostTitleContainingWordWhenGettingPostsWhereTitleContainsWord() throws Exception {
+        int expectedTotalPages = 1;
+        int count = 1;
+        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
+        Page<PostDto> pageWithOneElement = getPage(postDto, count, pageable);
+
+        String word = "word";
+
+        when(postService.getPostsWhereTitleContainsWord(word, pageable))
+                .thenReturn(pageWithOneElement);
+
+        mockMvc
+                .perform(get(BASE_URL + "/search?word=" + word))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.totalElements").value(count))
+                .andExpect(jsonPath("$.totalPages").value(expectedTotalPages))
+                .andExpectAll(postDtoMatchers("$.content[0].", postDto));
+
+        verify(postService)
+                .getPostsWhereTitleContainsWord(word, pageable);
+    }
+
+    @Test
     public void shouldReturnEmptyPageForNoPostWhenGettingPostsByUserSubscriptions() throws Exception {
         int expectedTotalPages = 1;
         int count = 0;
