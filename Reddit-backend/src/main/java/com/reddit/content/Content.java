@@ -22,8 +22,6 @@ public abstract class Content {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private RedditUser user;
-    @Enumerated(EnumType.STRING)
-    private ContentType contentType;
     @Column(name = "created", nullable = false)
     private LocalDateTime created;
     @Column(name = "text", nullable = false)
@@ -50,14 +48,6 @@ public abstract class Content {
 
     public void setUser(RedditUser user) {
         this.user = user;
-    }
-
-    public ContentType getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(ContentType contentType) {
-        this.contentType = contentType;
     }
 
     public LocalDateTime getCreated() {

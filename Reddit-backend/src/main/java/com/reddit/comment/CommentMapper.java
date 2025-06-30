@@ -13,6 +13,7 @@ public class CommentMapper {
         }
 
         List<CommentDto> replies = mapRepliesToDto(comment.getReplies());
+        Long parentId = comment.getParent() != null ? comment.getParent().getId() : null;
 
         return new CommentDto(
                 comment.getId(),
@@ -22,7 +23,7 @@ public class CommentMapper {
                 comment.getScore(),
                 comment.isDeleted(),
                 replies,
-                comment.getParent().getId(),
+                parentId,
                 comment.getPost().getId()
         );
     }

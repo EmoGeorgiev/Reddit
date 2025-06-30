@@ -1,7 +1,6 @@
 package com.reddit.comment;
 
 import com.reddit.comment.dto.CommentDto;
-import com.reddit.content.Content;
 import com.reddit.exception.comment.CommentIsDeletedException;
 import com.reddit.exception.comment.CommentNotFoundException;
 import com.reddit.exception.content.ContentUpdateNotAllowedException;

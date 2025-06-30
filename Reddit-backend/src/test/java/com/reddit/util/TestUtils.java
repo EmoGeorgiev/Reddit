@@ -30,7 +30,7 @@ public final class TestUtils {
         );
     }
 
-    public static <T> Page<T> getPage(T dto, int size, Pageable pageable) {
+    public static <T> Page<T> getPage(T item, int size, Pageable pageable) {
         if (size == 0) {
             return Page.empty();
         }
@@ -38,7 +38,7 @@ public final class TestUtils {
         List<T> elements = new ArrayList<>();
 
         for (int i = 0; i < size; i++) {
-            elements.add(dto);
+            elements.add(item);
         }
 
         return new PageImpl<>(elements, pageable, elements.size());
