@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
-import Navbar from './Navbar'
-import Sidebar from './SideBar'
-import LoginForm from './LoginForm'
-import SignUpForm from './SignUpForm'
+import Navbar from './Navigation/Navbar'
+import Sidebar from './Navigation/Sidebar'
+import LoginForm from './Authentication/LoginForm'
+import SignUpForm from './Authentication/SignUpForm'
 
 const Layout = () => {
     const [collapsed, setCollapsed] = useState(false)

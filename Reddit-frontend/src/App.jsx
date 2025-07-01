@@ -1,11 +1,8 @@
-import LoginForm from './components/LoginForm'
-
+import Layout from './components/Layout'
 const App = () => {
   
   return(
-    <div>
-      <LoginForm />
-    </div>
+    <Layout />
   )
 }
 
