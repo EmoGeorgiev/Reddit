@@ -28,7 +28,7 @@ const LoginForm = () => {
             <form onSubmit={handleLogin}>
                 <div className='m-6'>
                     <input 
-                        className='auth-input'
+                        className='auth-input focus-item'
                         type='text'
                         value={username}
                         name='username'
@@ -38,7 +38,7 @@ const LoginForm = () => {
                 </div>
                 <div className='m-6'>
                     <input 
-                        className='auth-input'
+                        className='auth-input focus-item'
                         type='password'
                         value={password}
                         name='password'
@@ -47,14 +47,14 @@ const LoginForm = () => {
                     />
                 </div>
                 <div className='m-6'>
-                    <button className='auth-btn'>
+                    <button className='auth-btn focus-item'>
                         Log in
                     </button>
                 </div>
             </form>
             
             <p className='m-3 font-medium'>
-                New to Reddit? <Link to='' className='text-blue-400'>Sign Up</Link>
+                New to Reddit? <Link to='' className='text-blue-400 focus-item'>Sign Up</Link>
             </p>
         </div>
     )
