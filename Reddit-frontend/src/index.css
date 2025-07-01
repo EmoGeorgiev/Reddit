@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@layer base {
+    button {
+        @apply cursor-pointer
+    }
+}
+
 @layer components {
     .focus-item {
         @apply focus:outline-none focus:border-2 focus:border-blue-400

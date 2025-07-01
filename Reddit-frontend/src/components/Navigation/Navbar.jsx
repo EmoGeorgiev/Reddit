@@ -1,5 +1,5 @@
 import Collapse from './Collapse'
-import Options from './Options'
+import ProfileMenu from './ProfileMenu'
 import Search from './Search'
 
 const Navbar = ({ handleCollapse }) => {
@@ -7,7 +7,7 @@ const Navbar = ({ handleCollapse }) => {
     
     return (
         <nav className='w-full top-0 fixed h-16 border border-gray-300 flex items-center'>
-            <div className='pl-4 flex-1 flex justify-start space-x-4'>
+            <div className='pl-10 flex-1 flex justify-start space-x-4'>
                 {isAuthenticated && <Collapse handleCollapse={handleCollapse} />}
                 <h2>Reddit</h2>
             </div>
@@ -16,9 +16,9 @@ const Navbar = ({ handleCollapse }) => {
                 <Search />
             </div>
 
-            <div className='pr-4 flex-1 flex justify-end'>
+            <div className='pr-10 flex-1 flex justify-end'>
                 {!isAuthenticated && <button className='w-16 p-2 auth-btn focus:border focus-item'>Log In</button>}
-                {isAuthenticated && <Options />}
+                {isAuthenticated && <ProfileMenu />}
             </div>
         </nav>
     )
