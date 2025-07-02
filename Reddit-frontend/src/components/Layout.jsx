@@ -1,11 +1,12 @@
+import { Route, Routes, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { useAuth } from './Authentication/AuthContext'
-
+import ProtectedRoute from './Authentication/ProtectedRoute'
 import Navbar from './Navigation/Navbar'
 import Sidebar from './Navigation/Sidebar'
 import LoginForm from './AuthenticationForms/LoginForm'
 import SignUpForm from './AuthenticationForms/SignUpForm'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import Settings from './Settings/Settings'
 
 const Layout = () => {
     const [collapsed, setCollapsed] = useState(false)
@@ -26,6 +27,7 @@ const Layout = () => {
                     <Routes>
                         <Route path='/login' element={<LoginForm />} />
                         <Route path='/signup' element={<SignUpForm />} />
+                        <Route path='/settings' element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                     </Routes>
                 </div>
             </div>
