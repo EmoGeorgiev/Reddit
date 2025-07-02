@@ -14,7 +14,7 @@ const Sidebar = ({ collapsed, isAuthenticated }) => {
     }
 
     return (
-        <div className={`h-full ${collapsed ? 'w-0' : 'w-84'} ${isOpen ? 'overflow-y-auto' : 'overflow-y-hidden'} duration-700 border border-gray-300`}>
+        <div className={`h-full ${collapsed ? 'w-0' : 'w-68'} ${isOpen ? 'overflow-y-auto' : 'overflow-y-hidden'} duration-700 border border-gray-300`}>
            {!collapsed && 
                 <div className='mt-4'>    
                     <Link to='/' className='w-56 ml-4 px-4 py-3 block font-semibold hover:bg-gray-200 rounded-2xl'>All</Link>

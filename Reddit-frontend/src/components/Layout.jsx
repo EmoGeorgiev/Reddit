@@ -23,7 +23,7 @@ const Layout = () => {
             <div className='pt-14 h-screen flex'>
                 {!hideLayout && <Sidebar collapsed={collapsed} isAuthenticated={isAuthenticated} />}
                 
-                <div className='w-full overflow-auto'>
+                <div className='flex-1 overflow-auto'>
                     <Routes>
                         <Route path='/login' element={<LoginForm />} />
                         <Route path='/signup' element={<SignUpForm />} />
