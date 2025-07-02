@@ -1,7 +1,6 @@
 package com.reddit.user;
 
 import com.reddit.user.dto.UpdatePasswordDto;
-import com.reddit.user.dto.UserDeleteDto;
 import com.reddit.user.dto.UserDto;
 import com.reddit.util.PaginationConstants;
 import jakarta.validation.Valid;
@@ -71,9 +70,9 @@ public class UserController {
                 .body(userDto);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deleteUser(@RequestBody @Valid UserDeleteDto userDeleteDto) {
-        userService.deleteUser(userDeleteDto);
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId, @RequestParam String password) {
+        userService.deleteUser(userId, password);
         return ResponseEntity
                 .noContent()
                 .build();
