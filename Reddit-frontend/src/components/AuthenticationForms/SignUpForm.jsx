@@ -47,7 +47,7 @@ const SignUpForm = () => {
                     />
                 </div>
                 <div className='m-6'>
-                    <button className='auth-btn focus-item'>
+                    <button className='auth-btn focus-item' type='submit'>
                         Sign Up
                     </button>
                 </div>

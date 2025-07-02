@@ -8,7 +8,7 @@ const Navbar = ({ handleCollapse, isAuthenticated }) => {
 
     return (
         <nav className='w-full top-0 fixed h-14 border border-gray-300 flex items-center'>
-            <div className='pl-10 flex-1 flex justify-start space-x-4'>
+            <div className='mx-5 flex-1 flex justify-start space-x-4 '>
                 {isAuthenticated && <Collapse handleCollapse={handleCollapse} />}
                 <h2>Reddit</h2>
             </div>
@@ -17,9 +17,9 @@ const Navbar = ({ handleCollapse, isAuthenticated }) => {
                 <Search />
             </div>
 
-            <div className='pr-10 flex-1 flex justify-end'>
+            <div className='mx-5 flex-1 flex justify-end '>
                 {!isAuthenticated && 
-                    <button className='w-16 p-2 auth-btn focus:border focus-item' 
+                    <button className='w-16 p-1.5 auth-btn focus-item' 
                             onClick={() => navigate('/login')}>
                         Log In
                     </button>}

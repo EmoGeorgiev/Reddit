@@ -15,15 +15,15 @@ const Settings = () => {
     const [activeForm, setActiveForm] = useState(null)
 
     const usernameChange = (username) => {
-        
+        closeActiveForm()
     }
     
     const passwordChange = (password) => {
-        
+        closeActiveForm()
     }
     
     const deleteAccount = () => {
-        
+        closeActiveForm()
     }
 
     const openActiveForm = (newActiveForm) => {

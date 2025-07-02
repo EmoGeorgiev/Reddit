@@ -11,7 +11,6 @@ const DeleteAccountForm = ({ deleteAccount, handleClose }) => {
         }
 
         setPassword('')
-        handleClose()
     }
 
     return (

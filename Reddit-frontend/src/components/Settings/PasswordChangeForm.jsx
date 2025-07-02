@@ -11,8 +11,6 @@ const PasswordChangeForm = ({ passwordChange, handleClose }) => {
 
         setOldPassword('')
         setNewPassword('')
-
-        handleClose()
     }
 
     return (

@@ -9,7 +9,6 @@ const UsernameChangeForm = ({ usernameChange, handleClose }) => {
         usernameChange(username)
 
         setUsername('')
-        handleClose()
     }
 
     return (
