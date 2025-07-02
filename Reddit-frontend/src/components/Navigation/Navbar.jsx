@@ -6,7 +6,7 @@ const Navbar = ({ handleCollapse }) => {
     const isAuthenticated = true
     
     return (
-        <nav className='w-full top-0 fixed h-16 border border-gray-300 flex items-center'>
+        <nav className='w-full top-0 fixed h-14 border border-gray-300 flex items-center'>
             <div className='pl-10 flex-1 flex justify-start space-x-4'>
                 {isAuthenticated && <Collapse handleCollapse={handleCollapse} />}
                 <h2>Reddit</h2>

@@ -12,7 +12,7 @@ const Layout = () => {
         <div className='h-screen'>
             <Navbar handleCollapse={() => setCollapsed(!collapsed)} />
             
-            <div className='pt-16 h-screen flex'>
+            <div className='pt-14 h-screen flex'>
                 <Sidebar collapsed={collapsed} />
                 
                 <div className='w-full overflow-auto'>
