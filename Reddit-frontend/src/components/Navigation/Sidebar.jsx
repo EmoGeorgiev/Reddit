@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import SubscriptionsList from './SubscriptionsList'
 
-const Sidebar = ({ collapsed }) => {
+const Sidebar = ({ collapsed, isAuthenticated }) => {
     const [isOpen, setIsOpen] = useState(true)
-
+    
     const handleOpen = () => {
         setIsOpen(!isOpen)
+    }
+
+    if (!isAuthenticated) {
+        return <></>
     }
 
     return (

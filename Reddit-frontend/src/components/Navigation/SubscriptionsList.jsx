@@ -1,5 +1,5 @@
 import { useState } from 'react'
-
+ 
 const subreddits = [
     { 'id' : 1, 'name' : 'AskMen'},
     { 'id' : 2, 'name' : 'AskReddit'},
@@ -21,7 +21,7 @@ const subreddits = [
 
 const SubscriptionsList = ({ isOpen, handleOpen }) => {
     const [subscriptions, setSubscriptions] = useState(subreddits)
-
+    
     return (
         <div>
             <div className='w-56 ml-4 px-4 py-3 font-semibold hover:bg-gray-200 rounded-2xl cursor-pointer' 

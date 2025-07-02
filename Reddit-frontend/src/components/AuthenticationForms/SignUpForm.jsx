@@ -54,7 +54,7 @@ const SignUpForm = () => {
             </form>
             
             <p className='m-3 font-medium'>
-                Already a redditor? <Link to='/' className='text-blue-400 focus-item'>Log In</Link>
+                Already a redditor? <Link to='/login' className='text-blue-400 focus-item'>Log In</Link>
             </p>
         </div>
     )

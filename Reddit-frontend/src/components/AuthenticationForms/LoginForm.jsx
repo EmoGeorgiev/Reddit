@@ -54,7 +54,7 @@ const LoginForm = () => {
             </form>
             
             <p className='m-3 font-medium'>
-                New to Reddit? <Link to='' className='text-blue-400 focus-item'>Sign Up</Link>
+                New to Reddit? <Link to='/signup' className='text-blue-400 focus-item'>Sign Up</Link>
             </p>
         </div>
     )
