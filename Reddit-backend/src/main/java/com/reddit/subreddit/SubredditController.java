@@ -24,9 +24,17 @@ public class SubredditController {
         this.subredditService = subredditService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<SubredditDto> getSubreddit(@PathVariable Long id) {
-        SubredditDto subredditDto = subredditService.getSubreddit(id);
+        SubredditDto subredditDto = subredditService.getSubredditById(id);
+        return ResponseEntity
+                .ok()
+                .body(subredditDto);
+    }
+
+    @GetMapping("/title/{title}")
+    public ResponseEntity<SubredditDto> getSubredditByTitle(@PathVariable String title) {
+        SubredditDto subredditDto = subredditService.getSubredditByTitle(title);
         return ResponseEntity
                 .ok()
                 .body(subredditDto);

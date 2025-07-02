@@ -50,33 +50,64 @@ public class SubredditControllerTest {
     private final SubredditUpdateTitleDto subredditUpdateTitleDto = new SubredditUpdateTitleDto(title, id);
 
     @Test
-    public void shouldReturnNotFoundForInvalidIdWhenGettingSubreddit() throws Exception {
+    public void shouldReturnNotFoundForInvalidIdWhenGettingSubredditById() throws Exception {
         Long invalidId = -1L;
-        when(subredditService.getSubreddit(invalidId))
+        when(subredditService.getSubredditById(invalidId))
                 .thenThrow(new SubredditNotFoundException(ErrorMessages.SUBREDDIT_NOT_FOUND));
 
         mockMvc
-                .perform(get(BASE_URL + "/" + invalidId))
+                .perform(get(BASE_URL + "/id/" + invalidId))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(ErrorMessages.SUBREDDIT_NOT_FOUND));
 
         verify(subredditService)
-                .getSubreddit(invalidId);
+                .getSubredditById(invalidId);
     }
 
     @Test
-    public void shouldReturnSubredditForValidIdWhenGettingSubreddit() throws Exception {
-        when(subredditService.getSubreddit(id))
+    public void shouldReturnSubredditForValidIdWhenGettingSubredditById() throws Exception {
+        when(subredditService.getSubredditById(id))
                 .thenReturn(subredditDto);
 
         mockMvc
-                .perform(get(BASE_URL + "/" + id))
+                .perform(get(BASE_URL + "/id/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(subredditDtoMatchers("$.", subredditDto));
 
         verify(subredditService)
-                .getSubreddit(id);
+                .getSubredditById(id);
+    }
+
+    @Test
+    public void shouldReturnNotFoundForInvalidTitleWhenGettingSubredditByTitle() throws Exception {
+        String title = "title";
+        when(subredditService.getSubredditByTitle(title))
+                .thenThrow(new SubredditNotFoundException(ErrorMessages.SUBREDDIT_NOT_FOUND));
+
+        mockMvc
+                .perform(get(BASE_URL + "/title/" + title))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value(ErrorMessages.SUBREDDIT_NOT_FOUND));
+
+        verify(subredditService)
+                .getSubredditByTitle(title);
+    }
+
+    @Test
+    public void shouldReturnSubredditValidTitleWhenGettingSubredditByTitle() throws Exception {
+        String title = "title";
+        when(subredditService.getSubredditByTitle(title))
+                .thenReturn(subredditDto);
+
+        mockMvc
+                .perform(get(BASE_URL + "/title/" + title))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(subredditDtoMatchers("$.", subredditDto));
+
+        verify(subredditService)
+                .getSubredditByTitle(title);
     }
 
     @Test

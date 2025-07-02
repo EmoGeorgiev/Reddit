@@ -39,7 +39,15 @@ public class SubredditService {
     }
 
     @Transactional(readOnly = true)
-    public SubredditDto getSubreddit(Long id) {
+    public SubredditDto getSubredditByTitle(String title) {
+        return subredditRepository
+                .findByTitleIgnoreCase(title)
+                .map(SubredditMapper::subredditToSubredditDto)
+                .orElseThrow(() -> new SubredditNotFoundException(ErrorMessages.SUBREDDIT_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public SubredditDto getSubredditById(Long id) {
         return SubredditMapper.subredditToSubredditDto(getSubredditEntity(id));
     }
 
@@ -71,7 +79,7 @@ public class SubredditService {
     public SubredditDto addSubreddit(SubredditDto subredditDto, Long creatorId) {
         RedditUser user = userService.getUserEntity(creatorId);
 
-        if (subredditRepository.findByTitle(subredditDto.title()).isPresent()) {
+        if (subredditRepository.findByTitleIgnoreCase(subredditDto.title()).isPresent()) {
             throw new SubredditAlreadyExistsException(ErrorMessages.SUBREDDIT_ALREADY_EXISTS);
         }
 
