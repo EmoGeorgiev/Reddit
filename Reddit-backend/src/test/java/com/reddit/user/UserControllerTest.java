@@ -6,6 +6,7 @@ import com.reddit.exception.user.PasswordsDoNotMatchException;
 import com.reddit.exception.user.UserNotFoundException;
 import com.reddit.exception.user.UsernameAlreadyExistsException;
 import com.reddit.user.dto.UpdatePasswordDto;
+import com.reddit.user.dto.UserDeleteDto;
 import com.reddit.user.dto.UserDto;
 import com.reddit.util.ErrorMessages;
 import com.reddit.util.PaginationConstants;
@@ -449,17 +450,98 @@ public class UserControllerTest {
     }
 
     @Test
-    public void shouldReturnNoContentWhenDeletingUser() throws Exception {
-        doNothing()
-                .when(userService)
-                    .deleteUser(id);
+    public void shouldReturnBadRequestForNullIdWhenDeletingUser() throws Exception {
+        String password = "password";
+        UserDeleteDto userDeleteDto = new UserDeleteDto(null, password);
+
+        String expectedMessage = messageSource.getMessage(
+                "userId.required",
+                null,
+                LocaleContextHolder.getLocale()
+        );
 
         mockMvc
-                .perform(delete(BASE_URL + "/" + id))
+                .perform(delete(BASE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userDeleteDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.id").value(expectedMessage));
+    }
+
+    @Test
+    public void shouldReturnBadRequestForBlankPasswordWhenDeletingUser() throws Exception {
+        UserDeleteDto userDeleteDto = new UserDeleteDto(null, BLANK_STRING);
+
+        String expectedMessage = messageSource.getMessage(
+                "password.required",
+                null,
+                LocaleContextHolder.getLocale()
+        );
+
+        mockMvc
+                .perform(delete(BASE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userDeleteDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.password").value(expectedMessage));
+    }
+
+    @Test
+    public void shouldReturnBadRequestForOverMaxSizePasswordWhenDeletingUser() throws Exception {
+        String password = getStringWithFixedLength(ValidationConstants.PASSWORD_MAX + 1);
+        UserDeleteDto userDeleteDto = new UserDeleteDto(null, password);
+
+        Object[] args = getArgs(ValidationConstants.PASSWORD_MIN, ValidationConstants.PASSWORD_MAX);
+        String expectedMessage = messageSource.getMessage(
+                "password.size.test",
+                args,
+                LocaleContextHolder.getLocale()
+        );
+
+        mockMvc
+                .perform(delete(BASE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userDeleteDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.password").value(expectedMessage));
+    }
+
+    @Test
+    public void shouldReturnBadRequestForNonMatchingPasswordsWhenDeletingUser() throws Exception {
+        String password = "password";
+        UserDeleteDto userDeleteDto = new UserDeleteDto(id, password);
+
+        doThrow(new PasswordsDoNotMatchException(ErrorMessages.PASSWORDS_DO_NOT_MATCH))
+                .when(userService)
+                .deleteUser(userDeleteDto);
+
+        mockMvc
+                .perform(delete(BASE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userDeleteDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(ErrorMessages.PASSWORDS_DO_NOT_MATCH));
+
+        verify(userService)
+                .deleteUser(userDeleteDto);
+    }
+    @Test
+    public void shouldReturnNoContentWhenDeletingUser() throws Exception {
+        String password = "password";
+        UserDeleteDto userDeleteDto = new UserDeleteDto(id, password);
+
+        doNothing()
+                .when(userService)
+                    .deleteUser(userDeleteDto);
+
+        mockMvc
+                .perform(delete(BASE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userDeleteDto)))
                 .andExpect(status().isNoContent());
 
         verify(userService)
-                .deleteUser(id);
+                .deleteUser(userDeleteDto);
     }
 
     private ResultMatcher[] userResultMatchers(String prefix, UserDto dto) {

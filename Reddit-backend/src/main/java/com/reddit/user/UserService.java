@@ -5,6 +5,7 @@ import com.reddit.exception.user.PasswordsDoNotMatchException;
 import com.reddit.exception.user.UserNotFoundException;
 import com.reddit.exception.user.UsernameAlreadyExistsException;
 import com.reddit.user.dto.UpdatePasswordDto;
+import com.reddit.user.dto.UserDeleteDto;
 import com.reddit.user.dto.UserDto;
 import com.reddit.util.ErrorMessages;
 import org.springframework.data.domain.Page;
@@ -100,8 +101,15 @@ public class UserService {
         return UserMapper.userToUserDto(user);
     }
 
-    public void deleteUser(Long id) {
+    public void deleteUser(UserDeleteDto userDeleteDto) {
+        Long id = userDeleteDto.id();
+        String password = userDeleteDto.password();
+
         RedditUser user = getUserEntity(id);
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new PasswordsDoNotMatchException(ErrorMessages.PASSWORDS_DO_NOT_MATCH);
+        }
 
         removeUserFromCollections(user);
 
