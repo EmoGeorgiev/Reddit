@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../Authentication/AuthContext'
 import Collapse from './Collapse'
 import ProfileMenu from './ProfileMenu'
 import Search from './Search'
 
-const Navbar = ({ handleCollapse, isAuthenticated }) => {
+const Navbar = ({ handleCollapse }) => {
     const navigate = useNavigate()
+    const { isAuthenticated } = useAuth()
 
     return (
         <nav className='w-full top-0 fixed h-14 border border-gray-300 flex items-center'>

@@ -1,22 +1,29 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import authenticationService from '../../services/authentication'
 
 const SignUpForm = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const navigate = useNavigate()
 
-    const handleSignUp = (e) => {
+    const handleSignUp = async (e) => {
         e.preventDefault()
 
+        const credentials = { username, password }
+
         try {
-            const credentials = { username, password }
+            const user = await authenticationService.signup(credentials)
 
-
-            setUsername('')
-            setPassword('')
+            if (user !== null) {
+                setUsername('')
+                setPassword('')
+                
+                navigate('/login')
+            }
         } catch (error) {
-            
-        }
+            console.log(error)
+        }   
     }
 
     return (

@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../Authentication/AuthContext'
 import SubscriptionsList from './SubscriptionsList'
 
-const Sidebar = ({ collapsed, isAuthenticated }) => {
+const Sidebar = ({ collapsed }) => {
     const [isOpen, setIsOpen] = useState(true)
+    const { isAuthenticated } = useAuth()
     
     const handleOpen = () => {
         setIsOpen(!isOpen)

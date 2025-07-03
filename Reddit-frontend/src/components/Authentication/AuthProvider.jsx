@@ -34,7 +34,7 @@ const AuthProvider = ({ children }) => {
     const loadUser = () => {
         const localStorageUser = JSON.parse(localStorage.getItem('loggedUser'))
 
-        if (localStorageUser != null) {
+        if (localStorageUser !== null) {
             setUser(localStorageUser)
             setIsAuthenticated(true)
         }

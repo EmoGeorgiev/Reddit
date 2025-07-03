@@ -1,6 +1,5 @@
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { useState } from 'react'
-import { useAuth } from './Authentication/AuthContext'
 import ProtectedRoute from './Authentication/ProtectedRoute'
 import Navbar from './Navigation/Navbar'
 import Sidebar from './Navigation/Sidebar'
@@ -11,17 +10,15 @@ import Settings from './Settings/Settings'
 const Layout = () => {
     const [collapsed, setCollapsed] = useState(false)
     const location = useLocation()
-    //const { isAuthenticated } = useAuth()
-    const isAuthenticated = true
 
     const hideLayout = location.pathname === '/login' || location.pathname === '/signup'
 
     return (
         <div className='h-screen'>
-            {!hideLayout && <Navbar handleCollapse={() => setCollapsed(!collapsed)} isAuthenticated={isAuthenticated} />}
+            {!hideLayout && <Navbar handleCollapse={() => setCollapsed(!collapsed)} />}
             
             <div className='pt-14 h-screen flex'>
-                {!hideLayout && <Sidebar collapsed={collapsed} isAuthenticated={isAuthenticated} />}
+                {!hideLayout && <Sidebar collapsed={collapsed} />}
                 
                 <div className='flex-1 overflow-auto'>
                     <Routes>
