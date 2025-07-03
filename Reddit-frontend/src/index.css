@@ -31,10 +31,6 @@
         @apply text-lg text-gray-700 font-bold
     }
 
-    .form-close-btn {
-        @apply w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full
-    }
-
     .active-form-input {
         @apply block w-80 mx-auto my-10 p-3 font-medium bg-gray-200 hover:bg-gray-300 rounded-2xl
     }
@@ -49,5 +45,13 @@
     
     .active-form-confirm-btn {
         @apply mx-2 px-2.5 py-2 font-semibold text-gray-100 bg-blue-800 hover:bg-blue-900 rounded-full
+    }
+    
+    .close-btn {
+        @apply w-8 h-8 p-1 bg-gray-200 hover:bg-gray-300 rounded-full
+    }
+
+    .expand-arrow {
+        @apply w-5 h-5
     }
 }

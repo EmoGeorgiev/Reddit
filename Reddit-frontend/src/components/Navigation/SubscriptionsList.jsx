@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import arrowIcon from '../../assets/expand-arrow-icon.svg'
  
 const subreddits = [
     { 'id' : 1, 'name' : 'AskMen'},
@@ -24,9 +25,11 @@ const SubscriptionsList = ({ isOpen, handleOpen }) => {
     
     return (
         <div>
-            <div className='w-56 ml-4 px-4 py-3 font-semibold hover:bg-gray-200 rounded-2xl cursor-pointer' 
-                 onClick={handleOpen}>
-                 {isOpen ? 'Subscriptions <<' : 'Subscriptions >>'}
+            <div className='w-56 ml-4 px-4 py-3 flex justify-between items-center font-semibold hover:bg-gray-200 rounded-2xl cursor-pointer' onClick={handleOpen}>
+                <div>
+                    Subscriptions
+                </div>
+                <img className={`expand-arrow ${isOpen ? '-rotate-90' : 'rotate-90'}`} src={arrowIcon} alt='arrow' />
             </div>
             <div className={`${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'} duration-400`}>
                 <div>

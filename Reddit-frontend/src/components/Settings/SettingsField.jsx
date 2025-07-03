@@ -1,3 +1,4 @@
+import arrowIcon from '../../assets/expand-arrow-icon.svg'
 
 const SettingsField = ({ name, handleClick }) => {
     return (
@@ -7,7 +8,7 @@ const SettingsField = ({ name, handleClick }) => {
             </span>
             
             <span className='w-8 h-8 flex justify-center items-center font-extrabold group-hover:bg-gray-200 rounded-full'>
-                &gt;
+                <img className='expand-arrow' src={arrowIcon} alt='arrow' />
             </span>
         </div>
     )

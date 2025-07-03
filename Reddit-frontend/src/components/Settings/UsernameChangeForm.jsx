@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import closeIcon from '../../assets/close-icon.svg'
 
 const UsernameChangeForm = ({ usernameChange, handleClose }) => {
     const [username, setUsername] = useState('')
@@ -16,8 +17,8 @@ const UsernameChangeForm = ({ usernameChange, handleClose }) => {
             <div className='active-form-header'>
                 <h1 className='active-form-heading'>Username</h1>
 
-                <button className='form-close-btn' onClick={handleClose}>
-                    X
+                <button onClick={handleClose}>
+                    <img className='close-btn' src={closeIcon} alt='close' />
                 </button>
             </div>
 

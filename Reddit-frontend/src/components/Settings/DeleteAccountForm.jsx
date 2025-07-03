@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import closeIcon from '../../assets/close-icon.svg'
 
 const DeleteAccountForm = ({ deleteAccount, handleClose }) => {
    const [password, setPassword] = useState('')
@@ -18,8 +19,8 @@ const DeleteAccountForm = ({ deleteAccount, handleClose }) => {
             <div className='active-form-header'>
                 <h1 className='active-form-heading'>Delete account</h1>
 
-                <button className='form-close-btn' onClick={handleClose}>
-                    X
+                <button onClick={handleClose}>
+                    <img className='close-btn' src={closeIcon} alt='close' />
                 </button>
             </div>
             
