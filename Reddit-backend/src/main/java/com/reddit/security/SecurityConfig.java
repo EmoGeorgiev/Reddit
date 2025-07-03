@@ -30,17 +30,15 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
     private final RsaKeyProperties rsaKeyProperties;
-    private final CorsConfigurationSource corsConfigurationSource;
 
-    public SecurityConfig(RsaKeyProperties rsaKeyProperties, CorsConfigurationSource corsConfigurationSource) {
+    public SecurityConfig(RsaKeyProperties rsaKeyProperties) {
         this.rsaKeyProperties = rsaKeyProperties;
-        this.corsConfigurationSource = corsConfigurationSource;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/api/login").permitAll();
