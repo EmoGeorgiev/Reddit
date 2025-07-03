@@ -6,6 +6,7 @@ import Sidebar from './Navigation/Sidebar'
 import LoginForm from './AuthenticationForms/LoginForm'
 import SignUpForm from './AuthenticationForms/SignUpForm'
 import Settings from './Settings/Settings'
+import Subreddit from './Subreddit/Subreddit'
 
 const Layout = () => {
     const [collapsed, setCollapsed] = useState(false)
@@ -21,6 +22,7 @@ const Layout = () => {
                     <Routes>
                         <Route path='/login' element={<LoginForm />} />
                         <Route path='/signup' element={<SignUpForm />} />
+                        <Route path='/r/:title' element={<Subreddit />} />
                         <Route path='/settings' element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                     </Routes>
                 </div>

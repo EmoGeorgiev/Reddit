@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import arrowIcon from '../../assets/expand-arrow-icon.svg'
+import subredditIcon from '../../assets/subreddit-icon.svg'
  
 const subreddits = [
     { 'id' : 1, 'name' : 'AskMen'},
@@ -24,23 +26,26 @@ const SubscriptionsList = ({ isOpen, handleOpen }) => {
     const [subscriptions, setSubscriptions] = useState(subreddits)
     
     return (
-        <div>
-            <div className='w-56 ml-4 px-4 py-3 flex justify-between items-center font-semibold hover:bg-gray-200 rounded-2xl cursor-pointer' onClick={handleOpen}>
+        <div className='w-56 ml-4'>
+            <div className='px-4 py-3 flex justify-between items-center font-semibold hover:bg-gray-200 rounded-2xl cursor-pointer' onClick={handleOpen}>
                 <div>
                     Subscriptions
                 </div>
                 <img className={`expand-arrow ${isOpen ? '-rotate-90' : 'rotate-90'}`} src={arrowIcon} alt='arrow' />
             </div>
+
             <div className={`${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'} duration-400`}>
-                <div>
-                    <ul>
-                        {subscriptions.map(subreddit => 
-                                <li className='w-48 ml-8 px-4 py-3 font-light hover:bg-gray-200 rounded-2xl overflow-clip' 
-                                    key={subreddit.id}>
-                                    <a href=''>r/{subreddit.name}</a>
-                                </li>)}
-                    </ul>
-                </div>
+                <ul>
+                    {subscriptions.map(subreddit => 
+                            <li key={subreddit.id}>
+                                <Link to={`/r/${subreddit.name}`} className='w-56 px-4 py-2 flex items-center font-light hover:bg-gray-200 rounded-2xl overflow-clip'>
+                                    <img className='w-8 h-8' src={subredditIcon} alt='subreddit' />
+                                    <div className='mx-2'>
+                                        r/{subreddit.name}
+                                    </div>
+                                </Link>
+                            </li>)}
+                </ul>
             </div>
         </div>
     )

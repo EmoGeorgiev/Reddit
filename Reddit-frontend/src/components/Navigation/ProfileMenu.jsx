@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useAuth } from '../Authentication/AuthContext'
-import { Link } from 'react-router-dom'
 import userIcon from '../../assets/user-icon.svg'
 import settingsIcon from '../../assets/settings-icon.svg'
 import logoutIcon from '../../assets/logout-icon.svg'
@@ -14,10 +13,12 @@ const ProfileMenu = () => {
         setIsOpen(false)
     }
 
-    const handleLogOut = () => {
-        logout()
-
+    const handleLogOut = (e) => {
+        e.preventDefault()
+        
         handleClose()
+        
+        logout()
     }
 
     return (

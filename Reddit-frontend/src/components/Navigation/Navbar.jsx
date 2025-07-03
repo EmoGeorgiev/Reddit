@@ -12,7 +12,7 @@ const Navbar = ({ handleCollapse }) => {
 
     return (
         <nav className='w-full top-0 fixed h-14 border border-gray-300 flex items-center'>
-            <div className='mx-5 flex-1 flex justify-start space-x-4 '>
+            <div className='mx-5 flex-1 flex justify-start items-center space-x-4 '>
                 {isAuthenticated && <Collapse handleCollapse={handleCollapse} />}
                 <Link to='/'>
                     <img className='w-24 h-24' src={redditIcon} alt='reddit' />
