@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../Authentication/AuthContext'
+import { Link } from 'react-router-dom'
 import Collapse from './Collapse'
 import ProfileMenu from './ProfileMenu'
 import Search from './Search'
@@ -12,7 +13,7 @@ const Navbar = ({ handleCollapse }) => {
         <nav className='w-full top-0 fixed h-14 border border-gray-300 flex items-center'>
             <div className='mx-5 flex-1 flex justify-start space-x-4 '>
                 {isAuthenticated && <Collapse handleCollapse={handleCollapse} />}
-                <h2>Reddit</h2>
+                <Link to='/'>Reddit</Link>
             </div>
 
             <div className='flex-1'>
