@@ -9,6 +9,7 @@ import com.reddit.user.dto.UserDto;
 import com.reddit.util.ErrorMessages;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,9 +34,18 @@ public class UserService {
                 .findById(id)
                 .orElseThrow(() -> new UserNotFoundException(ErrorMessages.USER_NOT_FOUND));
     }
+
     @Transactional(readOnly = true)
     public UserDto getUser(Long id) {
         return UserMapper.userToUserDto(getUserEntity(id));
+    }
+
+    @Transactional(readOnly = true)
+    public UserDto getUserByUsername(String username) {
+        return userRepository
+                .findByUsernameIgnoreCase(username)
+                .map(UserMapper::userToUserDto)
+                .orElseThrow(() -> new UsernameNotFoundException((ErrorMessages.USERNAME_DOES_NOT_EXIST)));
     }
 
     @Transactional(readOnly = true)
@@ -55,7 +65,7 @@ public class UserService {
     public UserDto addUser(String username, String password) {
         RedditUser user = new RedditUser();
 
-        if (userRepository.findByUsername(username).isPresent()) {
+        if (userRepository.findByUsernameIgnoreCase(username).isPresent()) {
             throw new UsernameAlreadyExistsException(ErrorMessages.USERNAME_ALREADY_EXISTS);
         }
 
@@ -72,7 +82,7 @@ public class UserService {
         RedditUser user = getUserEntity(id);
         String username = userDto.username();
 
-        if (userRepository.findByUsername(username).isPresent()) {
+        if (userRepository.findByUsernameIgnoreCase(username).isPresent()) {
             throw new UsernameAlreadyExistsException(ErrorMessages.USERNAME_ALREADY_EXISTS);
         }
 
