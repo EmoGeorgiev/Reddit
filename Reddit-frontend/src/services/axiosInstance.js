@@ -8,7 +8,9 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use((request) => {
     const token = localStorage.getItem('token')
-    request.headers.Authorization = `Bearer ${token}`
+    if (token && request.method && request.method.toUpperCase() !== 'GET') {
+        request.headers['Authorization'] = `Bearer ${token}`
+    }
     return request
 }, (error) => {
     return Promise.reject(error)

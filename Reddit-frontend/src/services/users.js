@@ -2,8 +2,13 @@ import axiosInstance from './axiosInstance'
 
 const baseUrl = '/users'
 
-const getUser = async (id) => {
-    const response = await axiosInstance.get(`${baseUrl}/${id}`)
+const getUserById = async (id) => {
+    const response = await axiosInstance.get(`${baseUrl}/id/${id}`)
+    return response.data
+}
+
+const getUserByUsername = async (username) => {
+    const response = await axiosInstance.get(`${baseUrl}/username/${username}`)
     return response.data
 }
 
@@ -37,4 +42,4 @@ const deleteUser = async (id, password) => {
 }
 
 
-export default { getUser, getUsers, getUsersWhereUsernameContainsWord, updateUsername, updatePassword, deleteUser }
+export default { getUserById, getUserByUsername, getUsers, getUsersWhereUsernameContainsWord, updateUsername, updatePassword, deleteUser }
