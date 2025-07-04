@@ -16,8 +16,9 @@ const AuthProvider = ({ children }) => {
             'id': data.id 
         }
 
+
         window.localStorage.setItem('loggedUser', JSON.stringify(localStorageUser))
-        window.localStorage.setItem('token', JSON.stringify(data.token))
+        window.localStorage.setItem('token', data.token)
 
         setUser(localStorageUser)
         setIsAuthenticated(true)
