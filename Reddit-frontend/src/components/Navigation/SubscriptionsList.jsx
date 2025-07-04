@@ -1,29 +1,27 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../Authentication/AuthContext'
+import subredditService from '../../services/subreddits'
 import arrowIcon from '../../assets/expand-arrow-icon.svg'
 import subredditIcon from '../../assets/subreddit-icon.svg'
- 
-const subreddits = [
-    { 'id' : 1, 'name' : 'AskMen'},
-    { 'id' : 2, 'name' : 'AskReddit'},
-    { 'id' : 3, 'name' : 'Barca'},
-    { 'id' : 4, 'name' : 'Bulgaria'},
-    { 'id' : 5, 'name' : 'Linux'},
-    { 'id' : 6, 'name' : 'Nba'},
-    { 'id' : 7, 'name' : 'Soccer'},
-    { 'id' : 8, 'name' : 'StarWars'},
-    { 'id' : 9, 'name' : 'AskMen'},
-    { 'id' : 10, 'name' : 'AskReddit'},
-    { 'id' : 11, 'name' : 'Barca'},
-    { 'id' : 12, 'name' : 'Bulgaria'},
-    { 'id' : 13, 'name' : 'Linux'},
-    { 'id' : 14, 'name' : 'Nba'},
-    { 'id' : 15, 'name' : 'Soccer'},
-    { 'id' : 16, 'name' : 'StarWars'}
-]
 
 const SubscriptionsList = ({ isOpen, handleOpen }) => {
-    const [subscriptions, setSubscriptions] = useState(subreddits)
+    const [subscriptions, setSubscriptions] = useState([])
+    const { user } = useAuth()
+
+    useEffect(() => {
+        getSubscriptions()
+    }, [])
+
+    const getSubscriptions = async () => {
+        try {
+            const subreddits = await subredditService.getSubredditsByUserId(user.id)
+
+            setSubscriptions(subreddits)
+        } catch (error) {
+            console.log(error)
+        }
+    }
     
     return (
         <div className='w-56 ml-4'>
@@ -38,10 +36,10 @@ const SubscriptionsList = ({ isOpen, handleOpen }) => {
                 <ul>
                     {subscriptions.map(subreddit => 
                             <li key={subreddit.id}>
-                                <Link to={`/r/${subreddit.name}`} className='w-56 px-4 py-2 flex items-center font-light hover:bg-gray-200 rounded-2xl overflow-clip'>
+                                <Link to={`/r/${subreddit.title}`} className='w-56 px-4 py-2 flex items-center font-light hover:bg-gray-200 rounded-2xl overflow-clip'>
                                     <img className='w-8 h-8' src={subredditIcon} alt='subreddit' />
                                     <div className='mx-2'>
-                                        r/{subreddit.name}
+                                        r/{subreddit.title}
                                     </div>
                                 </Link>
                             </li>)}

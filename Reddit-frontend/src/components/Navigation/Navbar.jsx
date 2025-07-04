@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../Authentication/AuthContext'
 import { Link } from 'react-router-dom'
-import Collapse from './Collapse'
 import ProfileMenu from './ProfileMenu'
 import Search from './Search'
+import menuIcon from '../../assets/menu-icon.svg'
 import redditIcon from '../../assets/reddit-logo-icon.svg'
 
 const Navbar = ({ handleCollapse }) => {
@@ -13,7 +13,10 @@ const Navbar = ({ handleCollapse }) => {
     return (
         <nav className='w-full top-0 fixed h-14 border border-gray-300 flex items-center'>
             <div className='mx-5 flex-1 flex justify-start items-center space-x-4 '>
-                {isAuthenticated && <Collapse handleCollapse={handleCollapse} />}
+                {isAuthenticated && 
+                    <button onClick={handleCollapse}>
+                        <img className='w-5 h-5' src={menuIcon} alt='Collapse' />
+                    </button> }
                 <Link to='/'>
                     <img className='w-24 h-24' src={redditIcon} alt='reddit' />
                 </Link>
