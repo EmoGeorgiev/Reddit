@@ -20,7 +20,7 @@ const Sidebar = ({ collapsed }) => {
            {!collapsed && 
                 <div className='mt-4'>    
                     <Link to='/' className='w-56 ml-4 px-4 py-3 block font-semibold hover:bg-gray-200 rounded-2xl'>All</Link>
-                    <Link to='/' className='w-56 ml-4 px-4 py-3 block font-semibold hover:bg-gray-200 rounded-2xl'>Home</Link>
+                    <Link to='/home' className='w-56 ml-4 px-4 py-3 block font-semibold hover:bg-gray-200 rounded-2xl'>Home</Link>
 
                     <div className='my-4 mx-6 border border-gray-200'></div>
 

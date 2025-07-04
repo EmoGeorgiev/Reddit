@@ -7,6 +7,9 @@ import LoginForm from './AuthenticationForms/LoginForm'
 import SignUpForm from './AuthenticationForms/SignUpForm'
 import Settings from './Settings/Settings'
 import Subreddit from './Subreddit/Subreddit'
+import AllFeed from './Feed/AllFeed'
+import HomeFeed from './Feed/HomeFeed'
+import User from './User/User'
 
 const Layout = () => {
     const [collapsed, setCollapsed] = useState(false)
@@ -22,7 +25,10 @@ const Layout = () => {
                     <Routes>
                         <Route path='/login' element={<LoginForm />} />
                         <Route path='/signup' element={<SignUpForm />} />
+                        <Route path='/' element={<AllFeed />} />
+                        <Route path='/home' element={<ProtectedRoute><HomeFeed /></ProtectedRoute>} />
                         <Route path='/r/:title' element={<Subreddit />} />
+                        <Route path='/users/:username' element={<User />} />
                         <Route path='/settings' element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                     </Routes>
                 </div>
