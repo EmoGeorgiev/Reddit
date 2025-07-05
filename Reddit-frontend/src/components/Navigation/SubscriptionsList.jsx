@@ -24,7 +24,7 @@ const SubscriptionsList = ({ isOpen, handleOpen }) => {
     }
     
     return (
-        <div className='w-56 mt-4 ml-4 border-t border-gray-200'>
+        <div className='w-56 mt-4 ml-4 border-t border-gray-300'>
             <div className='mt-4 px-4 py-3 flex justify-between items-center font-semibold hover:bg-gray-200 rounded-2xl cursor-pointer' onClick={handleOpen}>
                 <h1>
                     Subscriptions

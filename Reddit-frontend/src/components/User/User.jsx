@@ -1,7 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../Authentication/AuthContext'
 import { useEffect, useState } from 'react'
+import { Category } from '../../util/Category'
 import userService from '../../services/users'
+import MissingContent from './MissingContent'
 import UserPosts from './UserPosts'
 import UserComments from './UserComments'
 import UserSaved from './UserSaved'
@@ -10,20 +12,24 @@ import UserDownvoted from './UserDownvoted'
 import UserCategory from './UserCategory'
 import userIcon from '../../assets/user-icon.svg'
 
-const Category = Object.freeze({
-    COMMENTS: 'COMMENTS',
-    POSTS: 'POSTS',
-    UPVOTED: 'UPVOTED',
-    DOWNVOTED: 'DOWNVOTED',
-    SAVED: 'SAVED'
-})
-
 const User = () => {
     const [currentCategory, setCurrentCategory] = useState(Category.COMMENTS)
     const [profile, setProfile] = useState(null)
     const { username } = useParams()
     const { user } = useAuth()
     const navigate = useNavigate()
+    
+    const main = [Category.COMMENTS, Category.POSTS]
+    const extra = [Category.UPVOTED, Category.DOWNVOTED, Category.SAVED]
+    const categories = user?.id === profile?.id ? [...main, ...extra] : main
+
+    const categoryComponents = {
+        [Category.COMMENTS]: <UserComments id={profile?.id} />,
+        [Category.POSTS]: <UserPosts id={profile?.id} />,
+        [Category.UPVOTED]: <UserUpvoted id={profile?.id} />,
+        [Category.DOWNVOTED]: <UserDownvoted id={profile?.id} />,
+        [Category.SAVED]: <UserSaved id={profile?.id} />
+    }
     
     useEffect(() => {
         const getUser = async () => {
@@ -44,20 +50,10 @@ const User = () => {
  
     if (profile === null) {
         return (
-            <div className='h-full flex flex-col justify-center items-center space-y-3'>
-                <p className='page-header font-semibold'>
-                    Sorry, nobody on Reddit goes by the name "{username}".
-                </p>
-
-                <p className='text-lg text-center font-light'>
-                    This account may have been deleted or the username is incorrect.
-                </p>
-
-                <button className='p-2 text-sm text-gray-200 font-semibold bg-blue-800 hover:bg-blue-900 rounded-full'
-                        onClick={() => navigate('/')}>
-                    View Other Communities
-                </button>
-            </div>
+            <MissingContent heading={`Sorry, nobody on Reddit goes by the name "${username}".` }
+                            text='This account may have been deleted or the username is incorrect.'
+                            button='View Other Communities'
+                            handleClick={() => navigate('/')} />
         )
     }
 
@@ -72,45 +68,15 @@ const User = () => {
             </div>
 
             <div className='mx-48'>
-                <div className='flex justify-center'>
-                    <UserCategory name='Comments' 
-                                category={Category.COMMENTS} 
-                                currentCategory={currentCategory} 
-                                changeCategory={handleCategoryChange} />
-
-                    <UserCategory name='Posts' 
-                                category={Category.POSTS} 
-                                currentCategory={currentCategory} 
-                                changeCategory={handleCategoryChange} />
-
-                    {user?.id === profile.id && 
-                        <UserCategory name='Upvoted' 
-                                    category={Category.UPVOTED} 
-                                    currentCategory={currentCategory} 
-                                    changeCategory={handleCategoryChange} />
-                    }
-
-                    {user?.id === profile.id && 
-                        <UserCategory name='Downvoted' 
-                                    category={Category.DOWNVOTED} 
-                                    currentCategory={currentCategory} 
-                                    changeCategory={handleCategoryChange} />
-                    }
-                    
-                    {user?.id === profile.id && 
-                        <UserCategory name='Saved' 
-                                    category={Category.SAVED} 
-                                    currentCategory={currentCategory} 
-                                    changeCategory={handleCategoryChange} />
-                    }
+                <div className='flex justify-center'>                    
+                    {categories.map(category => <UserCategory key={category} 
+                                                            category={category}
+                                                            currentCategory={currentCategory} 
+                                                            changeCategory={handleCategoryChange} />)}
                 </div>
                 
-                <div className='mt-8 border-t border-gray-200'>
-                    {currentCategory === Category.COMMENTS && <UserComments id={profile.id} />}
-                    {currentCategory === Category.POSTS && <UserPosts id={profile.id} />}
-                    {currentCategory === Category.UPVOTED && <UserUpvoted id={profile.id} />}
-                    {currentCategory === Category.DOWNVOTED && <UserDownvoted id={profile.id} />}
-                    {currentCategory === Category.SAVED && <UserSaved id={profile.id} />} 
+                <div className='mt-8 border-t border-gray-300'>
+                    {categoryComponents[currentCategory]}
                 </div>
             </div>
         </div>

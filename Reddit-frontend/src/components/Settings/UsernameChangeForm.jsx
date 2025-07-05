@@ -27,7 +27,7 @@ const UsernameChangeForm = ({ usernameChange, handleClose }) => {
                     className='active-form-input focus-item'
                     type='text'
                     value={username}
-                    name='username'
+                    name='newUsername'
                     placeholder='New username'
                     onChange={(e) => setUsername(e.target.value)}
                 />

@@ -57,7 +57,7 @@ const Subreddit = () => {
                 </div>
             </div>
 
-            <div className='border-t border-gray-200'>
+            <div className='border-t border-gray-300'>
 
             </div>
         </div>
