@@ -9,11 +9,10 @@ import UserComments from './UserComments'
 import UserSaved from './UserSaved'
 import UserUpvoted from './UserUpvoted'
 import UserDownvoted from './UserDownvoted'
-import UserCategory from './UserCategory'
 import userIcon from '../../assets/user-icon.svg'
+import CategoryList from '../Category/CategoryList'
 
 const User = () => {
-    const [currentCategory, setCurrentCategory] = useState(Category.COMMENTS)
     const [profile, setProfile] = useState(null)
     const { username } = useParams()
     const { user } = useAuth()
@@ -43,14 +42,10 @@ const User = () => {
 
         getUser()
     }, [username])
-
-    const handleCategoryChange = (category) => {
-        setCurrentCategory(category)
-    }
  
     if (profile === null) {
         return (
-            <MissingContent heading={`Sorry, nobody on Reddit goes by the name "${username}".` }
+            <MissingContent heading={`Sorry, nobody on Reddit goes by the name "${username}".`}
                             text='This account may have been deleted or the username is incorrect.'
                             button='View Other Communities'
                             handleClick={() => navigate('/')} />
@@ -67,18 +62,9 @@ const User = () => {
                 </h1>
             </div>
 
-            <div className='mx-48'>
-                <div className='flex justify-center'>                    
-                    {categories.map(category => <UserCategory key={category} 
-                                                            category={category}
-                                                            currentCategory={currentCategory} 
-                                                            changeCategory={handleCategoryChange} />)}
-                </div>
-                
-                <div className='mt-8 border-t border-gray-300'>
-                    {categoryComponents[currentCategory]}
-                </div>
-            </div>
+            <CategoryList defaultCategory={Category.COMMENTS} 
+                        categories={categories} 
+                        categoryComponents={categoryComponents} />
         </div>
     )
 }
