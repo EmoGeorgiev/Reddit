@@ -24,11 +24,11 @@ const SubscriptionsList = ({ isOpen, handleOpen }) => {
     }
     
     return (
-        <div className='w-56 ml-4'>
-            <div className='px-4 py-3 flex justify-between items-center font-semibold hover:bg-gray-200 rounded-2xl cursor-pointer' onClick={handleOpen}>
-                <div>
+        <div className='w-56 mt-4 ml-4 border-t border-gray-200'>
+            <div className='mt-4 px-4 py-3 flex justify-between items-center font-semibold hover:bg-gray-200 rounded-2xl cursor-pointer' onClick={handleOpen}>
+                <h1>
                     Subscriptions
-                </div>
+                </h1>
                 <img className={`expand-arrow ${isOpen ? '-rotate-90' : 'rotate-90'}`} src={arrowIcon} alt='arrow' />
             </div>
 
@@ -42,7 +42,8 @@ const SubscriptionsList = ({ isOpen, handleOpen }) => {
                                         r/{subreddit.title}
                                     </div>
                                 </Link>
-                            </li>)}
+                            </li>
+                    )}
                 </ul>
             </div>
         </div>

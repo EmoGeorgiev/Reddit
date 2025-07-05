@@ -48,9 +48,11 @@ const User = () => {
                 <p className='page-header font-semibold'>
                     Sorry, nobody on Reddit goes by the name "{username}".
                 </p>
+
                 <p className='text-lg text-center font-light'>
                     This account may have been deleted or the username is incorrect.
                 </p>
+
                 <button className='p-2 text-sm text-gray-200 font-semibold bg-blue-800 hover:bg-blue-900 rounded-full'
                         onClick={() => navigate('/')}>
                     View Other Communities
@@ -63,12 +65,13 @@ const User = () => {
         <div>
             <div className='flex justify-center space-x-3 items-center'>
                 <img src={userIcon} alt='icon' />
+                
                 <h1 className='my-10 page-header'>
                     u/{profile.username}
                 </h1>
             </div>
 
-            <div className='mx-32'>
+            <div className='mx-48'>
                 <div className='flex justify-center'>
                     <UserCategory name='Comments' 
                                 category={Category.COMMENTS} 
@@ -101,8 +104,8 @@ const User = () => {
                                     changeCategory={handleCategoryChange} />
                     }
                 </div>
-
-                <div>
+                
+                <div className='mt-8 border-t border-gray-200'>
                     {currentCategory === Category.COMMENTS && <UserComments id={profile.id} />}
                     {currentCategory === Category.POSTS && <UserPosts id={profile.id} />}
                     {currentCategory === Category.UPVOTED && <UserUpvoted id={profile.id} />}

@@ -7,7 +7,7 @@ const SettingsField = ({ name, handleClick }) => {
                 {name}
             </span>
             
-            <span className='w-8 h-8 flex justify-center items-center font-extrabold group-hover:bg-gray-200 rounded-full'>
+            <span className='w-8 h-8 flex justify-center items-center font-extrabold group-hover:bg-gray-300 rounded-full'>
                 <img className='expand-arrow' src={arrowIcon} alt='arrow' />
             </span>
         </div>
