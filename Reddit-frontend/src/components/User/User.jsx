@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../Authentication/AuthContext'
 import { useEffect, useState } from 'react'
 import userService from '../../services/users'
@@ -23,6 +23,7 @@ const User = () => {
     const [profile, setProfile] = useState(null)
     const { username } = useParams()
     const { user } = useAuth()
+    const navigate = useNavigate()
     
     useEffect(() => {
         const getUser = async () => {
@@ -43,9 +44,17 @@ const User = () => {
  
     if (profile === null) {
         return (
-            <div>
-                <p>Sorry, nobody on Reddit goes by the name {username}.</p>
-                <p>This account may have been deleted or the username is incorrect.</p>
+            <div className='h-full flex flex-col justify-center items-center space-y-3'>
+                <p className='page-header font-semibold'>
+                    Sorry, nobody on Reddit goes by the name "{username}".
+                </p>
+                <p className='text-lg text-center font-light'>
+                    This account may have been deleted or the username is incorrect.
+                </p>
+                <button className='p-2 text-sm text-gray-200 font-semibold bg-blue-800 hover:bg-blue-900 rounded-full'
+                        onClick={() => navigate('/')}>
+                    View Other Communities
+                </button>
             </div>
         )
     }
@@ -54,7 +63,7 @@ const User = () => {
         <div>
             <div className='flex justify-center space-x-3 items-center'>
                 <img src={userIcon} alt='icon' />
-                <h1 className='my-10 font-bold text-gray-800 text-3xl text-center'>
+                <h1 className='my-10 page-header'>
                     u/{profile.username}
                 </h1>
             </div>

@@ -36,10 +36,10 @@ const Settings = () => {
 
     return (
         <div className='w-1/2 mt-10 mx-auto'>
-            <h1 className='text-gray-800 text-3xl text-center font-bold'>Settings</h1>
+            <h1 className='page-header'>Settings</h1>
             
             <div>
-                {activeForm !== null && <button className='fixed inset-0 bg-black/40 backdrop-blur-xs' onClick={closeActiveForm}></button>}
+                {activeForm !== null && <button className='background-btn background-blur' onClick={closeActiveForm}></button>}
 
                 <div className={`${activeForm === ActiveFormOptions.CHANGE_USERNAME ? 'opacity-100 visible' : 'opacity-0 invisible'} duration-300`}>
                     <UsernameChangeForm usernameChange={usernameChange} handleClose={closeActiveForm} />

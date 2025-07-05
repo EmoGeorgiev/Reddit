@@ -30,7 +30,7 @@ const LoginForm = () => {
 
     return (
         <div>
-            <button className='fixed inset-0 bg-black/40 backdrop-blur-xs' onClick={() => navigate('/')}></button>
+            <button className='background-btn background-blur' onClick={() => navigate('/')}></button>
             
             <div className='active-form h-3/5 flex flex-col items-center'>
                 <h1 className='m-10 text-3xl font-bold'>

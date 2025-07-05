@@ -54,4 +54,16 @@
     .expand-arrow {
         @apply w-5 h-5
     }
+
+    .page-header {
+        @apply text-gray-800 text-3xl text-center font-bold
+    }
+
+    .background-btn {
+        @apply fixed inset-0 cursor-default
+    }
+
+    .background-blur {
+        @apply bg-black/40 backdrop-blur-xs
+    }
 }
