@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import FormHeader from '../Common/FormHeader'
 import authenticationService from '../../services/authentication'
 
 const SignUpForm = () => {
@@ -26,46 +27,56 @@ const SignUpForm = () => {
         }   
     }
 
+    const handleClose = () => {
+        navigate('/')
+    }
+
     return (
         <div>
-            <button className='background-btn background-blur' onClick={() => navigate('/')}></button>
+            <button className='background-btn background-blur' onClick={handleClose}></button>
             
-            <div className='active-form h-3/5 flex flex-col items-center'>
-                <h1 className='m-10 text-3xl font-bold'>
-                    Sign Up
-                </h1>
+            <div className='active-form h-3/5'>
+                <FormHeader name='' handleClose={handleClose} />
 
-                <form onSubmit={handleSignUp}>
-                    <div className='m-6'>
-                        <input 
-                            className='auth-input focus-item'
-                            type='text'
-                            value={username}
-                            name='username'
-                            placeholder='Username'
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                    </div>
-                    <div className='m-6'>
-                        <input 
-                            className='auth-input focus-item'
-                            type='password'
-                            value={password}
-                            name='password'
-                            placeholder='Password'
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
-                    <div className='m-6'>
-                        <button className='auth-btn focus-item' type='submit'>
-                            Sign Up
-                        </button>
-                    </div>
-                </form>
-                
-                <p className='m-3 font-medium'>
-                    Already a redditor? <Link to='/login' className='text-blue-400 focus-item'>Log In</Link>
-                </p>
+                <div className='flex flex-col items-center'>
+                    <h1 className='m-6 text-3xl font-bold'>
+                        Sign Up
+                    </h1>
+
+                    <form onSubmit={handleSignUp}>
+                        <div className='m-6'>
+                            <input 
+                                className='auth-input focus-item'
+                                type='text'
+                                value={username}
+                                name='username'
+                                placeholder='Username'
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
+                        </div>
+
+                        <div className='m-6'>
+                            <input 
+                                className='auth-input focus-item'
+                                type='password'
+                                value={password}
+                                name='password'
+                                placeholder='Password'
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
+
+                        <div className='m-6'>
+                            <button className='auth-btn focus-item' type='submit'>
+                                Sign Up
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <p className='m-3 font-medium'>
+                        Already a redditor? <Link to='/login' className='text-blue-400 focus-item'>Log In</Link>
+                    </p>
+                </div>
             </div>
         </div>
     )

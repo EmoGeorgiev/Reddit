@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import closeIcon from '../../assets/close-icon.svg'
+import FormHeader from '../Common/FormHeader'
 
 const DeleteAccountForm = ({ deleteAccount, handleClose }) => {
    const [password, setPassword] = useState('')
@@ -16,13 +16,7 @@ const DeleteAccountForm = ({ deleteAccount, handleClose }) => {
 
     return (
         <div className='active-form'>
-            <div className='active-form-header'>
-                <h1 className='active-form-heading'>Delete account</h1>
-
-                <button onClick={handleClose}>
-                    <img className='close-btn' src={closeIcon} alt='close' />
-                </button>
-            </div>
+            <FormHeader name='Delete account' handleClose={handleClose} />
             
             <p className='mx-5 my-3 font-thin'>
                 Once you delete your account, your profile and username are permanently removed from Reddit and your posts and comments are disassociated (not deleted) from your account unless you delete them beforehand.
@@ -48,8 +42,6 @@ const DeleteAccountForm = ({ deleteAccount, handleClose }) => {
                     </button>
                 </div>
             </form>
-
-
         </div>
     )
 }

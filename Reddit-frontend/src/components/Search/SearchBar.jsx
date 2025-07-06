@@ -16,10 +16,20 @@ const SearchBar = () => {
         navigate(`/search/${query}`)
     }
 
+    const handleClear = () => {
+        setQuery('')
+        
+        handleFocus()
+    }
+
+    const handleFocus = () => {
+        inputRef.current?.focus()
+    }
+
     return (
         <div className='w-full flex items-center relative group'>
             <form className='w-full flex items-center' onSubmit={handleSubmit}>
-                <button className='absolute left-3 flex items-center cursor-default' onClick={() => inputRef.current?.focus()} type='button'>
+                <button className='absolute left-3 flex items-center cursor-default' onClick={handleFocus} type='button'>
                     <img className='w-5 h-5' src={searchIcon} alt='search' />
                 </button>
                 
@@ -33,7 +43,7 @@ const SearchBar = () => {
                     onChange={(e) => setQuery(e.target.value)}
                 />
 
-                {query.length !== 0 && <button className='absolute right-3' onClick={() => setQuery('')} type='button'>
+                {query.length !== 0 && <button className='absolute right-3' onClick={handleClear} type='button'>
                     <img className='w-4 h-4' src={closIcon} alt='clear' />
                 </button>}
             </form>
