@@ -4,23 +4,29 @@ import { useAuth } from '../Authentication/AuthContext'
 import subredditService from '../../services/subreddits'
 import arrowIcon from '../../assets/expand-arrow-icon.svg'
 import subredditIcon from '../../assets/subreddit-icon.svg'
+import CreateSubredditForm from '../Subreddit/CreateSubredditForm'
 
 const SubscriptionsList = ({ isOpen, handleOpen }) => {
     const [subscriptions, setSubscriptions] = useState([])
+    const [isFormOpen, setIsFormOpen] = useState(false)
     const { user } = useAuth()
 
     useEffect(() => {
+        const getSubscriptions = async () => {
+            try {
+                const subreddits = await subredditService.getSubredditsByUserId(user.id)
+
+                setSubscriptions(subreddits)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
         getSubscriptions()
     }, [])
 
-    const getSubscriptions = async () => {
-        try {
-            const subreddits = await subredditService.getSubredditsByUserId(user.id)
-
-            setSubscriptions(subreddits)
-        } catch (error) {
-            console.log(error)
-        }
+    const closeForm = () => {
+        setIsFormOpen(false)
     }
     
     return (
@@ -29,10 +35,28 @@ const SubscriptionsList = ({ isOpen, handleOpen }) => {
                 <h1>
                     Subscriptions
                 </h1>
+                
                 <img className={`expand-arrow ${isOpen ? '-rotate-90' : 'rotate-90'}`} src={arrowIcon} alt='arrow' />
             </div>
 
+            <div>
+                {isFormOpen && <button className='background-btn background-blur' onClick={closeForm}></button>}
+
+                <div className={`${isFormOpen ? 'opacity-100 visible' : 'opacity-0 invisible'} duration-300`}>
+                    <CreateSubredditForm handleClose={closeForm} />
+                </div>
+            </div>
+
             <div className={`${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'} duration-400`}>
+                <button className='w-56 px-4 py-2 group flex items-center font-light hover:bg-gray-200 rounded-2xl'
+                        onClick={() => setIsFormOpen(true)}>
+                    <svg className='w-8 h-8' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                        <path d='M12 6V18' stroke='currentColor'/>
+                        <path d='M6 12H18' stroke='currentColor'/>
+                    </svg>
+                    <span className='mx-2'>Create a subreddit</span>
+                </button>
+
                 <ul>
                     {subscriptions.map(subreddit => 
                             <li key={subreddit.id}>
@@ -42,8 +66,7 @@ const SubscriptionsList = ({ isOpen, handleOpen }) => {
                                         r/{subreddit.title}
                                     </div>
                                 </Link>
-                            </li>
-                    )}
+                            </li>)}
                 </ul>
             </div>
         </div>

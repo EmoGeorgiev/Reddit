@@ -10,15 +10,10 @@ const SearchBar = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        
+        inputRef.current?.blur()
+
         navigate(`/search/${query}`)
-    }
-
-    const handleQueryChange = (e) => {
-        setQuery(e.target.value)
-    }
-
-    const clearQuery = () => {
-        setQuery('')
     }
 
     return (
@@ -35,10 +30,10 @@ const SearchBar = () => {
                     name='query'
                     value={query}
                     placeholder='Search Reddit'
-                    onChange={handleQueryChange}
+                    onChange={(e) => setQuery(e.target.value)}
                 />
 
-                {query.length !== 0 && <button className='absolute right-3' onClick={clearQuery} type='button'>
+                {query.length !== 0 && <button className='absolute right-3' onClick={() => setQuery('')} type='button'>
                     <img className='w-4 h-4' src={closIcon} alt='clear' />
                 </button>}
             </form>
