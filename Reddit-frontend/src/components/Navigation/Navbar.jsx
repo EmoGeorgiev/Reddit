@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../Authentication/AuthContext'
 import { Link } from 'react-router-dom'
-import ProfileMenu from './ProfileMenu'
+import ProfileMenu from '../Profile/ProfileMenu'
 import SearchBar from '../Search/SearchBar'
 import menuIcon from '../../assets/menu-icon.svg'
 import redditIcon from '../../assets/reddit-logo-icon.svg'
