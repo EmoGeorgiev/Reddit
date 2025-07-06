@@ -3,5 +3,7 @@ export const Category = Object.freeze({
     POSTS: 'Posts',
     UPVOTED: 'Upvoted',
     DOWNVOTED: 'Downvoted',
-    SAVED: 'Saved'
+    SAVED: 'Saved',
+    SUBREDDITS: 'Subreddits',
+    USERS: 'Users'
 })

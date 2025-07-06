@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../Authentication/AuthContext'
 import { Link } from 'react-router-dom'
 import ProfileMenu from './ProfileMenu'
-import Search from './Search'
+import SearchBar from '../Search/SearchBar'
 import menuIcon from '../../assets/menu-icon.svg'
 import redditIcon from '../../assets/reddit-logo-icon.svg'
 
@@ -24,7 +24,7 @@ const Navbar = ({ handleCollapse }) => {
             </div>
 
             <div className='flex-1'>
-                <Search />
+                <SearchBar />
             </div>
 
             <div className='mx-5 flex-1 flex justify-end '>
