@@ -1,24 +1,49 @@
 import { useState } from 'react'
 import { ActiveFormOption } from '../../util/ActiveFormOption'
+import { useAuth } from '../Authentication/AuthContext'
 import SettingsCategory from './SettingsCategory'
 import SettingsField from './SettingsField'
 import UsernameChangeForm from './UsernameChangeForm'
 import PasswordChangeForm from './PasswordChangeForm'
 import DeleteAccountForm from './DeleteAccountForm'
+import userService from '../../services/users'
 
 const Settings = () => {
     const [activeForm, setActiveForm] = useState(null)
+    const { user, updateUser, logout } = useAuth()
 
-    const usernameChange = (username) => {
-        closeActiveForm()
+    const usernameChange = async (username) => {
+        try {
+            const newUser = await userService.updateUsername(user.id, { 'id': user.id, username })
+
+            updateUser(newUser)
+
+            closeActiveForm()
+        } catch (error) {
+            console.log(error)
+        }
     }
     
-    const passwordChange = (password) => {
-        closeActiveForm()
+    const passwordChange = async (oldPassword, newPassword) => {
+        try {
+            await userService.updatePassword(user.id, { oldPassword, newPassword })
+
+            closeActiveForm()
+        } catch (error) {
+            console.log(error)
+        }
     }
     
-    const deleteAccount = () => {
-        closeActiveForm()
+    const deleteAccount = async (password) => {
+        try {
+            await userService.deleteUser(user.id, password)
+                
+            closeActiveForm()
+
+            logout()
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const openActiveForm = (newActiveForm) => {

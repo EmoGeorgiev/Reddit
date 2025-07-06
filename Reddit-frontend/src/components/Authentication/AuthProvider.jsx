@@ -32,7 +32,7 @@ const AuthProvider = ({ children }) => {
         setIsAuthenticated(false)
     }
 
-    const loadUser = () => {
+     const loadUser = () => {
         const localStorageUser = JSON.parse(localStorage.getItem('loggedUser'))
 
         if (localStorageUser !== null) {
@@ -41,9 +41,16 @@ const AuthProvider = ({ children }) => {
         }
         setIsLoading(false)
     }
+
+    const updateUser = (newUser) => {
+        if (newUser !== null) {
+            window.localStorage.setItem('loggedUser', JSON.stringify(newUser))
+            setUser(newUser)
+        }
+    }
     
     return (
-        <AuthContext.Provider value={{ login, logout, user, isAuthenticated, isLoading }}>
+        <AuthContext.Provider value={{ login, logout, updateUser, user, isAuthenticated, isLoading }}>
             {children}
         </AuthContext.Provider>
     )
