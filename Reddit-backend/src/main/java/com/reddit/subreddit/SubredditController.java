@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -55,8 +56,8 @@ public class SubredditController {
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<Set<SubredditDto>> getSubredditsByUserId(@PathVariable Long userId) {
-        Set<SubredditDto> subreddits = subredditService.getSubredditsByUserId(userId);
+    public ResponseEntity<List<SubredditDto>> getSubredditsByUserId(@PathVariable Long userId) {
+        List<SubredditDto> subreddits = subredditService.getSubredditsByUserId(userId);
         return ResponseEntity
                 .ok()
                 .body(subreddits);

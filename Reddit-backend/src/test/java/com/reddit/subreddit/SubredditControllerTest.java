@@ -24,6 +24,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 
+import java.util.List;
 import java.util.Set;
 
 import static com.reddit.util.TestUtils.*;
@@ -161,7 +162,7 @@ public class SubredditControllerTest {
     @Test
     public void shouldReturnEmptySetForUserWithNoSubredditSubscriptionsWhenGettingSubredditsByUserId() throws Exception {
         when(subredditService.getSubredditsByUserId(id))
-                .thenReturn(Set.of());
+                .thenReturn(List.of());
 
         mockMvc
                 .perform(get(BASE_URL + "/users/" + id))
@@ -176,7 +177,7 @@ public class SubredditControllerTest {
     @Test
     public void shouldReturnSetWithOneElementForUserWithOneSubredditSubscriptionsWhenGettingSubredditsByUserId() throws Exception {
         when(subredditService.getSubredditsByUserId(id))
-                .thenReturn(Set.of(subredditDto));
+                .thenReturn(List.of(subredditDto));
 
         mockMvc
                 .perform(get(BASE_URL + "/users/" + id))
