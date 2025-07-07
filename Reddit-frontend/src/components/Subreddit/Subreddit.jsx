@@ -1,61 +1,57 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../Authentication/AuthContext'
-import subredditIcon from '../../assets/subreddit-icon.svg'
-import plusIcon from '../../assets/plus-icon.svg'
+import subredditService from '../../services/subreddits'
+import MissingContent from '../Common/MissingContent'
+import SubredditPanel from './SubredditPanel'
 
 const Subreddit = () => {
-    const [users, setUser] = useState([])
-    const { title } = useParams()
-    const { user, isAuthenticated } = useAuth()
+    const [subredditId, setSubredditId] = useState(null)
+    const [title, setTitle] = useState('')
+    const [users, setUsers] = useState(new Set())
+    const [moderators, setModerators] = useState(new Set())
+    const { name } = useParams()
+    const { user } = useAuth()
     const navigate = useNavigate()
 
-    const checkForAuthentication = () => {
-        if (!isAuthenticated) {
-            navigate('/login')
+    useEffect(() => {
+        const getSubreddit = async () => {
+            try {
+                const subreddit = await subredditService.getSubredditByTitle(name)
+
+                setSubredditId(subreddit.id)
+                setTitle(subreddit.title)
+                setUsers(new Set(subreddit.userIds))
+                setModerators(new Set(subreddit.moderatorIds))
+            } catch (error) {
+                console.log(error)
+            }
         }
+
+        getSubreddit()
+    }, [name])
+
+    const joinSubreddit = () => {
+
     }
 
-    const handleCreatePost = () => {
+    const leaveSubreddit = () => {
         
     }
 
-    const handleJoin = () => {
-
-    }
-
-    const handleLeave = () => {
-        
+    if (subredditId === null) {
+        return <MissingContent heading='Subreddit not found' 
+                                text={`There aren't any subreddits on Reddit with the name "${name}". Double-check the subreddit name or try searching for similar subreddits`}
+                                button='Browse other subreddits'
+                                handleClick={() => navigate('/')} />
     }
 
     return (
         <div className='w-4/5 h-full mx-auto'>
-            <div className='mx-4 my-12 py-5 flex justify-between items-center'>
-                <div className='flex items-center space-x-2'>
-                    <img className='w-20 h-2w-20' src={subredditIcon} alt='subreddit' />
-                    <h1 className='text-4xl page-header'>
-                        r/{title}
-                    </h1>
-                </div>
-
-                <div className='flex justify-center space-x-4 items-center'>
-                    <button className='w-32 py-2 flex items-center text-gray-800 font-semibold border border-gray-600 hover:border-black rounded-full'
-                            onClick={handleCreatePost}>    
-                        <img className='w-6 h-6 mx-1.5' src={plusIcon} alt='+' />
-                        <span>Create Post</span>
-                    </button>
-
-                    <button className='w-24 p-2 bg-gray-800 hover:bg-gray-950 text-gray-200 font-semibold rounded-full'
-                            onClick={handleJoin}>
-                        Join
-                    </button>
-
-                    <button className='w-24 p-2 text-gray-800 font-semibold border border-gray-600 hover:border-black rounded-full' 
-                            onClick={handleLeave}>
-                        Joined
-                    </button>
-                </div>
-            </div>
+            <SubredditPanel title={title}
+                            isMember={users.has(user.id)}
+                            leaveSubreddit={leaveSubreddit} 
+                            joinSubreddit={joinSubreddit} />
 
             <div className='border-t border-gray-300'>
 

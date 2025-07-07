@@ -11,6 +11,7 @@ import AllFeed from './Feed/AllFeed'
 import HomeFeed from './Feed/HomeFeed'
 import User from './User/User'
 import Search from './Search/Search'
+import CreatePostForm from './Post/CreatePostForm'
 
 const Layout = () => {
     const [collapsed, setCollapsed] = useState(false)
@@ -29,7 +30,8 @@ const Layout = () => {
                         <Route path='/' element={<AllFeed />} />
                         <Route path='/home' element={<ProtectedRoute><HomeFeed /></ProtectedRoute>} />
                         <Route path='/search/:query' element={<Search />} />
-                        <Route path='/r/:title' element={<Subreddit />} />
+                        <Route path='/r/:name' element={<Subreddit />} />
+                        <Route path='/r/:name/submit' element={<CreatePostForm />} />
                         <Route path='/users/:username' element={<User />} />
                         <Route path='/settings' element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                     </Routes>
