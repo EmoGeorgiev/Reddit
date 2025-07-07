@@ -25,6 +25,19 @@ const SubscriptionsList = ({ isOpen, handleOpen }) => {
         getSubscriptions()
     }, [])
 
+    const addSubreddit = async (subreddit) => {
+        try {
+            const newSubreddit = await subredditService.addSubreddit(subreddit, user.id)
+            
+            const sortedSubreddits = [...subscriptions, newSubreddit].sort((a, b) => a.title.localeCompare(b.title))
+            setSubscriptions(sortedSubreddits)
+
+            closeForm()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const closeForm = () => {
         setIsFormOpen(false)
     }
@@ -43,7 +56,7 @@ const SubscriptionsList = ({ isOpen, handleOpen }) => {
                 {isFormOpen && <button className='background-btn background-blur' onClick={closeForm}></button>}
 
                 <div className={`${isFormOpen ? 'opacity-100 visible' : 'opacity-0 invisible'} duration-300`}>
-                    <CreateSubredditForm handleClose={closeForm} />
+                    <CreateSubredditForm addSubreddit={addSubreddit} handleClose={closeForm} />
                 </div>
             </div>
 

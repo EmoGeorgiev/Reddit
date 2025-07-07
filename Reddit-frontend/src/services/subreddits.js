@@ -29,8 +29,10 @@ const getSubredditsByModeratorId = async (moderatorId) => {
     return response.data
 }
 
-const addSubreddit = async (subreddit) => {
-    const response = await axiosInstance.post(baseUrl, subreddit)
+const addSubreddit = async (subreddit, creatorId) => {
+    const response = await axiosInstance.post(baseUrl, subreddit, {
+        params: { creatorId }
+    })
     return response.data
 }
 

@@ -1,26 +1,22 @@
 import { useState } from 'react'
-import closeIcon from '../../assets/close-icon.svg'
+import FormHeader from '../Common/FormHeader'
 
-const CreateSubredditForm = ({ handleClose }) => {
+const CreateSubredditForm = ({ addSubreddit, handleClose }) => {
     const [title, setTitle] = useState('')
 
-    const handleOnSubmit = () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault()
         
+        const subreddit = { title }
+
+        addSubreddit(subreddit)
     }
 
     return (
         <div className='active-form h-1/3'>
-            <div className='active-form-header'>
-                <h1 className='active-form-heading'>
-                    Tell us about your subreddit
-                </h1>
+            <FormHeader name='Tell us about your subreddit' handleClose={handleClose} />
 
-                <button onClick={handleClose}>
-                    <img className='close-btn' src={closeIcon} alt='close' />
-                </button>
-            </div>
-
-            <form onSubmit={handleOnSubmit}>
+            <form onSubmit={handleSubmit}>
                 <input
                     className='active-form-input focus-item'
                     type='text' 
