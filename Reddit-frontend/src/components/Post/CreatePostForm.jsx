@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import MissingContent from '../Common/MissingContent'
 import subredditService from '../../services/subreddits'
 import postService from '../../services/posts'
+import subredditIcon from '../../assets/subreddit-icon.svg'
 
 const CreatePostForm = () => {
     const [subreddit, setSubreddit] = useState(null)
@@ -27,10 +28,22 @@ const CreatePostForm = () => {
         getSubredditByTitle()
     }, [name])
 
-    const createPost = (e) => {
+    const createPost = async (e) => {
         e.preventDefault()
 
+        try {
+            const post = { 'userId': user.id, title, 'text': description, 'subredditId': subreddit.id }
 
+            await postService.addPost(post)
+
+            handleRedirect()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleRedirect = () => {
+        navigate(`/r/${name}`)
     }
 
     if (subreddit === null) {
@@ -41,11 +54,17 @@ const CreatePostForm = () => {
     }
 
     return (
-        <div className='w-2/3 h-1/2 my-8 mx-auto flex flex-col items-center'>
-            <h1 className='my-4 text-2xl active-form-heading'>
+        <div className='w-2/3 h-3/4 my-8 mx-auto flex flex-col items-center'>
+            <h1 className='my-4 text-3xl active-form-heading'>
                 Create Post
             </h1>    
 
+            <div className='flex items-center space-x-2'>
+                <img className='w-10 h-10' src={subredditIcon} alt='subreddit' />
+                <h2 className='my-5 text-lg font-semibold text-gray-800'>
+                    r/{name}
+                </h2>
+            </div>
 
             <form className='w-3/4 h-3/4 flex flex-col justify-around' onSubmit={createPost}>
                 <input 
@@ -67,11 +86,11 @@ const CreatePostForm = () => {
                 />
 
                 <div className='flex justify-end'>
-                    <button className='active-form-cancel-btn'>
+                    <button className='active-form-cancel-btn' type='button' onClick={handleRedirect}>
                         Cancel
                     </button>
 
-                    <button className='active-form-confirm-btn'>
+                    <button className='active-form-confirm-btn' type='submit'>
                         Post
                     </button>
                 </div>
