@@ -18,6 +18,7 @@ public record PostDto(
                 message = "{text.size}")
         String text,
         Integer score,
+        Integer commentCount,
         @NotNull(message = "{subredditId.required}")
         Long subredditId,
         @NotBlank(message = "{title.required}")

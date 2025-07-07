@@ -17,7 +17,7 @@ const SubredditButtonPanel = ({ title, isMember, leaveSubreddit, joinSubreddit }
                         onClick={leaveSubreddit}>
                     Joined
                 </button>  :
-                <button className='w-24 p-2 bg-gray-800 hover:bg-gray-950 text-gray-200 font-semibold rounded-full'
+                <button className='w-24 p-2 bg-gray-800 hover:bg-black text-gray-200 font-semibold rounded-full'
                         onClick={joinSubreddit}>
                     Join
                 </button>}

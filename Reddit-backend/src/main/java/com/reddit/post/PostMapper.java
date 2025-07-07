@@ -14,6 +14,7 @@ public class PostMapper {
             post.getCreated(),
             post.getText(),
             post.getScore(),
+            post.getComments().size(),
             post.getSubreddit().getId(),
             post.getTitle()
         );

@@ -1,13 +1,13 @@
 const Pagination = ({ handlePageChange, isFirst, isLast }) => {
     return (
-        <div>
-            <button disabled={isFirst} onClick={() => handlePageChange(-1)}>
+        <div className='my-8 flex justify-start space-x-2'>
+            {!isFirst && <button className={`w-24 p-2 bg-gray-800 hover:bg-black text-gray-200 border rounded-3xl`} onClick={() => handlePageChange(-1)}>
                 Prev
-            </button>
+            </button>}
 
-            <button disabled={isLast} onClick={() => handlePageChange(1)}>
+            {!isLast && <button className={`w-24 p-2 bg-gray-800 hover:bg-black text-gray-200 border rounded-3xl`} onClick={() => handlePageChange(1)}>
                 Next
-            </button>
+            </button>}
         </div>
     )
 }
