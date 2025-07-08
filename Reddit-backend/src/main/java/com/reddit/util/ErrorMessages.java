@@ -17,4 +17,5 @@ public final class ErrorMessages {
     public static final String USERNAME_ALREADY_EXISTS = "There already exists a user with this username";
     public static final String USERNAME_DOES_NOT_EXIST = "There does not exist a user with this username";
     public static final String USER_NOT_SUBSCRIBED = "The user is not subscribed to this subreddit";
+    public static final String USER_ALREADY_SUBSCRIBED = "The user is already subscribed to this subreddit";
 }

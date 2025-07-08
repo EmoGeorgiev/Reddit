@@ -9,13 +9,16 @@ import com.reddit.user.dto.UserDto;
 import com.reddit.util.ErrorMessages;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -60,6 +63,24 @@ public class UserService {
         return userRepository
                 .findByUsernameContainingIgnoreCase(word, pageable)
                 .map(UserMapper::userToUserDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserDto> getUsersBySubredditTitle(String subredditTitle) {
+        return userRepository
+                .findBySubredditTitle(subredditTitle, Sort.by("username"))
+                .stream()
+                .map(UserMapper::userToUserDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserDto> getModeratorsBySubredditTitle(String subredditTitle) {
+        return userRepository
+                .findModeratorsBySubredditTitle(subredditTitle, Sort.by("username"))
+                .stream()
+                .map(UserMapper::userToUserDto)
+                .collect(Collectors.toList());
     }
 
     public UserDto addUser(String username, String password) {

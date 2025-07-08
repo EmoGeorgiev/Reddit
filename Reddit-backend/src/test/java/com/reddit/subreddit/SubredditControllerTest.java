@@ -25,10 +25,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.util.List;
-import java.util.Set;
 
 import static com.reddit.util.TestUtils.*;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -192,7 +190,7 @@ public class SubredditControllerTest {
     @Test
     public void shouldReturnEmptySetForModeratorWithNoModeratedSubredditWhenGettingSubredditsByModeratorId() throws Exception {
         when(subredditService.getSubredditsByModeratorId(id))
-                .thenReturn(Set.of());
+                .thenReturn(List.of());
 
         mockMvc
                 .perform(get(BASE_URL + "/moderators/" + id))
@@ -207,7 +205,7 @@ public class SubredditControllerTest {
     @Test
     public void shouldReturnSetWithOneElementForModeratorWithOneModeratedSubredditWhenGettingSubredditsByModeratorId() throws Exception {
         when(subredditService.getSubredditsByModeratorId(id))
-                .thenReturn(Set.of(subredditDto));
+                .thenReturn(List.of(subredditDto));
 
         mockMvc
                 .perform(get(BASE_URL + "/moderators/" + id))

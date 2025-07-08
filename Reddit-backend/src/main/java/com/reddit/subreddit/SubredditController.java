@@ -3,6 +3,7 @@ package com.reddit.subreddit;
 import com.reddit.subreddit.dto.ModeratorUpdateDto;
 import com.reddit.subreddit.dto.SubredditDto;
 import com.reddit.subreddit.dto.SubredditUpdateTitleDto;
+import com.reddit.user.dto.UserDto;
 import com.reddit.util.PaginationConstants;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/subreddits")
@@ -64,8 +64,8 @@ public class SubredditController {
     }
 
     @GetMapping("/moderators/{moderatorId}")
-    public ResponseEntity<Set<SubredditDto>> getSubredditsByModeratorId(@PathVariable Long moderatorId) {
-        Set<SubredditDto> subreddits = subredditService.getSubredditsByModeratorId(moderatorId);
+    public ResponseEntity<List<SubredditDto>> getSubredditsByModeratorId(@PathVariable Long moderatorId) {
+        List<SubredditDto> subreddits = subredditService.getSubredditsByModeratorId(moderatorId);
         return ResponseEntity
                 .ok()
                 .body(subreddits);
@@ -82,6 +82,22 @@ public class SubredditController {
     @PutMapping("/{subredditId}/title")
     public ResponseEntity<SubredditDto> updateSubredditTitle(@PathVariable Long subredditId, @RequestBody @Valid SubredditUpdateTitleDto subredditUpdateTitleDto) {
         SubredditDto subredditDto = subredditService.updateSubredditTitle(subredditId, subredditUpdateTitleDto);
+        return ResponseEntity
+                .ok()
+                .body(subredditDto);
+    }
+
+    @PutMapping("/{subredditTitle}/users/add}")
+    public ResponseEntity<SubredditDto> addSubredditToUserSubscriptions(@PathVariable String subredditTitle, @RequestParam Long userId) {
+        SubredditDto subredditDto = subredditService.addSubredditToUserSubscriptions(subredditTitle, userId);
+        return ResponseEntity
+                .ok()
+                .body(subredditDto);
+    }
+
+    @PutMapping("/{subredditTitle}/users/remove")
+    public ResponseEntity<SubredditDto> removeSubredditFromUserSubscriptions(@PathVariable String subredditTitle, @RequestParam Long userId) {
+        SubredditDto subredditDto = subredditService.removeSubredditFromUserSubscriptions(subredditTitle, userId);
         return ResponseEntity
                 .ok()
                 .body(subredditDto);

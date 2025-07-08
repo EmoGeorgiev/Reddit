@@ -82,6 +82,11 @@ public class GlobalExceptionHandler {
         return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(UserIsAlreadySubscribedToSubredditException.class)
+    public ResponseEntity<ErrorObject> handleUserIsAlreadySubscribedToSubreddit(UserIsAlreadySubscribedToSubredditException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(UserNotSubscribedException.class)
     public ResponseEntity<ErrorObject> handleUserNotSubscribedException(UserNotSubscribedException ex) {
         return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);

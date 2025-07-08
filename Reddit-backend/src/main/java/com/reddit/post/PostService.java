@@ -79,7 +79,7 @@ public class PostService {
 
     public PostDto addPost(PostDto postDto) {
         RedditUser user = userService.getUserEntity(postDto.user().id());
-        Subreddit subreddit = subredditService.getSubredditEntity(postDto.subreddit().id());
+        Subreddit subreddit = subredditService.getSubredditEntityById(postDto.subreddit().id());
 
         Post post = PostMapper.postDtoToPost(postDto);
         post.setCreated(LocalDateTime.now());

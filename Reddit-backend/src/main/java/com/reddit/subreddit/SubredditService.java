@@ -3,6 +3,7 @@ package com.reddit.subreddit;
 import com.reddit.exception.subreddit.MissingModeratorPrivilegesException;
 import com.reddit.exception.subreddit.SubredditAlreadyExistsException;
 import com.reddit.exception.subreddit.SubredditNotFoundException;
+import com.reddit.exception.user.UserIsAlreadySubscribedToSubredditException;
 import com.reddit.exception.user.UserNotSubscribedException;
 import com.reddit.subreddit.dto.ModeratorUpdateDto;
 import com.reddit.subreddit.dto.SubredditDto;
@@ -18,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -34,9 +34,16 @@ public class SubredditService {
     }
 
     @Transactional(readOnly = true)
-    public Subreddit getSubredditEntity(Long id) {
+    public Subreddit getSubredditEntityById(Long id) {
         return subredditRepository
                 .findById(id)
+                .orElseThrow(() -> new SubredditNotFoundException(ErrorMessages.SUBREDDIT_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public Subreddit getSubredditEntityByTitle(String title) {
+        return subredditRepository
+                .findByTitleIgnoreCase(title)
                 .orElseThrow(() -> new SubredditNotFoundException(ErrorMessages.SUBREDDIT_NOT_FOUND));
     }
 
@@ -50,7 +57,7 @@ public class SubredditService {
 
     @Transactional(readOnly = true)
     public SubredditDto getSubredditById(Long id) {
-        return SubredditMapper.subredditToSubredditDto(getSubredditEntity(id));
+        return SubredditMapper.subredditToSubredditDto(getSubredditEntityById(id));
     }
 
     @Transactional(readOnly = true)
@@ -70,12 +77,12 @@ public class SubredditService {
     }
 
     @Transactional(readOnly = true)
-    public Set<SubredditDto> getSubredditsByModeratorId(Long moderatorId) {
+    public List<SubredditDto> getSubredditsByModeratorId(Long moderatorId) {
         return subredditRepository
-                .findByModerators_Id(moderatorId)
+                .findByModerators_Id(moderatorId, Sort.by("title"))
                 .stream()
                 .map(SubredditMapper::subredditToSubredditDto)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     public SubredditDto addSubreddit(SubredditDto subredditDto, Long creatorId) {
@@ -102,7 +109,7 @@ public class SubredditService {
         String newTitle = subredditUpdateTitleDto.title();
         Long moderatorId = subredditUpdateTitleDto.moderatorId();
 
-        Subreddit subreddit = getSubredditEntity(subredditId);
+        Subreddit subreddit = getSubredditEntityById(subredditId);
         RedditUser user = userService.getUserEntity(moderatorId);
 
         if (!subreddit.getModerators().contains(user)) {
@@ -114,11 +121,42 @@ public class SubredditService {
         return SubredditMapper.subredditToSubredditDto(subreddit);
     }
 
+    public SubredditDto addSubredditToUserSubscriptions(String subredditTitle, Long userId) {
+        Subreddit subreddit = getSubredditEntityByTitle(subredditTitle);
+        RedditUser user = userService.getUserEntity(userId);
+
+        if (user.getSubscribedTo().contains(subreddit)) {
+            throw new UserIsAlreadySubscribedToSubredditException(ErrorMessages.USER_ALREADY_SUBSCRIBED);
+        }
+
+        user.getSubscribedTo().add(subreddit);
+        subreddit.getUsers().add(user);
+
+        return SubredditMapper.subredditToSubredditDto(subreddit);
+    }
+
+    public SubredditDto removeSubredditFromUserSubscriptions(String subredditTitle, Long userId) {
+        Subreddit subreddit = getSubredditEntityByTitle(subredditTitle);
+        RedditUser user = userService.getUserEntity(userId);
+
+        if (!user.getSubscribedTo().contains(subreddit)) {
+            throw new UserNotSubscribedException(ErrorMessages.USER_NOT_SUBSCRIBED);
+        }
+
+        user.getSubscribedTo().remove(subreddit);
+        subreddit.getUsers().remove(user);
+
+        user.getModerated().remove(subreddit);
+        subreddit.getModerators().remove(user);
+
+        return SubredditMapper.subredditToSubredditDto(subreddit);
+    }
+
     public SubredditDto addSubredditModerator(Long subredditId, ModeratorUpdateDto moderatorUpdateDto) {
         Long moderatorId = moderatorUpdateDto.moderatorId();
         Long newModeratorId = moderatorUpdateDto.updatedModeratorId();
 
-        Subreddit subreddit = getSubredditEntity(subredditId);
+        Subreddit subreddit = getSubredditEntityById(subredditId);
         RedditUser moderator = userService.getUserEntity(moderatorId);
         RedditUser newModerator = userService.getUserEntity(newModeratorId);
 
@@ -141,7 +179,7 @@ public class SubredditService {
         Long moderatorId = moderatorUpdateDto.moderatorId();
         Long removedModeratorId = moderatorUpdateDto.updatedModeratorId();
 
-        Subreddit subreddit = getSubredditEntity(subredditId);
+        Subreddit subreddit = getSubredditEntityById(subredditId);
         RedditUser moderator = userService.getUserEntity(moderatorId);
         RedditUser removedModerator = userService.getUserEntity(removedModeratorId);
 
@@ -157,7 +195,7 @@ public class SubredditService {
     }
 
     public void deleteSubreddit(Long subredditId, Long moderatorId) {
-        Subreddit subreddit = getSubredditEntity(subredditId);
+        Subreddit subreddit = getSubredditEntityById(subredditId);
         RedditUser moderator = userService.getUserEntity(moderatorId);
 
         if (!subreddit.getModerators().contains(moderator)) {
