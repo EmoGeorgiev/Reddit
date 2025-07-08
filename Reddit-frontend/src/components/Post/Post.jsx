@@ -10,17 +10,22 @@ const Post = ({ post }) => {
     const date = post.created.split('T')[0]
     const location = useLocation()
     
-    const showUser = location.pathname.includes(`/r/`)
+    const showUser = () => {
+        const subredditPath = `/r/${post.subreddit.title}`.toLowerCase()
+        const currentPath = location.pathname.toLowerCase()
+
+        return currentPath.includes(subredditPath)
+    }
 
     return (
         <>    
             <div className='w-full h-auto my-4 hover:bg-gray-100 overflow-hidden rounded-2xl'>
                 <div className='mx-4 py-4 h-full flex flex-col space-y-2.5 '>
                     <div className='flex justify-between items-center'>
-                        {showUser ? 
+                        {showUser() ? 
                             <div className='flex space-x-1.5 items-center'>
                                 <img className='w-10 h-10' src={userIcon} alt='user icon' />
-                                <span className='font-semibold'>u/{user}</span>
+                                <span className='font-semibold'>u/{post.user.username}</span>
                             </div> :
                             <div className='flex space-x-1.5 items-center'>
                                 <img className='w-10 h-10' src={subredditIcon} alt='subreddit' />

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import plusIcon from '../../assets/plus-icon.svg'
 
-const SubredditButtonPanel = ({ title, isMember, leaveSubreddit, joinSubreddit }) => {
+const SubredditButtonPanel = ({ title, isMember, isModerator, leaveSubreddit, joinSubreddit }) => {
     const navigate = useNavigate()
 
     return (

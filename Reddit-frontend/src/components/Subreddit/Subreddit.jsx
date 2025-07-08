@@ -8,8 +8,7 @@ import SubredditPanel from './SubredditPanel'
 import PostList from '../Post/PostList'
 
 const Subreddit = () => {
-    const [subredditId, setSubredditId] = useState(null)
-    const [title, setTitle] = useState('')
+    const [subreddit, setSubreddit] = useState(null)
     const [users, setUsers] = useState(new Set())
     const [moderators, setModerators] = useState(new Set())
     const { name } = useParams()
@@ -19,12 +18,9 @@ const Subreddit = () => {
     useEffect(() => {
         const getSubreddit = async () => {
             try {
-                const subreddit = await subredditService.getSubredditByTitle(name)
+                const newSubreddit = await subredditService.getSubredditByTitle(name)
 
-                setSubredditId(subreddit.id)
-                setTitle(subreddit.title)
-                setUsers(new Set(subreddit.userIds))
-                setModerators(new Set(subreddit.moderatorIds))
+                setSubreddit(newSubreddit)
             } catch (error) {
                 console.log(error)
             }
@@ -32,6 +28,8 @@ const Subreddit = () => {
 
         getSubreddit()
     }, [name])
+
+    
 
     const joinSubreddit = () => {
 
@@ -46,7 +44,7 @@ const Subreddit = () => {
         return pagePost
     }
 
-    if (subredditId === null) {
+    if (subreddit === null) {
         return <MissingContent heading='Subreddit not found' 
                                 text={`There aren't any subreddits on Reddit with the name "${name}". Double-check the subreddit name or try searching for similar subreddits`}
                                 button='Browse other subreddits'
@@ -55,13 +53,14 @@ const Subreddit = () => {
 
     return (
         <div className='w-4/5 h-full mx-auto'>
-            <SubredditPanel title={title}
-                            isMember={users.has(user.id)}
+            <SubredditPanel title={subreddit.title}
+                            isMember={users.has(user)}
+                            isModerator={true}
                             leaveSubreddit={leaveSubreddit} 
                             joinSubreddit={joinSubreddit} />
 
             <div className='border-t border-gray-300'>
-                <PostList query={subredditId} getPosts={getPosts} />
+                <PostList query={subreddit.id} getPosts={getPosts} />
             </div>
         </div>
     )
