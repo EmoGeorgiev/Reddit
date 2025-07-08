@@ -13,6 +13,6 @@ import java.util.Set;
 public interface SubredditRepository extends JpaRepository<Subreddit, Long> {
     Optional<Subreddit> findByTitleIgnoreCase(String title);
     List<Subreddit> findByUsers_Id(Long userId, Sort sort);
-    Set<Subreddit> findByModerators_Id(Long moderatorId, Sort sort);
+    List<Subreddit> findByModerators_Id(Long moderatorId, Sort sort);
     Page<Subreddit> findByTitleContainingIgnoreCase(String word, Pageable pageable);
 }

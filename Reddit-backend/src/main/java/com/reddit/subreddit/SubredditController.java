@@ -87,7 +87,7 @@ public class SubredditController {
                 .body(subredditDto);
     }
 
-    @PutMapping("/{subredditTitle}/users/add}")
+    @PutMapping("/{subredditTitle}/users/add")
     public ResponseEntity<SubredditDto> addSubredditToUserSubscriptions(@PathVariable String subredditTitle, @RequestParam Long userId) {
         SubredditDto subredditDto = subredditService.addSubredditToUserSubscriptions(subredditTitle, userId);
         return ResponseEntity
