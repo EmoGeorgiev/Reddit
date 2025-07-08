@@ -10,11 +10,15 @@ const PostList = ({ query, getPosts }) => {
 
     useEffect(() => {
         const getPostPage = async () => {
-            const postPage = await getPosts(query, { page })
+            try {
+                const postPage = await getPosts(query, { page })
 
-            setPosts(postPage.content)
-            setIsFirst(postPage.first)
-            setIsLast(postPage.last)
+                setPosts(postPage.content)
+                setIsFirst(postPage.first)
+                setIsLast(postPage.last)
+            } catch (error) {
+                console.log(error)
+            }
         }
 
         getPostPage()
@@ -22,8 +26,8 @@ const PostList = ({ query, getPosts }) => {
 
     const handlePageChange = (change) => {
         setPage(page + change)
-    } 
-    
+    }
+
     return (
         <div className='my-4'>
             {posts.map(post => <Post key={post.id} post={post} />)}

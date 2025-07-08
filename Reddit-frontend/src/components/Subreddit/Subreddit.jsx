@@ -72,9 +72,9 @@ const Subreddit = () => {
         }
     }
 
-    const getPosts = async (id, page) => {
-        const pagePost = await postService.getPostsBySubredditId(id, page)
-        return pagePost
+    const getPosts = async (id, pageable) => {
+        const postPage = await postService.getPostsBySubredditId(id, pageable)
+        return postPage
     }
 
     if (subreddit === null) {

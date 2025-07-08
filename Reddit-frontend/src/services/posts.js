@@ -16,10 +16,10 @@ const getPosts = async (pageable) => {
     return response.data
 }
 
-const getPostsWhereTitleContainsWord = async (title, pageable) => {
+const getPostsWhereTitleContainsWord = async (word, pageable) => {
     const response = await axiosInstance.get(`${baseUrl}/search`, {
         params: { 
-            title,
+            word,
             ...pageable
         }
     })
