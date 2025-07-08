@@ -17,6 +17,16 @@ const getUsers = async () => {
     return response.data
 }
 
+const getUsersBySubredditTitle = async (title) => {
+    const response = await axiosInstance.get(`${baseUrl}/subreddits/${title}`)
+    return response.data
+}
+
+const getModeratorsBySubredditTitle = async (title) => {
+    const response = await axiosInstance.get(`${baseUrl}/subreddits/${title}/moderators`)
+    return response.data
+}
+
 const getUsersWhereUsernameContainsWord = async (word) => {
     const response = await axiosInstance.get(`${baseUrl}/search`, {
         params: { word }
@@ -42,4 +52,4 @@ const deleteUser = async (id, password) => {
 }
 
 
-export default { getUserById, getUserByUsername, getUsers, getUsersWhereUsernameContainsWord, updateUsername, updatePassword, deleteUser }
+export default { getUserById, getUserByUsername, getUsers, getUsersBySubredditTitle, getModeratorsBySubredditTitle, getUsersWhereUsernameContainsWord, updateUsername, updatePassword, deleteUser }

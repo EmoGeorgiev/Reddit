@@ -41,6 +41,24 @@ const updateSubredditTitle = async (id, subredditUpdateTitle) => {
     return response.data
 }
 
+const addSubredditToUserSubscriptions = async (title, userId) => {
+    const response = await axiosInstance.put(`${baseUrl}/${title}/users/add`, null, {
+        params: {
+            userId
+        }
+    })
+    return response.data    
+}
+
+const removeSubredditFromUserSubscriptions = async (title, userId) => {
+    const response = await axiosInstance.put(`${baseUrl}/${title}/users/remove`, null, {
+        params: {
+            userId
+        }
+    })
+    return response.data
+}
+
 const addSubredditModerator = async (id, moderatorUpdate) => {
     const response = await axiosInstance.put(`${baseUrl}/${id}/moderators/add`, moderatorUpdate)
     return response.data
@@ -59,4 +77,4 @@ const deleteSubreddit = async (subredditId, moderatorId) => {
 }
 
 
-export default { getSubredditById, getSubredditByTitle, getSubredditsWhereTitleContainsWord, getSubredditsByUserId, getSubredditsByModeratorId, addSubreddit, updateSubredditTitle, addSubredditModerator, removeSubredditModerator, deleteSubreddit }
+export default { getSubredditById, getSubredditByTitle, getSubredditsWhereTitleContainsWord, getSubredditsByUserId, getSubredditsByModeratorId, addSubreddit, updateSubredditTitle, addSubredditToUserSubscriptions, removeSubredditFromUserSubscriptions, addSubredditModerator, removeSubredditModerator, deleteSubreddit }

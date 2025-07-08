@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../Authentication/AuthContext'
 import subredditService from '../../services/subreddits'
+import userService from '../../services/users'
 import postService from '../../services/posts'
 import MissingContent from '../Common/MissingContent'
 import SubredditPanel from './SubredditPanel'
@@ -29,14 +30,46 @@ const Subreddit = () => {
         getSubreddit()
     }, [name])
 
-    
+    useEffect(() => {
+        const getUsersAndModerators = async () => {
+            try {
+                const [users, moderators] = await Promise.all([
+                    userService.getUsersBySubredditTitle(name),
+                    userService.getModeratorsBySubredditTitle(name),
+                ])
 
-    const joinSubreddit = () => {
+                const userSet = new Set(users.map(u => u.id))
+                const moderatorSet = new Set(moderators.map(m => m.id))
 
+                setUsers(userSet)
+                setModerators(moderatorSet)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        getUsersAndModerators()
+    }, [name])
+
+    const joinSubreddit = async () => {
+        try {
+            await subredditService.addSubredditToUserSubscriptions(subreddit.title, user.id)
+
+            setUsers(new Set(users).add(user.id))
+        } catch (error) {
+            console.log(error)
+        }
     }
 
-    const leaveSubreddit = () => {
-        
+    const leaveSubreddit = async () => {
+        try {
+            await subredditService.removeSubredditFromUserSubscriptions(subreddit.title, user.id)
+
+            setUsers(new Set([...users].filter(id => id != user.id)))
+            setModerators(new Set([...users].filter(id => id != user.id)))
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const getPosts = async (id, page) => {
@@ -54,8 +87,8 @@ const Subreddit = () => {
     return (
         <div className='w-4/5 h-full mx-auto'>
             <SubredditPanel title={subreddit.title}
-                            isMember={users.has(user)}
-                            isModerator={true}
+                            isMember={users.has(user?.id)}
+                            isModerator={moderators.has(user?.id)}
                             leaveSubreddit={leaveSubreddit} 
                             joinSubreddit={joinSubreddit} />
 
