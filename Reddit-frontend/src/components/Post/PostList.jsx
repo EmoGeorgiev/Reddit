@@ -10,7 +10,7 @@ const PostList = ({ query, getPosts }) => {
 
     useEffect(() => {
         const getPostPage = async () => {
-            const postPage = await getPosts(query, page)
+            const postPage = await getPosts(query, { page })
 
             setPosts(postPage.content)
             setIsFirst(postPage.first)

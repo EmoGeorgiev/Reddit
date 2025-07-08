@@ -12,8 +12,12 @@ const getUserByUsername = async (username) => {
     return response.data
 }
 
-const getUsers = async () => {
-    const response = await axiosInstance.get(baseUrl)
+const getUsers = async (pageable) => {
+    const response = await axiosInstance.get(baseUrl, {
+        params: {
+            ...pageable
+        }
+    })
     return response.data
 }
 
@@ -27,9 +31,12 @@ const getModeratorsBySubredditTitle = async (title) => {
     return response.data
 }
 
-const getUsersWhereUsernameContainsWord = async (word) => {
+const getUsersWhereUsernameContainsWord = async (word, pageable) => {
     const response = await axiosInstance.get(`${baseUrl}/search`, {
-        params: { word }
+        params: { 
+            word,
+            ...pageable
+        }
     })
     return response.data
 }

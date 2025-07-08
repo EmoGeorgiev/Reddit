@@ -7,47 +7,47 @@ const getPost = async (id) => {
     return response.data
 }
 
-const getPosts = async (page) => {
+const getPosts = async (pageable) => {
     const response = await axiosInstance.get(baseUrl, {
         params: {
-            page
+            ...pageable
         }
     })
     return response.data
 }
 
-const getPostsWhereTitleContainsWord = async (title) => {
+const getPostsWhereTitleContainsWord = async (title, pageable) => {
     const response = await axiosInstance.get(`${baseUrl}/search`, {
         params: { 
             title,
-            page
+            ...pageable
         }
     })
     return response.data
 }
 
-const getPostsByUserSubscriptions = async (userId, page) => {
+const getPostsByUserSubscriptions = async (userId, pageable) => {
     const response = await axiosInstance.get(`${baseUrl}/subscriptions/${userId}`, {
         params: {
-            page
+            ...pageable
         }
     })
     return response.data
 }
 
-const getPostsByUserId = async (userId, page) => {
+const getPostsByUserId = async (userId, pageable) => {
     const response = await axiosInstance.get(`${baseUrl}/users/${userId}`, {
         params: {
-            page
+            ...pageable
         }
     })
     return response.data
 }
 
-const getPostsBySubredditId = async (subredditId, page) => {
+const getPostsBySubredditId = async (subredditId, pageable) => {
     const response = await axiosInstance.get(`${baseUrl}/subreddits/${subredditId}`, {
         params: {
-            page
+            ...pageable
         }
     })
     return response.data

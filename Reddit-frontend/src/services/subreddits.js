@@ -12,9 +12,12 @@ const getSubredditByTitle = async (title) => {
     return response.data
 }
 
-const getSubredditsWhereTitleContainsWord = async (word) => {
+const getSubredditsWhereTitleContainsWord = async (word, pageable) => {
     const response = await axiosInstance.get(`${baseUrl}/search`, {
-        params: { word }
+        params: {
+            word,
+            ...pageable
+        }
     })
     return response.data
 }

@@ -7,13 +7,21 @@ const getComment = async (id) => {
     return response.data
 }
 
-const getCommentsByPostId = async (postId) => {
-    const response = await axiosInstance.get(`${baseUrl}/posts/${postId}`)
+const getCommentsByPostId = async (postId, pageable) => {
+    const response = await axiosInstance.get(`${baseUrl}/posts/${postId}`, {
+        params: {
+            ...pageable
+        }
+    })
     return response.data
 }
 
-const getCommentsByUserId = async (userId) => {
-    const response = await axiosInstance.get(`${baseUrl}/users/${userId}`)
+const getCommentsByUserId = async (userId, pageable) => {
+    const response = await axiosInstance.get(`${baseUrl}/users/${userId}`, {
+        params: {
+            ...pageable
+        }
+    })
     return response.data
 }
 
