@@ -59,7 +59,7 @@ public class CommentService {
     }
 
     public CommentDto addComment(CommentDto commentDto) {
-        RedditUser user = userService.getUserEntity(commentDto.userId());
+        RedditUser user = userService.getUserEntity(commentDto.user().id());
         Post post = postService.getPostEntity(commentDto.postId());
         Comment parent = commentDto.parentId() != null
                 ? getCommentEntity(commentDto.parentId())
@@ -79,7 +79,7 @@ public class CommentService {
     public CommentDto updateComment(Long id, CommentDto commentDto) {
         Comment comment = getCommentEntity(id);
 
-        if (!Objects.equals(comment.getUser().getId(), commentDto.userId())) {
+        if (!Objects.equals(comment.getUser().getId(), commentDto.user().id())) {
             throw new ContentUpdateNotAllowedException(ErrorMessages.CONTENT_UPDATE_NOT_ALLOWED);
         }
         if (comment.isDeleted()) {

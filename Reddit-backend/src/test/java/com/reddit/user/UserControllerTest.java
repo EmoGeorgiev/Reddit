@@ -44,14 +44,14 @@ public class UserControllerTest {
     private final UserDto userDto = new UserDto(id, "username");
 
     @Test
-    public void shouldReturnNotFoundForInvalidIdWhenGettingUser() throws Exception {
+    public void shouldReturnNotFoundForInvalidIdWhenGettingUserById() throws Exception {
         Long invalidId = -1L;
 
         when(userService.getUser(invalidId))
                 .thenThrow(new UserNotFoundException(ErrorMessages.USER_NOT_FOUND));
 
         mockMvc
-                .perform(get(BASE_URL + "/" + invalidId))
+                .perform(get(BASE_URL + "/id/" + invalidId))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(ErrorMessages.USER_NOT_FOUND));
 
@@ -60,12 +60,12 @@ public class UserControllerTest {
     }
 
     @Test
-    public void shouldReturnUserForValidIdWhenGettingUser() throws Exception {
+    public void shouldReturnUserForValidIdWhenGettingUserById() throws Exception {
         when(userService.getUser(id))
                 .thenReturn(userDto);
 
         mockMvc
-                .perform(get(BASE_URL + "/" + id))
+                .perform(get(BASE_URL + "/id/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(userResultMatchers("$.", userDto));

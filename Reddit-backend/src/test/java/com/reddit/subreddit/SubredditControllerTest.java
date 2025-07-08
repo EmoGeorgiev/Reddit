@@ -47,7 +47,7 @@ public class SubredditControllerTest {
     private SubredditService subredditService;
     private final Long id = 1L;
     private final String title = "title";
-    private final SubredditDto subredditDto = new SubredditDto(id, title, Set.of(id, 2L), Set.of(id, 2L));
+    private final SubredditDto subredditDto = new SubredditDto(id, title);
     private final SubredditUpdateTitleDto subredditUpdateTitleDto = new SubredditUpdateTitleDto(title, id);
 
     @Test
@@ -221,7 +221,7 @@ public class SubredditControllerTest {
 
     @Test
     public void shouldReturnBadRequestForBlankTitleWhenCreatingSubreddit() throws Exception {
-        SubredditDto blankTitleSubredditDto = new SubredditDto(id, BLANK_STRING, Set.of(id), Set.of(id));
+        SubredditDto blankTitleSubredditDto = new SubredditDto(id, BLANK_STRING);
 
         String expectedMessage = messageSource.getMessage(
                 "title.required",
@@ -240,7 +240,7 @@ public class SubredditControllerTest {
     public void shouldReturnBadRequestForNonValidTitleWhenCreatingSubreddit() throws Exception {
         String title = getStringWithFixedLength(ValidationConstants.TITLE_MAX + 1);
 
-        SubredditDto overMaxTitleSizeSubredditDto = new SubredditDto(id, title, Set.of(id), Set.of(id));
+        SubredditDto overMaxTitleSizeSubredditDto = new SubredditDto(id, title);
 
         Object[] args = getArgs(ValidationConstants.TITLE_MIN, ValidationConstants.TITLE_MAX);
         String expectedMessage = messageSource.getMessage(
@@ -593,9 +593,7 @@ public class SubredditControllerTest {
     private ResultMatcher[] subredditDtoMatchers(String prefix, SubredditDto dto) {
         return new ResultMatcher[] {
                 jsonPath(prefix + "id").value(dto.id()),
-                jsonPath(prefix + "title").value(dto.title()),
-                jsonPath(prefix + "userIds", containsInAnyOrder(dto.userIds().stream().map(Long::intValue).toArray())),
-                jsonPath(prefix + "moderatorIds", containsInAnyOrder(dto.moderatorIds().stream().map(Long::intValue).toArray()))
+                jsonPath(prefix + "title").value(dto.title())
         };
     }
 }

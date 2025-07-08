@@ -1,6 +1,7 @@
 package com.reddit.comment;
 
 import com.reddit.comment.dto.CommentDto;
+import com.reddit.user.UserMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class CommentMapper {
 
         return new CommentDto(
                 comment.getId(),
-                comment.getUser().getId(),
+                UserMapper.userToUserDto(comment.getUser()),
                 comment.getCreated(),
                 comment.getText(),
                 comment.getScore(),

@@ -170,7 +170,7 @@ public class CommentServiceTest {
         return new Executable[] {
                 () -> assertNotNull(actual),
                 () -> assertEquals(expected.id(), actual.id()),
-                () -> assertEquals(expected.userId(), actual.userId()),
+                () -> assertEquals(expected.user(), actual.user()),
                 () -> assertEquals(expected.created(), actual.created()),
                 () -> assertEquals(expected.text(), actual.text()),
                 () -> assertEquals(expected.score(), actual.score()),

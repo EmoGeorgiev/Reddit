@@ -6,6 +6,7 @@ import com.reddit.exception.comment.CommentIsDeletedException;
 import com.reddit.exception.comment.CommentNotFoundException;
 import com.reddit.exception.content.ContentUpdateNotAllowedException;
 import com.reddit.exception.subreddit.MissingModeratorPrivilegesException;
+import com.reddit.user.dto.UserDto;
 import com.reddit.util.ErrorMessages;
 import com.reddit.util.PaginationConstants;
 import com.reddit.util.ValidationConstants;
@@ -42,7 +43,8 @@ public class CommentControllerTest {
     @MockitoBean
     private CommentService commentService;
     private final Long id = 1L;
-    private final CommentDto commentDto = new CommentDto(id, id, null, "text", Comment.INITIAL_SCORE, false, new ArrayList<>(), null, id);
+    private final UserDto userDto = new UserDto(id, "user");
+    private final CommentDto commentDto = new CommentDto(id, userDto, null, "text", Comment.INITIAL_SCORE, false, new ArrayList<>(), null, id);
 
     @Test
     public void shouldReturnNotFoundForInvalidId() throws Exception {
@@ -164,7 +166,7 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnBadRequestForBlankTextWhenCreatingComment() throws Exception {
-        CommentDto blankTextCommentDto = new CommentDto(id, id, null, BLANK_STRING, Comment.INITIAL_SCORE, false, new ArrayList<>(), null, id);
+        CommentDto blankTextCommentDto = new CommentDto(id, userDto, null, BLANK_STRING, Comment.INITIAL_SCORE, false, new ArrayList<>(), null, id);
 
         String expectedMessage = messageSource.getMessage("text.required", null, LocaleContextHolder.getLocale());
 
@@ -180,7 +182,7 @@ public class CommentControllerTest {
     public void shouldReturnBadRequestForNotValidTextWhenCreatingComment() throws Exception {
         String text = getStringWithFixedLength(ValidationConstants.TEXT_MAX + 1);
 
-        CommentDto overMaxTextSizeCommentDto = new CommentDto(id, id, null, text, Comment.INITIAL_SCORE, false, new ArrayList<>(), null, id);
+        CommentDto overMaxTextSizeCommentDto = new CommentDto(id, userDto, null, text, Comment.INITIAL_SCORE, false, new ArrayList<>(), null, id);
 
         Object[] args = getArgs(ValidationConstants.TEXT_MIN, ValidationConstants.TEXT_MAX);
         String expectedMessage = messageSource.getMessage(
@@ -198,7 +200,7 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnBadRequestForNullPostIdWhenCreatingComment() throws Exception {
-        CommentDto nullPostIdCommentDto = new CommentDto(id, id, null, "text", Comment.INITIAL_SCORE, false, new ArrayList<>(), null, null);
+        CommentDto nullPostIdCommentDto = new CommentDto(id, userDto, null, "text", Comment.INITIAL_SCORE, false, new ArrayList<>(), null, null);
 
         String expectedMessage = messageSource.getMessage(
                 "postId.required",
@@ -293,7 +295,7 @@ public class CommentControllerTest {
 
     @Test
     public void shouldReturnDeletedCommentCommentWhenDeletingComment() throws Exception {
-        CommentDto deletedCommentDto = new CommentDto(id, id, null, Comment.DELETED_TEXT, Comment.INITIAL_SCORE, true, null, null, id);
+        CommentDto deletedCommentDto = new CommentDto(id, userDto, null, Comment.DELETED_TEXT, Comment.INITIAL_SCORE, true, null, null, id);
 
         when(commentService.deleteComment(id, id))
                 .thenReturn(deletedCommentDto);
@@ -310,7 +312,8 @@ public class CommentControllerTest {
     private ResultMatcher[] commentDtoMatchers(String prefix, CommentDto dto) {
         return new ResultMatcher[] {
                 jsonPath(prefix + "id").value(dto.id()),
-                jsonPath(prefix + "userId").value(dto.userId()),
+                jsonPath(prefix + "user.id").value(dto.user().id()),
+                jsonPath(prefix + "user.username").value(dto.user().username()),
                 jsonPath(prefix + "created").value(dto.created()),
                 jsonPath(prefix + "text").value(dto.text()),
                 jsonPath(prefix + "score").value(dto.score()),

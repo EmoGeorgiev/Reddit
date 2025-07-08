@@ -5,6 +5,8 @@ import com.reddit.exception.content.ContentUpdateNotAllowedException;
 import com.reddit.exception.post.PostNotFoundException;
 import com.reddit.exception.subreddit.MissingModeratorPrivilegesException;
 import com.reddit.post.dto.PostDto;
+import com.reddit.subreddit.dto.SubredditDto;
+import com.reddit.user.dto.UserDto;
 import com.reddit.util.ErrorMessages;
 import com.reddit.util.PaginationConstants;
 import com.reddit.util.ValidationConstants;
@@ -38,7 +40,10 @@ public class PostControllerTest {
     @MockitoBean
     private PostService postService;
     private final Long id = 1L;
-    private final PostDto postDto = new PostDto(id, id, null, "text", Post.INITIAL_SCORE, id, "title");
+    private final Integer commentCount = 0;
+    private final UserDto userDto = new UserDto(id, "user");
+    private final SubredditDto subredditDto = new SubredditDto(id, "subreddit");
+    private final PostDto postDto = new PostDto(id, userDto, null, "text", Post.INITIAL_SCORE, commentCount, subredditDto, "title");
 
     @Test
     public void shouldReturnNotFoundForInvalidIdWhenGettingPost() throws Exception {
@@ -297,7 +302,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnBadRequestForBlankTextWhenCreatingPost() throws Exception {
-        PostDto blankTextPostDto = new PostDto(id, id, null, BLANK_STRING, Post.INITIAL_SCORE, id, "title");
+        PostDto blankTextPostDto = new PostDto(id, userDto, null, BLANK_STRING, Post.INITIAL_SCORE, commentCount, subredditDto, "title");
 
         String expectedMessage = messageSource.getMessage(
                 "text.required",
@@ -316,7 +321,7 @@ public class PostControllerTest {
     public void shouldReturnBadRequestForNonValidTextWhenCreatingPost() throws Exception {
         String text = getStringWithFixedLength(ValidationConstants.TEXT_MAX + 1);
 
-        PostDto overMaxTextSizePostDto = new PostDto(id, id, null, text, Post.INITIAL_SCORE, id, "title");
+        PostDto overMaxTextSizePostDto = new PostDto(id, userDto, null, text, Post.INITIAL_SCORE, commentCount, subredditDto, "title");
 
         Object[] args = getArgs(ValidationConstants.TEXT_MIN, ValidationConstants.TEXT_MAX);
         String expectedMessage = messageSource.getMessage(
@@ -334,7 +339,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnBadRequestForBlankTitleWhenCreatingPost() throws Exception {
-        PostDto blankTitlePostDto = new PostDto(id, id, null, "text", Post.INITIAL_SCORE, id, BLANK_STRING);
+        PostDto blankTitlePostDto = new PostDto(id, userDto, null, "text", Post.INITIAL_SCORE, commentCount, subredditDto, BLANK_STRING);
 
         String expectedMessage = messageSource.getMessage(
                 "title.required",
@@ -353,7 +358,7 @@ public class PostControllerTest {
     public void shouldReturnBadRequestForNonValidTitleWhenCreatingPost() throws Exception {
         String title = getStringWithFixedLength(ValidationConstants.TITLE_MAX + 1);
 
-        PostDto overMaxTitleSizePostDto = new PostDto(id, id, null, "text", Post.INITIAL_SCORE, id, title);
+        PostDto overMaxTitleSizePostDto = new PostDto(id, userDto, null, "text", Post.INITIAL_SCORE, commentCount, subredditDto, title);
 
         Object[] args = getArgs(ValidationConstants.TITLE_MIN, ValidationConstants.TITLE_MAX);
         String expectedMessage = messageSource.getMessage(
@@ -371,10 +376,10 @@ public class PostControllerTest {
 
     @Test
     public void shouldReturnBadRequestForNullSubredditIdWhenCreatingPost() throws Exception {
-        PostDto nullSubredditIdPostDto = new PostDto(id, id, null, "text", Post.INITIAL_SCORE, null, "title");
+        PostDto nullSubredditIdPostDto = new PostDto(id, userDto, null, "text", Post.INITIAL_SCORE, commentCount, null, "title");
 
         String expectedMessage = messageSource.getMessage(
-                "subredditId.required",
+                "subreddit.required",
                 null,
                 LocaleContextHolder.getLocale());
 
@@ -383,7 +388,7 @@ public class PostControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(nullSubredditIdPostDto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.subredditId").value(expectedMessage));
+                .andExpect(jsonPath("$.subreddit").value(expectedMessage));
     }
 
     @Test
@@ -466,11 +471,13 @@ public class PostControllerTest {
     private ResultMatcher[] postDtoMatchers(String prefix, PostDto dto) {
         return new ResultMatcher[] {
                 jsonPath(prefix + "id").value(dto.id()),
-                jsonPath(prefix + "userId").value(dto.userId()),
+                jsonPath(prefix + "user.id").value(dto.user().id()),
+                jsonPath(prefix + "user.username").value(dto.user().username()),
                 jsonPath(prefix + "created").value(dto.created()),
                 jsonPath(prefix + "text").value(dto.text()),
                 jsonPath(prefix + "score").value(dto.score()),
-                jsonPath(prefix + "subredditId").value(dto.subredditId()),
+                jsonPath(prefix + "subreddit.id").value(dto.subreddit().id()),
+                jsonPath(prefix + "subreddit.title").value(dto.subreddit().title()),
                 jsonPath(prefix + "title").value(dto.title())
         };
     }

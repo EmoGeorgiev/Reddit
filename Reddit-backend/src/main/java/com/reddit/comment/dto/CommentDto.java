@@ -1,6 +1,7 @@
 package com.reddit.comment.dto;
 
 
+import com.reddit.user.dto.UserDto;
 import com.reddit.util.ValidationConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 public record CommentDto(
         Long id,
-        Long userId,
+        UserDto user,
         LocalDateTime created,
         @NotBlank(message = "{text.required}")
         @Size(

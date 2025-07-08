@@ -78,8 +78,8 @@ public class PostService {
     }
 
     public PostDto addPost(PostDto postDto) {
-        RedditUser user = userService.getUserEntity(postDto.userId());
-        Subreddit subreddit = subredditService.getSubredditEntity(postDto.subredditId());
+        RedditUser user = userService.getUserEntity(postDto.user().id());
+        Subreddit subreddit = subredditService.getSubredditEntity(postDto.subreddit().id());
 
         Post post = PostMapper.postDtoToPost(postDto);
         post.setCreated(LocalDateTime.now());
@@ -94,7 +94,7 @@ public class PostService {
     public PostDto updatePost(Long id, PostDto postDto) {
         Post post = getPostEntity(id);
 
-        if (!Objects.equals(post.getUser().getId(), postDto.userId())) {
+        if (!Objects.equals(post.getUser().getId(), postDto.user().id())) {
             throw new ContentUpdateNotAllowedException(ErrorMessages.CONTENT_UPDATE_NOT_ALLOWED);
         }
 

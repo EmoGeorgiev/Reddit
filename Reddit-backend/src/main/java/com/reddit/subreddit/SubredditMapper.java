@@ -12,23 +12,9 @@ public class SubredditMapper {
             return null;
         }
 
-        Set<Long> users = subreddit
-                .getUsers()
-                .stream()
-                .map(RedditUser::getId)
-                .collect(Collectors.toSet());
-
-        Set<Long> moderators = subreddit
-                .getModerators()
-                .stream()
-                .map(RedditUser::getId)
-                .collect(Collectors.toSet());
-
         return new SubredditDto(
                 subreddit.getId(),
-                subreddit.getTitle(),
-                users,
-                moderators
+                subreddit.getTitle()
         );
     }
 

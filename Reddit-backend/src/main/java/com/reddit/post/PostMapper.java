@@ -1,6 +1,8 @@
 package com.reddit.post;
 
 import com.reddit.post.dto.PostDto;
+import com.reddit.subreddit.SubredditMapper;
+import com.reddit.user.UserMapper;
 
 public class PostMapper {
     public static PostDto postToPostDto(Post post) {
@@ -10,12 +12,12 @@ public class PostMapper {
 
         return new PostDto(
             post.getId(),
-            post.getUser().getId(),
+            UserMapper.userToUserDto(post.getUser()),
             post.getCreated(),
             post.getText(),
             post.getScore(),
             post.getComments().size(),
-            post.getSubreddit().getId(),
+            SubredditMapper.subredditToSubredditDto(post.getSubreddit()),
             post.getTitle()
         );
     }
