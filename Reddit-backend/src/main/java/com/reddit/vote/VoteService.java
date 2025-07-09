@@ -8,6 +8,7 @@ import com.reddit.user.RedditUser;
 import com.reddit.user.UserService;
 import com.reddit.util.ErrorMessages;
 import com.reddit.vote.dto.VoteDto;
+import com.reddit.vote.dto.VotedContentDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,21 +31,32 @@ public class VoteService {
     }
 
     @Transactional(readOnly = true)
-    public Page<VoteDto> getUpVotedByUserId(Long userId, Pageable pageable) {
-        return voteRepository
-                .findByUserIdAndVoteType(userId, VoteType.UP_VOTE, pageable)
-                .map(VoteMapper::voteToVoteDto);
+    public VoteDto getVoteByContentAndUser(Long contentId, Long userId) {
+        Content content = contentService.getContentEntity(contentId);
+        RedditUser user = userService.getUserEntity(userId);
+
+        Optional<Vote> voteOptional = voteRepository.findByUserAndContent(user, content);
+
+        return voteOptional.map(VoteMapper::voteToVoteDto)
+                .orElseGet(() -> new VoteDto(userId, contentId, VoteType.NO_VOTE, VoteType.NO_VOTE.getScore()));
     }
 
     @Transactional(readOnly = true)
-    public Page<VoteDto> getDownVotedByUserId(Long userId, Pageable pageable) {
+    public Page<VotedContentDto> getUpVotedByUserId(Long userId, Pageable pageable) {
+        return voteRepository
+                .findByUserIdAndVoteType(userId, VoteType.UP_VOTE, pageable)
+                .map(VoteMapper::voteToVotedContentDto);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<VotedContentDto> getDownVotedByUserId(Long userId, Pageable pageable) {
         return voteRepository
                 .findByUserIdAndVoteType(userId, VoteType.DOWN_VOTE, pageable)
-                .map(VoteMapper::voteToVoteDto);
+                .map(VoteMapper::voteToVotedContentDto);
     }
     public VoteDto toggleVote(VoteDto voteDto) {
         RedditUser user = userService.getUserEntity(voteDto.userId());
-        Content content = contentService.getContentEntity(voteDto.contentDto().id());
+        Content content = contentService.getContentEntity(voteDto.contentId());
         VoteType voteType = voteDto.voteType();
 
         if (content instanceof Comment c) {
@@ -84,11 +96,9 @@ public class VoteService {
     private VoteDto removeVote(Content content, Vote vote, VoteType voteType) {
         content.setScore(content.getScore() - voteType.getScore());
 
-        VoteDto voteDto = VoteMapper.voteToVoteDto(vote);
-
         voteRepository.deleteById(vote.getId());
 
-        return voteDto;
+        return new VoteDto(vote.getUser().getId(), content.getId(), VoteType.NO_VOTE, VoteType.NO_VOTE.getScore());
     }
 
     private VoteDto changeVote(Content content, Vote vote, VoteType voteType) {
