@@ -47,7 +47,7 @@ public class SubredditController {
             @PageableDefault(
                     size = PaginationConstants.SUBREDDIT_BY_TITLE_CONTAINS_SIZE,
                     sort = PaginationConstants.SUBREDDIT_BY_TITLE_CONTAINS_SORT,
-                    direction = Sort.Direction.DESC) Pageable pageable) {
+                    direction = Sort.Direction.ASC) Pageable pageable) {
         Page<SubredditDto> subreddits = subredditService.getSubredditsWhereTitleContainsWord(word, pageable);
 
         return ResponseEntity

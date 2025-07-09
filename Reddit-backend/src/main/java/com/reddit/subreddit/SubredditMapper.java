@@ -14,7 +14,8 @@ public class SubredditMapper {
 
         return new SubredditDto(
                 subreddit.getId(),
-                subreddit.getTitle()
+                subreddit.getTitle(),
+                subreddit.getUsers().size()
         );
     }
 

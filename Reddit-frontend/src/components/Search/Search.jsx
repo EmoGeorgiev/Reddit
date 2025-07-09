@@ -7,6 +7,7 @@ import PostList from '../Post/PostList'
 import postService from '../../services/posts'
 import subredditService from '../../services/subreddits'
 import userService from '../../services/users'
+import SubredditList from '../Subreddit/SubredditList'
 
 const Search = () => {
     const [isEmpty, setIsEmpty] = useState(true)
@@ -41,7 +42,7 @@ const Search = () => {
 
     const categoryComponents = {
         [Category.POSTS]: <PostList query={query} getPosts={getPostsWhereTitleContainsWord} />,
-        [Category.SUBREDDITS]: <div>subreddits {query}</div>,
+        [Category.SUBREDDITS]: <SubredditList query={query} getSubreddits={getSubredditsWhereTitleContainsWord} />,
         [Category.USERS]: <div>users {query}</div>
     }
     

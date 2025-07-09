@@ -61,23 +61,23 @@ const SubscriptionsList = ({ isOpen, handleOpen }) => {
             </div>
 
             <div className={`${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'} duration-400`}>
-                <button className='w-56 px-4 py-2 group flex items-center font-light hover:bg-gray-200 rounded-2xl'
+                <button className='w-56 px-4 py-2 group flex items-center space-x-2 hover:bg-gray-200 rounded-2xl'
                         onClick={() => setIsFormOpen(true)}>
                     <svg className='w-8 h-8' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
                         <path d='M12 6V18' stroke='currentColor'/>
                         <path d='M6 12H18' stroke='currentColor'/>
                     </svg>
-                    <span className='mx-2'>Create a subreddit</span>
+                    <span className='font-light'>Create a subreddit</span>
                 </button>
 
                 <ul>
                     {subscriptions.map(subreddit => 
                             <li key={subreddit.id}>
-                                <Link to={`/r/${subreddit.title}`} className='w-56 px-4 py-2 flex items-center font-light hover:bg-gray-200 rounded-2xl overflow-clip'>
+                                <Link to={`/r/${subreddit.title}`} className='w-56 px-4 py-2 flex items-center space-x-2 hover:bg-gray-100 rounded-2xl overflow-clip'>
                                     <img className='w-8 h-8' src={subredditIcon} alt='subreddit' />
-                                    <div className='mx-2'>
+                                    <h2 className='font-light'>
                                         r/{subreddit.title}
-                                    </div>
+                                    </h2>
                                 </Link>
                             </li>)}
                 </ul>

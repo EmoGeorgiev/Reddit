@@ -13,5 +13,6 @@ public record SubredditDto(
                 min = ValidationConstants.TITLE_MIN,
                 max = ValidationConstants.TITLE_MAX,
                 message = "{title.size}")
-        String title) {
+        String title,
+        Integer userCount) {
 }

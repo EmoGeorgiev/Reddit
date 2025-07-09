@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Post from './Post'
-import Pagination from '../Pagination/Pagination'
+import Pagination from '../Common/Pagination'
 
 const PostList = ({ query, getPosts }) => {
     const [posts, setPosts] = useState([])
@@ -30,7 +30,9 @@ const PostList = ({ query, getPosts }) => {
 
     return (
         <div className='my-4'>
-            {posts.map(post => <Post key={post.id} post={post} />)}
+            <ul>
+                {posts.map(post => <li key={post.id}><Post post={post} /></li>)}
+            </ul>
 
             <Pagination handlePageChange={handlePageChange} isFirst={isFirst} isLast={isLast} />
         </div>

@@ -1,10 +1,10 @@
 import { useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import userIcon from '../../assets/user-icon.svg'
-import Vote from '../Vote/Vote'
+import Vote from '../Common/Vote'
+import Save from '../Common/Save'
 import subredditIcon from '../../assets/subreddit-icon.svg'
 import CommentCount from '../Comment/CommentCount'
-import Save from '../Common/Save'
 
 const Post = ({ post }) => {
     const [user, setUser] = useState('user')
@@ -20,7 +20,7 @@ const Post = ({ post }) => {
 
     return (
         <>    
-            <div className='w-full h-auto my-4 hover:bg-gray-100 overflow-hidden rounded-2xl'>
+            <div className='w-full h-auto my-4 hover:bg-gray-100 overflow-hidden rounded-2xl cursor-pointer'>
                 <div className='mx-4 py-4 h-full flex flex-col space-y-2.5 '>
                     <div className='flex justify-between items-center'>
                         {showUser() ? 
