@@ -37,7 +37,8 @@ public class VoteService {
 
         Optional<Vote> voteOptional = voteRepository.findByUserAndContent(user, content);
 
-        return voteOptional.map(vote -> VoteMapper.voteToVoteDto(vote, vote.getVoteType().getScore()))
+        return voteOptional
+                .map(vote -> VoteMapper.voteToVoteDto(vote, vote.getVoteType().getScore()))
                 .orElseGet(() -> new VoteDto(userId, contentId, VoteType.NO_VOTE, VoteType.NO_VOTE.getScore()));
     }
 
@@ -101,7 +102,12 @@ public class VoteService {
 
         voteRepository.deleteById(vote.getId());
 
-        return new VoteDto(vote.getUser().getId(), content.getId(), VoteType.NO_VOTE, score);
+        return new VoteDto(
+                vote.getUser().getId(),
+                content.getId(),
+                VoteType.NO_VOTE,
+                score
+        );
     }
 
     private VoteDto changeVote(Content content, Vote vote, VoteType voteType) {

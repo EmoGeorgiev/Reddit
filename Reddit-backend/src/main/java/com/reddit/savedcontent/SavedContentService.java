@@ -5,6 +5,7 @@ import com.reddit.content.Content;
 import com.reddit.content.ContentService;
 import com.reddit.exception.comment.CommentIsDeletedException;
 import com.reddit.savedcontent.dto.SavedContentDto;
+import com.reddit.savedcontent.dto.SavedDto;
 import com.reddit.user.RedditUser;
 import com.reddit.user.UserService;
 import com.reddit.util.ErrorMessages;
@@ -30,15 +31,27 @@ public class SavedContentService {
     }
 
     @Transactional(readOnly = true)
+    public SavedDto getSavedByContentAndUser(Long contentId, Long userId) {
+        Content content = contentService.getContentEntity(contentId);
+        RedditUser user = userService.getUserEntity(userId);
+
+        Optional<SavedContent> savedContentOptional = savedContentRepository.findByUserAndContent(user, content);
+
+        return savedContentOptional
+                .map(SavedContentMapper::savedContentToSavedDto)
+                .orElseGet(() -> new SavedDto(userId, contentId, SavedType.NOT_SAVED));
+    }
+
+    @Transactional(readOnly = true)
     public Page<SavedContentDto> getSavedContentByUserId(Long userId, Pageable pageable) {
         return savedContentRepository
                 .findByUserId(userId, pageable)
                 .map(SavedContentMapper::savedContentToSavedContentDto);
     }
 
-    public SavedContentDto toggleSavedContent(SavedContentDto savedContent) {
-        RedditUser user = userService.getUserEntity(savedContent.userId());
-        Content content = contentService.getContentEntity(savedContent.contentDto().id());
+    public SavedDto toggleSavedContent(SavedDto savedDto) {
+        RedditUser user = userService.getUserEntity(savedDto.userId());
+        Content content = contentService.getContentEntity(savedDto.contentId());
 
         if (content instanceof Comment c) {
             if (c.isDeleted()) {
@@ -48,14 +61,12 @@ public class SavedContentService {
 
         Optional<SavedContent> optionalSavedContent = savedContentRepository.findByUserAndContent(user, content);
 
-        if (optionalSavedContent.isPresent()) {
-            return removeSavedContent(optionalSavedContent.get());
-        }
-
-        return addSavedContent(user, content);
+        return optionalSavedContent
+                .map(this::removeSavedContent)
+                .orElseGet(() -> addSavedContent(user, content));
     }
 
-    private SavedContentDto addSavedContent(RedditUser user, Content content) {
+    private SavedDto addSavedContent(RedditUser user, Content content) {
         SavedContent savedContent = new SavedContent();
         savedContent.setCreated(LocalDateTime.now());
         savedContent.setUser(user);
@@ -63,14 +74,16 @@ public class SavedContentService {
 
         SavedContent result = savedContentRepository.save(savedContent);
 
-        return SavedContentMapper.savedContentToSavedContentDto(result);
+        return SavedContentMapper.savedContentToSavedDto(result);
     }
 
-    private SavedContentDto removeSavedContent(SavedContent savedContent) {
-        SavedContentDto savedContentDto = SavedContentMapper.savedContentToSavedContentDto(savedContent);
-
+    private SavedDto removeSavedContent(SavedContent savedContent) {
         savedContentRepository.deleteById(savedContent.getId());
 
-        return savedContentDto;
+        return new SavedDto(
+                savedContent.getUser().getId(),
+                savedContent.getContent().getId(),
+                SavedType.NOT_SAVED
+        );
     }
 }
