@@ -30,6 +30,8 @@ const AuthProvider = ({ children }) => {
 
         setUser(null)
         setIsAuthenticated(false)
+
+        location.reload()
     }
 
      const loadUser = () => {

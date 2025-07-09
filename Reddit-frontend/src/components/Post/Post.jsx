@@ -46,7 +46,7 @@ const Post = ({ post }) => {
                     </div>
 
                     <div className='flex space-x-4 items-center'>
-                        <Vote score={post.score} />
+                        <Vote contentId={post.id} contentScore={post.score} />
                         <CommentCount count={post.commentCount} />
                     </div>
                 </div>

@@ -37,7 +37,7 @@ public class VoteService {
 
         Optional<Vote> voteOptional = voteRepository.findByUserAndContent(user, content);
 
-        return voteOptional.map(VoteMapper::voteToVoteDto)
+        return voteOptional.map(vote -> VoteMapper.voteToVoteDto(vote, vote.getVoteType().getScore()))
                 .orElseGet(() -> new VoteDto(userId, contentId, VoteType.NO_VOTE, VoteType.NO_VOTE.getScore()));
     }
 
@@ -81,32 +81,37 @@ public class VoteService {
     }
 
     private VoteDto createVote(RedditUser user, Content content, VoteType voteType) {
+        int score = voteType.getScore();
+
         Vote vote = new Vote();
         vote.setCreated(LocalDateTime.now());
         vote.setUser(user);
         vote.setContent(content);
         vote.setVoteType(voteType);
-        content.setScore(content.getScore() + voteType.getScore());
+        content.setScore(content.getScore() + score);
 
         Vote savedVote = voteRepository.save(vote);
 
-        return VoteMapper.voteToVoteDto(savedVote);
+        return VoteMapper.voteToVoteDto(savedVote, score);
     }
 
     private VoteDto removeVote(Content content, Vote vote, VoteType voteType) {
-        content.setScore(content.getScore() - voteType.getScore());
+        int score = -voteType.getScore();
+        content.setScore(content.getScore() + score);
 
         voteRepository.deleteById(vote.getId());
 
-        return new VoteDto(vote.getUser().getId(), content.getId(), VoteType.NO_VOTE, VoteType.NO_VOTE.getScore());
+        return new VoteDto(vote.getUser().getId(), content.getId(), VoteType.NO_VOTE, score);
     }
 
     private VoteDto changeVote(Content content, Vote vote, VoteType voteType) {
-        content.setScore(content.getScore() - vote.getVoteType().getScore() + voteType.getScore());
+        int score = -vote.getVoteType().getScore() + voteType.getScore();
+        content.setScore(content.getScore() + score);
+
         vote.setVoteType(voteType);
 
         Vote savedVote = voteRepository.save(vote);
 
-        return VoteMapper.voteToVoteDto(savedVote);
+        return VoteMapper.voteToVoteDto(savedVote, score);
     }
 }

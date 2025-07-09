@@ -1,15 +1,16 @@
+import axios from 'axios'
 import axiosInstance from './axiosInstance'
 
 const baseUrl = '/votes'
 
 const getVoteByContentAndUser = async (contentId, userId) => {
-    const response = await axiosInstance.get(`${baseUrl}`, {
+    const response = await axiosInstance.get(baseUrl, {
         params: {
             contentId,
             userId
         }
     })
-    response.data
+    return response.data
 }
 
 const getUpVotedByUserId = async (userId, pageable) => {

@@ -37,7 +37,7 @@ public class VoteMapper {
         return vote;
     }
 
-    public static VoteDto voteToVoteDto(Vote vote) {
+    public static VoteDto voteToVoteDto(Vote vote, int score) {
         if (vote == null) {
             return null;
         }
@@ -46,7 +46,7 @@ public class VoteMapper {
                 vote.getUser().getId(),
                 vote.getContent().getId(),
                 vote.getVoteType(),
-                vote.getVoteType().getScore()
+                score
         );
     }
 }
