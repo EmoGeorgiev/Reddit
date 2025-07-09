@@ -32,23 +32,24 @@ const SubredditList = ({ query, getSubreddits }) => {
     return (
         <div className='my-4'>
             <ul>
-                {subreddits.map(subreddit => <li className='border-b border-gray-300' key={subreddit.id}>
-                    <Link to={`/r/${subreddit.title}`}>
-                        <div className='p-4 hover:bg-gray-100 rounded-2xl overflow-clip'>
-                            <div className='flex items-center space-x-2'>
-                                <img className='w-12 h-12' src={subredditIcon} alt='subreddit' />
-                                <div>
-                                    <h2 className='font-semibold'>
-                                        r/{subreddit.title}
-                                    </h2>
-                                    <div className='font-light'>
-                                        {subreddit.userCount} {subreddit.userCount === 1 ? 'member' : 'members'}
+                {subreddits.map(subreddit => 
+                        <li className='border-b border-gray-300' key={subreddit.id}>
+                            <Link to={`/r/${subreddit.title}`}>
+                                <div className='p-4 hover:bg-gray-100 rounded-2xl overflow-clip'>
+                                    <div className='flex items-center space-x-2'>
+                                        <img className='w-12 h-12' src={subredditIcon} alt='subreddit' />
+                                        <div>
+                                            <h2 className='font-semibold'>
+                                                r/{subreddit.title}
+                                            </h2>
+                                            <div className='font-light'>
+                                                {subreddit.userCount} {subreddit.userCount === 1 ? 'member' : 'members'}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </Link>
-                </li>)}
+                            </Link>
+                        </li>)}
             </ul>
 
             <Pagination handlePageChange={handlePageChange} isFirst={isFirst} isLast={isLast} />
