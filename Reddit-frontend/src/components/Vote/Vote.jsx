@@ -29,7 +29,7 @@ const Vote = ({ contentId, contentScore }) => {
         try {
             const vote = { 
                 contentId, 
-                'userId': user.id, 
+                'userId': user?.id, 
                 'voteType': type 
             }
 

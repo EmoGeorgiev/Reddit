@@ -2,8 +2,18 @@ import axiosInstance from './axiosInstance'
 
 const baseUrl = '/saved'
 
+const getSavedByContentAndUser = async (contentId, userId) => {
+    const response = await axiosInstance.get(baseUrl, {
+        params: {
+            contentId,
+            userId
+        }
+    })
+    return response.data
+}
+
 const getSavedContentByUserId = async (userId, pageable) => {
-    const response = await axiosInstance.get(`${baseUrl}/${userId}`, {
+    const response = await axiosInstance.get(`${baseUrl}/users/${userId}`, {
         params: {
             ...pageable
         }
@@ -16,4 +26,4 @@ const toggleSavedContent = async (savedContent) => {
     return response.data
 }
 
-export default { getSavedContentByUserId, toggleSavedContent }
+export default { getSavedByContentAndUser, getSavedContentByUserId, toggleSavedContent }

@@ -4,6 +4,7 @@ import userIcon from '../../assets/user-icon.svg'
 import Vote from '../Vote/Vote'
 import subredditIcon from '../../assets/subreddit-icon.svg'
 import CommentCount from '../Comment/CommentCount'
+import Save from '../Common/Save'
 
 const Post = ({ post }) => {
     const [user, setUser] = useState('user')
@@ -48,6 +49,7 @@ const Post = ({ post }) => {
                     <div className='flex space-x-4 items-center'>
                         <Vote contentId={post.id} contentScore={post.score} />
                         <CommentCount count={post.commentCount} />
+                        <Save contentId={post.id} />
                     </div>
                 </div>
             </div>
