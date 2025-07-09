@@ -1,21 +1,45 @@
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useState } from 'react'
+import { useAuth } from '../Authentication/AuthContext'
 import userIcon from '../../assets/user-icon.svg'
 import Vote from '../Common/Vote'
 import Save from '../Common/Save'
-import subredditIcon from '../../assets/subreddit-icon.svg'
 import CommentCount from '../Comment/CommentCount'
+import DeleteContent from '../Common/DeleteContent'
+import userService from '../../services/users'
+import subredditIcon from '../../assets/subreddit-icon.svg'
 
-const Post = ({ post }) => {
-    const [user, setUser] = useState('user')
+const Post = ({ post, deletePost }) => {
+    const [moderators, setModerators] = useState(new Set())
+    const { user } = useAuth()
     const date = post.created.split('T')[0]
     const location = useLocation()
+    
+    useEffect(() => {
+        const getModerators = async () => {
+            try {
+                const newModerators = await userService.getModeratorsBySubredditTitle(post.subreddit.title)
+                
+                setModerators(new Set(newModerators.map(moderator => moderator.id)))
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        getModerators()
+    }, [])
     
     const showUser = () => {
         const subredditPath = `/r/${post.subreddit.title}`.toLowerCase()
         const currentPath = location.pathname.toLowerCase()
 
         return currentPath.includes(subredditPath)
+    }
+
+    const handleDelete = () => {
+        if (window.confirm('Are you sure you want to delete this post?')) {
+            deletePost(post.id)
+        }
     }
 
     return (
@@ -50,6 +74,7 @@ const Post = ({ post }) => {
                         <Vote contentId={post.id} contentScore={post.score} />
                         <CommentCount count={post.commentCount} />
                         <Save contentId={post.id} />
+                        {(user?.id === post.user.id || moderators.has(user?.id)) && <DeleteContent handleDelete={handleDelete} />}
                     </div>
                 </div>
             </div>
