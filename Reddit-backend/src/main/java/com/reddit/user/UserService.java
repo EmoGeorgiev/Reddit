@@ -144,8 +144,7 @@ public class UserService {
     }
 
     private void removeUserFromCollections(RedditUser user) {
-        applyToCollection(user.getComments(), comment -> comment.setUser(null));
-        applyToCollection(user.getPosts(), post -> post.setUser(null));
+        applyToCollection(user.getContents(), comment -> comment.setUser(null));
 
         removeUserFromCollection(user.getSubscribedTo(), subreddit -> subreddit.getUsers().remove(user));
         removeUserFromCollection(user.getModerated(), subreddit -> subreddit.getModerators().remove(user));

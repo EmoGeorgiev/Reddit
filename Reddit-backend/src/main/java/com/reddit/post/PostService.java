@@ -98,7 +98,7 @@ public class PostService {
             throw new ContentUpdateNotAllowedException(ErrorMessages.CONTENT_UPDATE_NOT_ALLOWED);
         }
 
-        post.setText(postDto.text());
+        post.setDescription(postDto.text());
         post.setTitle(postDto.title());
 
         return PostMapper.postToPostDto(post);

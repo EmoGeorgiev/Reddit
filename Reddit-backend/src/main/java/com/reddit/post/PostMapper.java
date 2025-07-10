@@ -14,7 +14,7 @@ public class PostMapper {
             post.getId(),
             UserMapper.userToUserDto(post.getUser()),
             post.getCreated(),
-            post.getText(),
+            post.getDescription(),
             post.getScore(),
             post.getComments().size(),
             SubredditMapper.subredditToSubredditDto(post.getSubreddit()),
@@ -30,7 +30,7 @@ public class PostMapper {
         Post post = new Post();
         post.setId(postDto.id());
         post.setCreated(postDto.created());
-        post.setText(postDto.text());
+        post.setDescription(postDto.text());
         post.setTitle(postDto.title());
 
         return post;

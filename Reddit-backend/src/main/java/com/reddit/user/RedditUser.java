@@ -71,11 +71,11 @@ public class RedditUser {
         this.password = password;
     }
 
-    public Set<Content> getContent() {
+    public Set<Content> getContents() {
         return contents;
     }
 
-    public void setContent(Set<Content> contents) {
+    public void setContents(Set<Content> contents) {
         this.contents = contents;
     }
 

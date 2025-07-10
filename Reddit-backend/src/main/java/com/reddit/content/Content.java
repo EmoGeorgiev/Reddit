@@ -49,6 +49,14 @@ public abstract class Content {
         this.user = user;
     }
 
+    public ContentType getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(ContentType contentType) {
+        this.contentType = contentType;
+    }
+
     public LocalDateTime getCreated() {
         return created;
     }
