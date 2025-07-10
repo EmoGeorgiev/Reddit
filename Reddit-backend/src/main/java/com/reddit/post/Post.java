@@ -11,6 +11,8 @@ import java.util.Set;
 @Entity
 @Table(name = "posts")
 public class Post extends Content {
+    @Column(name = "description")
+    private String description;
     @ManyToOne
     @JoinColumn(name = "subreddit_id", nullable = false)
     private Subreddit subreddit;
@@ -20,6 +22,14 @@ public class Post extends Content {
     private Set<Comment> comments = new HashSet<>();
 
     public Post() {
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Subreddit getSubreddit() {

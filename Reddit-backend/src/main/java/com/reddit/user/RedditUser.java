@@ -23,9 +23,7 @@ public class RedditUser {
     @Column(name = "password", nullable = false)
     private String password;
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Post> posts = new HashSet<>();
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Comment> comments = new HashSet<>();
+    private Set<Content> contents = new HashSet<>();
     @ManyToMany
     @JoinTable(
             name = "users_subreddits",
@@ -73,20 +71,12 @@ public class RedditUser {
         this.password = password;
     }
 
-    public Set<Post> getPosts() {
-        return posts;
+    public Set<Content> getContent() {
+        return contents;
     }
 
-    public void setPosts(Set<Post> posts) {
-        this.posts = posts;
-    }
-
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
+    public void setContent(Set<Content> contents) {
+        this.contents = contents;
     }
 
     public Set<Subreddit> getSubscribedTo() {

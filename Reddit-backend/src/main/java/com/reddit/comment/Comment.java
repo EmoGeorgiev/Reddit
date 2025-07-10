@@ -3,6 +3,7 @@ package com.reddit.comment;
 import com.reddit.content.Content;
 import com.reddit.post.Post;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,9 @@ import java.util.List;
 @Table(name = "comments")
 public class Comment extends Content {
     public static final String DELETED_TEXT = "[deleted]";
+    @Column(name = "text", nullable = false)
+    @Size(max = 5000)
+    private String text;
     @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Comment> replies = new ArrayList<>();
     @ManyToOne
@@ -23,6 +27,16 @@ public class Comment extends Content {
     private boolean isDeleted = false;
 
     public Comment() {
+    }
+
+    @Override
+    public String getText() {
+        return text;
+    }
+
+    @Override
+    public void setText(String text) {
+        this.text = text;
     }
 
     public List<Comment> getReplies() {

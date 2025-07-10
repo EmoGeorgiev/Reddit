@@ -65,8 +65,9 @@ public class CommentService {
                 ? getCommentEntity(commentDto.parentId())
                 : null;
 
-        Comment comment = CommentMapper.commentDtoToComment(commentDto);
+        Comment comment = new Comment();
         comment.setCreated(LocalDateTime.now());
+        comment.setText(commentDto.text());
         comment.setUser(user);
         comment.setParent(parent);
         comment.setPost(post);

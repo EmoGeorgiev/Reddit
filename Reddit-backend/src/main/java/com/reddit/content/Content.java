@@ -22,11 +22,10 @@ public abstract class Content {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private RedditUser user;
+    @Enumerated(EnumType.STRING)
+    private ContentType contentType;
     @Column(name = "created", nullable = false)
     private LocalDateTime created;
-    @Column(name = "text", nullable = false)
-    @Size(max = 5000)
-    private String text;
     @Column(name = "score", nullable = false)
     private int score = INITIAL_SCORE;
     @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -56,14 +55,6 @@ public abstract class Content {
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public int getScore() {
