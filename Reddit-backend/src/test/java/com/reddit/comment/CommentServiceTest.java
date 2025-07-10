@@ -58,14 +58,14 @@ public class CommentServiceTest {
         post.setId(id);
         post.setUser(user);
         post.setCreated(LocalDateTime.now());
-        post.setText("post text");
+        post.setText("post description");
         post.setTitle("post title");
 
         firstComment = new Comment();
         firstComment.setId(id);
         firstComment.setUser(user);
         firstComment.setCreated(LocalDateTime.now());
-        firstComment.setText("comment text");
+        firstComment.setText("comment description");
         firstComment.setPost(post);
 
         firstCommentDto = CommentMapper.commentToCommentDto(firstComment);

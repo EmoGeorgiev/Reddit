@@ -13,11 +13,11 @@ public record CommentDto(
         Long id,
         UserDto user,
         LocalDateTime created,
-        @NotBlank(message = "{text.required}")
+        @NotBlank(message = "{description.required}")
         @Size(
                 min = ValidationConstants.TEXT_MIN,
                 max = ValidationConstants.TEXT_MAX,
-                message = "{text.size}")
+                message = "{description.size}")
         String text,
         Integer score,
         Boolean isDeleted,

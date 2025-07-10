@@ -314,7 +314,7 @@ public class PostControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(blankTextPostDto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.text").value(expectedMessage));
+                .andExpect(jsonPath("$.description").value(expectedMessage));
     }
 
     @Test
@@ -334,7 +334,7 @@ public class PostControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(overMaxTextSizePostDto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.text").value(expectedMessage));
+                .andExpect(jsonPath("$.description").value(expectedMessage));
     }
 
     @Test
@@ -474,7 +474,7 @@ public class PostControllerTest {
                 jsonPath(prefix + "user.id").value(dto.user().id()),
                 jsonPath(prefix + "user.username").value(dto.user().username()),
                 jsonPath(prefix + "created").value(dto.created()),
-                jsonPath(prefix + "text").value(dto.text()),
+                jsonPath(prefix + "description").value(dto.description()),
                 jsonPath(prefix + "score").value(dto.score()),
                 jsonPath(prefix + "subreddit.id").value(dto.subreddit().id()),
                 jsonPath(prefix + "subreddit.title").value(dto.subreddit().title()),

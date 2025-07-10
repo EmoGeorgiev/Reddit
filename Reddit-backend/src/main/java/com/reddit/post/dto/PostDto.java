@@ -13,12 +13,7 @@ public record PostDto(
         Long id,
         UserDto user,
         LocalDateTime created,
-        @NotBlank(message = "{text.required}")
-        @Size(
-                min = ValidationConstants.TEXT_MIN,
-                max = ValidationConstants.TEXT_MAX,
-                message = "{text.size}")
-        String text,
+        String description,
         Integer score,
         Integer commentCount,
         @NotNull(message = "{subreddit.required}")

@@ -30,7 +30,7 @@ public class PostMapper {
         Post post = new Post();
         post.setId(postDto.id());
         post.setCreated(postDto.created());
-        post.setDescription(postDto.text());
+        post.setDescription(postDto.description());
         post.setTitle(postDto.title());
 
         return post;

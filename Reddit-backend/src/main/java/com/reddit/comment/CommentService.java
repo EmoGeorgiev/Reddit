@@ -1,6 +1,7 @@
 package com.reddit.comment;
 
 import com.reddit.comment.dto.CommentDto;
+import com.reddit.content.ContentType;
 import com.reddit.exception.comment.CommentIsDeletedException;
 import com.reddit.exception.comment.CommentNotFoundException;
 import com.reddit.exception.content.ContentUpdateNotAllowedException;
@@ -68,6 +69,7 @@ public class CommentService {
         Comment comment = new Comment();
         comment.setCreated(LocalDateTime.now());
         comment.setText(commentDto.text());
+        comment.setContentType(ContentType.COMMENT);
         comment.setUser(user);
         comment.setParent(parent);
         comment.setPost(post);

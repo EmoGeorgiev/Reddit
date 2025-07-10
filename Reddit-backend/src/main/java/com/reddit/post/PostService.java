@@ -1,5 +1,6 @@
 package com.reddit.post;
 
+import com.reddit.content.ContentType;
 import com.reddit.exception.content.ContentUpdateNotAllowedException;
 import com.reddit.exception.post.PostNotFoundException;
 import com.reddit.exception.subreddit.MissingModeratorPrivilegesException;
@@ -81,7 +82,10 @@ public class PostService {
         RedditUser user = userService.getUserEntity(postDto.user().id());
         Subreddit subreddit = subredditService.getSubredditEntityById(postDto.subreddit().id());
 
-        Post post = PostMapper.postDtoToPost(postDto);
+        Post post = new Post();
+        post.setDescription(postDto.description());
+        post.setTitle(postDto.title());
+        post.setContentType(ContentType.POST);
         post.setCreated(LocalDateTime.now());
         post.setUser(user);
         post.setSubreddit(subreddit);
@@ -98,7 +102,7 @@ public class PostService {
             throw new ContentUpdateNotAllowedException(ErrorMessages.CONTENT_UPDATE_NOT_ALLOWED);
         }
 
-        post.setDescription(postDto.text());
+        post.setDescription(postDto.description());
         post.setTitle(postDto.title());
 
         return PostMapper.postToPostDto(post);
