@@ -54,20 +54,20 @@ const Post = ({ post, deletePost }) => {
                             </div> :
                             <div className='flex space-x-1.5 items-center'>
                                 <img className='w-10 h-10' src={subredditIcon} alt='subreddit' />
-                                <span className='font-semibold'>r/AskReddit</span>
+                                <span className='font-semibold'>r/{post.subreddit.title}</span>
                             </div>}
 
                         <div className='font-light'>
                             {date}
                         </div>
                     </div>
-
+                    
                     <div className='text-lg font-semibold'>
                         {post.title}
                     </div>
 
                     <div className='font-light break-words'>
-                        {post.text}
+                        {post.description}
                     </div>
 
                     <div className='flex space-x-4 items-center'>

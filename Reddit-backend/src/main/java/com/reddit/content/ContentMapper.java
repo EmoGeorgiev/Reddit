@@ -3,6 +3,8 @@ package com.reddit.content;
 import com.reddit.comment.Comment;
 import com.reddit.content.dto.ContentDto;
 import com.reddit.post.Post;
+import com.reddit.subreddit.SubredditMapper;
+import com.reddit.subreddit.dto.SubredditDto;
 import com.reddit.user.UserMapper;
 
 public class ContentMapper {
@@ -20,7 +22,8 @@ public class ContentMapper {
                 content.getCreated(),
                 getTitle(content),
                 getText(content),
-                content.getScore()
+                content.getScore(),
+                getSubreddit(content)
         );
     }
 
@@ -42,5 +45,15 @@ public class ContentMapper {
             return c.getText();
         }
         return EMPTY_TEXT;
+    }
+
+    private static SubredditDto getSubreddit(Content content) {
+        if (content instanceof Post p) {
+            return SubredditMapper.subredditToSubredditDto(p.getSubreddit());
+        }
+        if (content instanceof Comment c) {
+            return SubredditMapper.subredditToSubredditDto(c.getPost().getSubreddit());
+        }
+        return null;
     }
 }

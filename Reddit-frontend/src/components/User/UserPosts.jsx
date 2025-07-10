@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import EmptyContent from '../Common/EmptyContent'
 import postService from '../../services/posts'
-import PostList from '../Post/PostList'
+import PostPage from '../Post/PostPage'
 
 const UserPosts = ({ profile }) => {
     const [isEmpty, setIsEmpty] = useState(true)
@@ -17,8 +17,7 @@ const UserPosts = ({ profile }) => {
     return (
         <div>
             {isEmpty && <EmptyContent text={`u/${profile.username} hasn't posted yet`} />}
-
-            <PostList query={profile.id} getPosts={getPostPage} />
+            <PostPage query={profile.id} getPosts={getPostPage} />
         </div>
     )
 }

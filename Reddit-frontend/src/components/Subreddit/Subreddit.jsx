@@ -6,7 +6,7 @@ import userService from '../../services/users'
 import postService from '../../services/posts'
 import MissingContent from '../Common/MissingContent'
 import SubredditPanel from './SubredditPanel'
-import PostList from '../Post/PostList'
+import PostPage from '../Post/PostPage'
 
 const Subreddit = () => {
     const [subreddit, setSubreddit] = useState(null)
@@ -93,7 +93,7 @@ const Subreddit = () => {
                             joinSubreddit={joinSubreddit} />
 
             <div className='border-t border-gray-300'>
-                <PostList query={subreddit.id} getPosts={getPosts} />
+                <PostPage query={subreddit.id} getPosts={getPosts} />
             </div>
         </div>
     )

@@ -1,6 +1,7 @@
 package com.reddit.content.dto;
 
 import com.reddit.content.ContentType;
+import com.reddit.subreddit.dto.SubredditDto;
 import com.reddit.user.dto.UserDto;
 
 import java.time.LocalDateTime;
@@ -12,5 +13,6 @@ public record ContentDto(
         LocalDateTime created,
         String title,
         String text,
-        int score) {
+        int score,
+        SubredditDto subredditDto) {
 }

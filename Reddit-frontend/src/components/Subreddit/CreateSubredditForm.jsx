@@ -10,6 +10,8 @@ const CreateSubredditForm = ({ addSubreddit, handleClose }) => {
         const subreddit = { title }
 
         addSubreddit(subreddit)
+
+        setTitle('')
     }
 
     return (

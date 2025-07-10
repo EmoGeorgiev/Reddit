@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Category } from '../../util/Category'
 import CategoryList from '../Category/CategoryList'
 import MissingContent from '../Common/MissingContent'
-import PostList from '../Post/PostList'
+import PostPage from '../Post/PostPage'
 import postService from '../../services/posts'
 import subredditService from '../../services/subreddits'
 import userService from '../../services/users'
@@ -16,33 +16,45 @@ const Search = () => {
     const navigate = useNavigate()
 
     const getPostsWhereTitleContainsWord = async (word, pageable) => {
-        const postPage = await postService.getPostsWhereTitleContainsWord(word, pageable)
-        
-        setIsEmpty(postPage.empty)
-        
-        return postPage
+        try {
+            const postPage = await postService.getPostsWhereTitleContainsWord(word, pageable)
+            
+            setIsEmpty(postPage.empty)
+            
+            return postPage
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const getSubredditsWhereTitleContainsWord = async (word, pageable) => {
-        const subredditPage = await subredditService.getSubredditsWhereTitleContainsWord(word, pageable)
-        
-        setIsEmpty(subredditPage.empty)
-        
-        return subredditPage
+        try {
+            const subredditPage = await subredditService.getSubredditsWhereTitleContainsWord(word, pageable)
+            
+            setIsEmpty(subredditPage.empty)
+            
+            return subredditPage
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const getUsersWhereUsernameContainsWord = async (word, pageable) => {
-        const userPage = await userService.getUsersWhereUsernameContainsWord(word, pageable)
-        
-        setIsEmpty(userPage.empty)
-        
-        return userPage
+        try {
+            const userPage = await userService.getUsersWhereUsernameContainsWord(word, pageable)
+            
+            setIsEmpty(userPage.empty)
+            
+            return userPage
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const categories = [Category.POSTS, Category.SUBREDDITS, Category.USERS]
 
     const categoryComponents = {
-        [Category.POSTS]: <PostList query={query} getPosts={getPostsWhereTitleContainsWord} />,
+        [Category.POSTS]: <PostPage query={query} getPosts={getPostsWhereTitleContainsWord} />,
         [Category.SUBREDDITS]: <SubredditList query={query} getSubreddits={getSubredditsWhereTitleContainsWord} />,
         [Category.USERS]: <UserList query={query} getUsers={getUsersWhereUsernameContainsWord} />
     }
