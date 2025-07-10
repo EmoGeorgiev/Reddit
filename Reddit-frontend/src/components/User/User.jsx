@@ -2,15 +2,15 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../Authentication/AuthContext'
 import { useEffect, useState } from 'react'
 import { Category } from '../../util/Category'
-import userService from '../../services/users'
 import MissingContent from '../Common/MissingContent'
+import CategoryList from '../Category/CategoryList'
 import UserPosts from './UserPosts'
 import UserComments from './UserComments'
 import UserSaved from './UserSaved'
 import UserUpvoted from './UserUpvoted'
 import UserDownvoted from './UserDownvoted'
+import userService from '../../services/users'
 import userIcon from '../../assets/user-icon.svg'
-import CategoryList from '../Category/CategoryList'
 
 const User = () => {
     const [profile, setProfile] = useState(null)
@@ -23,11 +23,11 @@ const User = () => {
     const categories = user?.id === profile?.id ? [...main, ...extra] : main
 
     const categoryComponents = {
-        [Category.COMMENTS]: <UserComments id={profile?.id} />,
-        [Category.POSTS]: <UserPosts id={profile?.id} />,
-        [Category.UPVOTED]: <UserUpvoted id={profile?.id} />,
-        [Category.DOWNVOTED]: <UserDownvoted id={profile?.id} />,
-        [Category.SAVED]: <UserSaved id={profile?.id} />
+        [Category.COMMENTS]: <UserComments profile={profile} />,
+        [Category.POSTS]: <UserPosts profile={profile} />,
+        [Category.UPVOTED]: <UserUpvoted profile={profile} />,
+        [Category.DOWNVOTED]: <UserDownvoted profile={profile} />,
+        [Category.SAVED]: <UserSaved profile={profile} />
     }
     
     useEffect(() => {
@@ -42,6 +42,9 @@ const User = () => {
 
         getUser()
     }, [username])
+
+    
+
  
     if (profile === null) {
         return (

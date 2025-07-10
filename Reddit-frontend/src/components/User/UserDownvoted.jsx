@@ -1,7 +1,11 @@
-const UserDownvoted = ({ id }) => {
+import { useState } from 'react'
+import EmptyContent from '../Common/EmptyContent'
+
+const UserDownvoted = ({ profile }) => {
+    const [isEmpty, setIsEmpty] = useState(true)
     return (
         <div>
-            Downvoted
+            {isEmpty && <EmptyContent text={`u/${profile.username} hasn't downvoted yet`} />}
         </div>
     )
 }

@@ -30,7 +30,7 @@ const SubredditList = ({ query, getSubreddits }) => {
     }
 
     return (
-        <div className='my-4'>
+        <div>
             <ul>
                 {subreddits.map(subreddit => 
                         <li className='border-b border-gray-300' key={subreddit.id}>

@@ -31,7 +31,7 @@ const UserList = ({ query, getUsers }) => {
 
     return (
         <div>
-            <ul className='my-4'>
+            <ul>
                 {users.map(user => 
                         <li className='border-b border-gray-300' key={user.id}>
                             <Link to={`/users/${user.username}`}>
