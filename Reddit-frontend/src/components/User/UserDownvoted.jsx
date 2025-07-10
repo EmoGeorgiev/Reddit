@@ -4,7 +4,7 @@ import UserVoted from './UserVoted'
 import voteService from '../../services/votes'
 
 const UserUpvoted = ({ profile }) => {
-    const [isEmpty, setIsEmpty] = useState(true)
+    const [isEmpty, setIsEmpty] = useState(false)
 
     const getDownvotedPage = async (id, pageable) => {
         try {

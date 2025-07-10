@@ -1,11 +1,66 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { contentToPost, contentToComment } from '../../util/contentMapper'
 import EmptyContent from '../Common/EmptyContent'
+import savedContentService from '../../services/savedContents'
+import Pagination from '../Common/Pagination'
+import Post from '../Post/Post'
 
 const UserSaved = ({ profile }) => {
-    const [isEmpty, setIsEmpty] = useState(true)
+    const [contents, setContents] = useState([])
+    const [isEmpty, setIsEmpty] = useState(false)
+    const [page, setPage] = useState(0)
+    const [isFirst, setIsFirst] = useState(true)
+    const [isLast, setIsLast] = useState(true)
+
+    useEffect(() => {
+        const getSavedContents = async () => {
+            try {
+                const savedContentPage = await savedContentService.getSavedContentByUserId(profile.id, { page })
+
+                setContents(savedContentPage.content.map(savedContent => savedContent.contentDto))
+                setIsFirst(savedContentPage.first)
+                setIsLast(savedContentPage.last)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        getSavedContents()
+    }, [profile.id, page])
+
+
+    const handlePageChange = (change) => {
+        setPage(page + change)
+    }
+    
     return (
         <div>
             {isEmpty && <EmptyContent text={`u/${profile.username} hasn't saved yet`} />}
+            
+            <ul>
+                {contents.map(content => {
+                    if (content.contentType === 'POST') {
+                        const post = contentToPost(content)
+                        return (
+                            <li key={post.id}>
+                                <Post post={post} deletePost={null} />
+                            </li>
+                        )
+                    }
+                    
+                    const comment = contentToComment(content)
+
+                    return (
+                        <li key={comment.id}>
+                            {comment.title}
+                            {comment.score}
+                            {comment.text}
+                        </li>
+                    )
+                })}
+            </ul>
+
+            <Pagination handlePageChange={handlePageChange} isFirst={isFirst} isLast={isLast} />
         </div>
     )
 }

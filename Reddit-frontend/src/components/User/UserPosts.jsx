@@ -4,7 +4,7 @@ import postService from '../../services/posts'
 import PostPage from '../Post/PostPage'
 
 const UserPosts = ({ profile }) => {
-    const [isEmpty, setIsEmpty] = useState(true)
+    const [isEmpty, setIsEmpty] = useState(false)
 
     const getPostPage = async (id, pageable) => {
         const postPage = await postService.getPostsByUserId(id, pageable)

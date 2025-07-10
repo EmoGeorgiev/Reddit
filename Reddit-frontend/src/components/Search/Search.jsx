@@ -11,7 +11,7 @@ import SubredditList from '../Subreddit/SubredditList'
 import UserList from '../User/UserList'
 
 const Search = () => {
-    const [isEmpty, setIsEmpty] = useState(true)
+    const [isEmpty, setIsEmpty] = useState(false)
     const { query } = useParams()
     const navigate = useNavigate()
 

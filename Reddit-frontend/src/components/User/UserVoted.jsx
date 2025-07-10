@@ -4,7 +4,7 @@ import PostList from '../Post/PostList'
 import Pagination from '../Common/Pagination'
 
 const UserVoted = ({ profile, getVoted }) => {
-    const [content, setContent] = useState([])
+    const [contents, setContents] = useState([])
     const [page, setPage] = useState(0)
     const [isFirst, setIsFirst] = useState(true)
     const [isLast, setIsLast] = useState(true)
@@ -14,7 +14,7 @@ const UserVoted = ({ profile, getVoted }) => {
             try {
                 const votedPage = await getVoted(profile.id, { page })
                 
-                setContent(votedPage.content
+                setContents(votedPage.content
                                     .map(vote => vote.contentDto)
                                     .filter(content => content.contentType === 'POST')
                                     .map(content => contentToPost(content)))
@@ -34,7 +34,7 @@ const UserVoted = ({ profile, getVoted }) => {
 
     return (
         <div>
-            <PostList posts={content} />
+            <PostList posts={contents} deletePost={null} />
             <Pagination handlePageChange={handlePageChange} isFirst={isFirst} isLast={isLast} />
         </div>
     )
