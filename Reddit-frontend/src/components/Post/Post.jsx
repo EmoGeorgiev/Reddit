@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../Authentication/AuthContext'
 import userIcon from '../../assets/user-icon.svg'
 import Vote from '../Common/Vote'
@@ -14,6 +14,7 @@ const Post = ({ post, deletePost }) => {
     const { user } = useAuth()
     const date = post.created.split('T')[0]
     const location = useLocation()
+    const navigate = useNavigate()
     
     useEffect(() => {
         const getModerators = async () => {
@@ -42,9 +43,14 @@ const Post = ({ post, deletePost }) => {
         }
     }
 
+    const handleRedirect = () => {
+        navigate(`/r/${post.subreddit.title}/comments/${post.id}`)
+    }
+
     return (
         <>    
-            <div className='w-full h-auto my-4 hover:bg-gray-100 overflow-hidden rounded-2xl cursor-pointer'>
+            <div className='w-full h-auto my-4 hover:bg-gray-100 overflow-hidden rounded-2xl cursor-pointer'
+                onClick={handleRedirect}>
                 <div className='mx-4 py-4 h-full flex flex-col space-y-2.5 '>
                     <div className='flex justify-between items-center'>
                         {showUser() ? 
@@ -72,7 +78,7 @@ const Post = ({ post, deletePost }) => {
 
                     <div className='flex space-x-4 items-center'>
                         <Vote contentId={post.id} contentScore={post.score} />
-                        <CommentCount count={post.commentCount} />
+                        <CommentCount count={post.commentCount} handleClick={handleRedirect} />
                         <Save contentId={post.id} />
                         {(user?.id === post.user.id || moderators.has(user?.id)) && <DeleteContent handleDelete={handleDelete} />}
                     </div>

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Post from '../Post/Post'
 import MissingContent from '../Common/MissingContent'
 import CommentList from './CommentList'
+import CreateCommentForm from './CreateCommentForm'
 import postService from '../../services/posts'
 import commentService from '../../services/comments'
 
@@ -17,7 +18,9 @@ const CommentSection = () => {
             try {
                 const newPost = await postService.getPost(postId)
                 
-                setPost(newPost)
+                if (newPost.subreddit.title === name) {
+                    setPost(newPost)
+                }
             } catch (error) {
                 console.log(error)
             }
@@ -31,8 +34,6 @@ const CommentSection = () => {
             try {
                 const newComments = await commentService.getCommentsByPostId(postId, { 'page': 0 })
 
-                console.log(newComments.content)
-
                 setComments(newComments.content)
             } catch (error) {
                 console.log(error)
@@ -42,6 +43,19 @@ const CommentSection = () => {
         getComments()
     }, [postId])
 
+
+    const createComment = async (comment) => {
+        try {
+            const newComment = await commentService.addComment(comment)
+            
+            console.log(comment)
+
+            setComments([...comments, newComment])
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     if (post === null) {
         return <MissingContent heading='Post not found' 
                                 text={`There aren't any posts on ${name} that match your description`}
@@ -50,9 +64,10 @@ const CommentSection = () => {
     }
 
     return (
-        <div className='w-4/5 mx-auto'>
+        <div className='w-4/5 h-full mx-auto'>
+            r/{post.subreddit.title}
             <Post post={post} deletePost={null} />
-
+            <CreateCommentForm createComment={createComment} postId={postId} parentId={null} />
             <CommentList comments={comments} />
         </div>
     )
