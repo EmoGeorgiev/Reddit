@@ -52,13 +52,13 @@ public class CommentServiceTest {
         user.setId(id);
         user.setUsername("username");
         user.setPassword("encoded password");
-        user.getComments().add(firstComment);
+        user.getContents().add(firstComment);
 
         post = new Post();
         post.setId(id);
         post.setUser(user);
         post.setCreated(LocalDateTime.now());
-        post.setText("post description");
+        post.setDescription("post description");
         post.setTitle("post title");
 
         firstComment = new Comment();
@@ -116,7 +116,7 @@ public class CommentServiceTest {
 
         Page<Comment> emptyPage = getPage(firstComment, count, pageable);
 
-        when(commentRepository.findByPostId(id, pageable))
+        when(commentRepository.findByPostIdAndParentIsNull(id, pageable))
                 .thenReturn(emptyPage);
 
         Page<CommentDto> result = commentService.getCommentsByPostId(id, pageable);
@@ -126,7 +126,7 @@ public class CommentServiceTest {
         assertTrue(result.isEmpty());
 
         verify(commentRepository)
-                .findByPostId(id, pageable);
+                .findByPostIdAndParentIsNull(id, pageable);
     }
 
     @Test
@@ -136,7 +136,7 @@ public class CommentServiceTest {
 
         Page<Comment> pageWithOneComment = getPage(firstComment, count, pageable);
 
-        when(commentRepository.findByPostId(id, pageable))
+        when(commentRepository.findByPostIdAndParentIsNull(id, pageable))
                 .thenReturn(pageWithOneComment);
 
         Page<CommentDto> result = commentService.getCommentsByPostId(id, pageable);
@@ -149,7 +149,7 @@ public class CommentServiceTest {
         assertAll(commentDtoAssertions(firstCommentDto, resultCommentDto));
 
         verify(commentRepository)
-                .findByPostId(id, pageable);
+                .findByPostIdAndParentIsNull(id, pageable);
     }
 
     private Executable[] commentAssertions(Comment expected, Comment actual) {

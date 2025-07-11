@@ -35,7 +35,7 @@ const CreateCommentForm = ({ createComment, postId, parentId }) => {
     }
 
     return (
-        <div className={`my-3 ${isFocused ? 'h-48' : 'h-12'}`}>
+        <div className={`m-3 ${isFocused ? 'h-48' : 'h-12'}`}>
             <form className='h-full flex flex-col' onSubmit={handleCreateComment}>
                 <textarea className='h-full p-2 flex-1 border border-gray-300 focus:outline-none focus:border-gray-500 rounded-2xl resize-none'
                             value={text}

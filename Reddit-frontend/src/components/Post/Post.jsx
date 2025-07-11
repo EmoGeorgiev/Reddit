@@ -51,7 +51,7 @@ const Post = ({ post, deletePost }) => {
         <>    
             <div className='w-full h-auto my-4 hover:bg-gray-100 overflow-hidden rounded-2xl cursor-pointer'
                 onClick={handleRedirect}>
-                <div className='mx-4 py-4 h-full flex flex-col space-y-2.5 '>
+                <div className='mx-4 py-4 h-full flex flex-col space-y-2.5'>
                     <div className='flex justify-between items-center'>
                         {showUser() ? 
                             <div className='flex space-x-1.5 items-center'>

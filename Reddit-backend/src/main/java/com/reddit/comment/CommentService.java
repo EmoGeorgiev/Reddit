@@ -48,7 +48,7 @@ public class CommentService {
     @Transactional(readOnly = true)
     public Page<CommentDto> getCommentsByPostId(Long postId, Pageable pageable) {
         return commentRepository
-                .findByPostId(postId, pageable)
+                .findByPostIdAndParentIsNull(postId, pageable)
                 .map(CommentMapper::commentToCommentDto);
     }
 

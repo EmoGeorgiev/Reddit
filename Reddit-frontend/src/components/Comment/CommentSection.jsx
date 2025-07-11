@@ -64,8 +64,8 @@ const CommentSection = () => {
     }
 
     return (
-        <div className='w-4/5 h-full mx-auto'>
-            r/{post.subreddit.title}
+        <div className='w-4/5 h-full mx-auto '>
+            {/* r/{post.subreddit.title} */}
             <Post post={post} deletePost={null} />
             <CreateCommentForm createComment={createComment} postId={postId} parentId={null} />
             <CommentList comments={comments} />
