@@ -8,6 +8,7 @@ import CreateCommentForm from './CreateCommentForm'
 import commentService from '../../services/comments'
 
 const Comment = ({ comment }) => {
+    const [replies, setReplies] = useState(comment.replies)
     const [isOpen, setIsOpen] = useState(false)
     const { user } = useAuth()
     const date = comment.created.split('T')[0]
@@ -21,13 +22,15 @@ const Comment = ({ comment }) => {
             const newComment = await commentService.addComment(comment)
             
             console.log(newComment)
+
+            setReplies([...replies, newComment])
         } catch (error) {
             console.log(error)
         }
     }
 
     return (
-        <div className='m-3 p-4 flex flex-col space-y-2.5'>
+        <div className='m-3 p-4 flex flex-col space-y-2.5 border border-gray-300 rounded-4xl'>
             <div className='flex justify-between items-center'>
                 <div className='flex space-x-1.5 items-center'>
                     <img className='w-10 h-10' src={userIcon} alt='user icon' />
@@ -53,9 +56,8 @@ const Comment = ({ comment }) => {
             
             {isOpen && <CreateCommentForm createComment={createComment} postId={comment.postId} parentId={comment.id} />}
 
-            {comment.replies && comment.replies.length > 0 && (
-                comment.replies.map(reply => <Comment key={reply.id} comment={reply} />)
-            )}
+            {replies && replies.length > 0 && (
+                replies.map(reply => <Comment key={reply.id} comment={reply} />))}
         </div>
     )
 }
