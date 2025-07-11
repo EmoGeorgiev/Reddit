@@ -12,6 +12,7 @@ import HomeFeed from './Feed/HomeFeed'
 import User from './User/User'
 import Search from './Search/Search'
 import CreatePostForm from './Post/CreatePostForm'
+import CommentSection from './Comment/CommentSection'
 
 const Layout = () => {
     const [collapsed, setCollapsed] = useState(false)
@@ -32,6 +33,7 @@ const Layout = () => {
                         <Route path='/search/:query' element={<Search />} />
                         <Route path='/r/:name' element={<Subreddit />} />
                         <Route path='/r/:name/submit' element={<CreatePostForm />} />
+                        <Route path='/r/:name/comments/:postId' element={<CommentSection />} />
                         <Route path='/users/:username' element={<User />} />
                         <Route path='/settings' element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                     </Routes>

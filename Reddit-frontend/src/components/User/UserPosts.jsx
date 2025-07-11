@@ -14,11 +14,18 @@ const UserPosts = ({ profile }) => {
         return postPage
     }
 
+    if (isEmpty) {
+        return (
+            <>
+                <EmptyContent text={`u/${profile.username} hasn't posted yet`} />
+            </>
+        )
+    }
+
     return (
-        <div>
-            {isEmpty && <EmptyContent text={`u/${profile.username} hasn't posted yet`} />}
+        <>
             <PostPage query={profile.id} getPosts={getPostPage} />
-        </div>
+        </>
     )
 }
 

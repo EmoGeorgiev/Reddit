@@ -17,6 +17,7 @@ const UserSaved = ({ profile }) => {
             try {
                 const savedContentPage = await savedContentService.getSavedContentByUserId(profile.id, { page })
 
+                setIsEmpty(savedContentPage.empty)
                 setContents(savedContentPage.content.map(savedContent => savedContent.contentDto))
                 setIsFirst(savedContentPage.first)
                 setIsLast(savedContentPage.last)
@@ -32,11 +33,17 @@ const UserSaved = ({ profile }) => {
     const handlePageChange = (change) => {
         setPage(page + change)
     }
+
+    if (isEmpty) {
+        return (
+            <>
+                <EmptyContent text={`u/${profile.username} hasn't saved yet`} />
+            </>
+        )
+    }
     
     return (
         <div>
-            {isEmpty && <EmptyContent text={`u/${profile.username} hasn't saved yet`} />}
-            
             <ul>
                 {contents.map(content => {
                     if (content.contentType === 'POST') {

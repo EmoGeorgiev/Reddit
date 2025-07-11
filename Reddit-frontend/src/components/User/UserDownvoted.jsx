@@ -18,11 +18,18 @@ const UserUpvoted = ({ profile }) => {
         }
     }
 
+    if (isEmpty) {
+        return (
+            <>
+                <EmptyContent text={`u/${profile.username} hasn't downvoted yet`} />
+            </>
+        )
+    }
+
     return (
-        <div>
-            {isEmpty && <EmptyContent text={`u/${profile.username} hasn't downvoted yet`} />}
+        <>
             <UserVoted profile={profile} getVoted={getDownvotedPage} />
-        </div>
+        </>
     )
 }
 
