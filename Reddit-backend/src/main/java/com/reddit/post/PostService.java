@@ -113,7 +113,7 @@ public class PostService {
         RedditUser user = userService.getUserEntity(userId);
         Subreddit subreddit = post.getSubreddit();
 
-        if (!post.getUser().equals(user)) {
+        if (post.getUser() == null || !post.getUser().equals(user)) {
             if (!subreddit.getModerators().contains(user)) {
                 throw new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES);
             }

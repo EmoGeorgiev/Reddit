@@ -1,6 +1,7 @@
 package com.reddit.comment;
 
 import com.reddit.comment.dto.CommentDto;
+import com.reddit.subreddit.SubredditMapper;
 import com.reddit.user.UserMapper;
 
 import java.util.ArrayList;
@@ -25,7 +26,8 @@ public class CommentMapper {
                 comment.isDeleted(),
                 replies,
                 parentId,
-                comment.getPost().getId()
+                comment.getPost().getId(),
+                SubredditMapper.subredditToSubredditDto(comment.getPost().getSubreddit())
         );
     }
 

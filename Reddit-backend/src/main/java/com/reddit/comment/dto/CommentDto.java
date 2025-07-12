@@ -1,6 +1,7 @@
 package com.reddit.comment.dto;
 
 
+import com.reddit.subreddit.dto.SubredditDto;
 import com.reddit.user.dto.UserDto;
 import com.reddit.util.ValidationConstants;
 import jakarta.validation.constraints.NotBlank;
@@ -24,5 +25,6 @@ public record CommentDto(
         List<CommentDto> replies,
         Long parentId,
         @NotNull(message = "{postId.required}")
-        Long postId) {
+        Long postId,
+        SubredditDto subreddit) {
 }

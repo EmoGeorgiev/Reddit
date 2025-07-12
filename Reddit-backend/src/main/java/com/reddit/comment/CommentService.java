@@ -96,17 +96,18 @@ public class CommentService {
 
     public CommentDto deleteComment(Long commentId, Long userId) {
         Comment comment = getCommentEntity(commentId);
-        RedditUser user = userService.getUserEntity(userId);
-        Subreddit subreddit = comment.getPost().getSubreddit();
-
-        if (!comment.getUser().equals(user)) {
-            if (!subreddit.getModerators().contains(user)) {
-                throw new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES);
-            }
-        }
 
         if (comment.isDeleted()) {
             return CommentMapper.commentToCommentDto(comment);
+        }
+
+        RedditUser user = userService.getUserEntity(userId);
+        Subreddit subreddit = comment.getPost().getSubreddit();
+
+        if (comment.getUser() == null || !comment.getUser().equals(user)) {
+            if (!subreddit.getModerators().contains(user)) {
+                throw new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES);
+            }
         }
 
         comment.setText(Comment.DELETED_TEXT);
