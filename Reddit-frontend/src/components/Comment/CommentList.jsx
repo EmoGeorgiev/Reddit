@@ -1,16 +1,14 @@
 import Comment from './Comment'
 
-const CommentList = ({ comments }) => {
+const CommentList = ({ comments, deleteComment }) => {
     return (
-        <>
-            <ul className='mb-8'>
-                {comments.map(comment => 
-                    <li key={comment.id}>
-                        <Comment comment={comment} />
-                    </li>
-                )}
-            </ul>
-        </>
+        <ul className='mb-8'>
+            {comments.map(comment => 
+                <li key={comment.id}>
+                    <Comment comment={comment} deleteComment={deleteComment} />
+                </li>
+            )}
+        </ul>
     )
 }
 

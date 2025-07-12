@@ -1,18 +1,22 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../Authentication/AuthContext'
-import userIcon from '../../assets/user-icon.svg'
 import Vote from '../Common/Vote'
 import Save from '../Common/Save'
 import CommentCount from '../Comment/CommentCount'
-import DeleteContent from '../Common/DeleteContent'
+import DeleteContent from '../Content/DeleteContent'
+import ContentDate from '../Content/ContentDate'
+import ContentText from '../Content/ContentText'
+import ContentButtonPanel from '../Content/ContentButtonPanel'
+import ContentUserHeader from '../Content/ContentUserHeader'
+import ContentTitle from '../Content/ContentTitle'
 import userService from '../../services/users'
-import subredditIcon from '../../assets/subreddit-icon.svg'
+import ContentHeader from '../Content/ContentHeader'
+import ContentSubredditHeader from '../Content/ContentSubredditHeader'
 
 const Post = ({ post, deletePost }) => {
     const [moderators, setModerators] = useState(new Set())
     const { user } = useAuth()
-    const date = post.created.split('T')[0]
     const location = useLocation()
     const navigate = useNavigate()
     
@@ -52,36 +56,23 @@ const Post = ({ post, deletePost }) => {
             <div className='w-full h-auto my-4 hover:bg-gray-100 overflow-hidden rounded-2xl cursor-pointer'
                 onClick={handleRedirect}>
                 <div className='mx-4 py-4 h-full flex flex-col space-y-2.5'>
-                    <div className='flex justify-between items-center'>
+                    <ContentHeader>
                         {showUser() ? 
-                            <div className='flex space-x-1.5 items-center'>
-                                <img className='w-10 h-10' src={userIcon} alt='user icon' />
-                                <span className='font-semibold'>u/{post.user.username}</span>
-                            </div> :
-                            <div className='flex space-x-1.5 items-center'>
-                                <img className='w-10 h-10' src={subredditIcon} alt='subreddit' />
-                                <span className='font-semibold'>r/{post.subreddit.title}</span>
-                            </div>}
+                            <ContentUserHeader user={post.user} /> :
+                            <ContentSubredditHeader subreddit={post.subreddit} />}
+                        <ContentDate created={post.created} />
+                    </ContentHeader>
 
-                        <div className='font-light'>
-                            {date}
-                        </div>
-                    </div>
-                    
-                    <div className='text-lg font-semibold'>
-                        {post.title}
-                    </div>
+                    <ContentTitle title={post.title} />
 
-                    <div className='font-light break-words'>
-                        {post.description}
-                    </div>
+                    <ContentText text={post.description} />
 
-                    <div className='flex space-x-4 items-center'>
+                    <ContentButtonPanel>
                         <Vote contentId={post.id} contentScore={post.score} />
                         <CommentCount count={post.commentCount} handleClick={handleRedirect} />
                         <Save contentId={post.id} />
-                        {(user?.id === post.user.id || moderators.has(user?.id)) && <DeleteContent handleDelete={handleDelete} />}
-                    </div>
+                        <DeleteContent contentId={post.id} subreddit={post.subreddit} handleDelete={handleDelete} />
+                    </ContentButtonPanel>
                 </div>
             </div>
 

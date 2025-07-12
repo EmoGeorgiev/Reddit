@@ -33,7 +33,6 @@ const CommentSection = () => {
         const getComments = async () => {
             try {
                 const newComments = await commentService.getCommentsByPostId(postId, { 'page': 0 })
-
                 setComments(newComments.content)
             } catch (error) {
                 console.log(error)
@@ -56,6 +55,16 @@ const CommentSection = () => {
         }
     }
 
+    const deleteComment = async (commentId, userId) => {
+        try {
+            const deletedComment = await commentService.deleteComment(commentId, userId)
+
+            setComments(comments.map(comment => comment.id === commentId ? deletedComment : comment))
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     if (post === null) {
         return <MissingContent heading='Post not found' 
                                 text={`There aren't any posts on ${name} that match your description`}
@@ -68,7 +77,7 @@ const CommentSection = () => {
             {/* r/{post.subreddit.title} */}
             <Post post={post} deletePost={null} />
             <CreateCommentForm createComment={createComment} postId={postId} parentId={null} />
-            <CommentList comments={comments} />
+            <CommentList comments={comments} deleteComment={deleteComment} />
         </div>
     )
 }

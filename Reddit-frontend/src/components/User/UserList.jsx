@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import Pagination from '../Common/Pagination'
-import userIcon from '../../assets/user-icon.svg'
+import ContentUserHeader from '../Content/ContentUserHeader'
 
 const UserList = ({ query, getUsers }) => {
     const [users, setUsers] = useState([])
@@ -34,16 +33,9 @@ const UserList = ({ query, getUsers }) => {
             <ul>
                 {users.map(user => 
                         <li className='border-b border-gray-300' key={user.id}>
-                            <Link to={`/users/${user.username}`}>
-                                <div className='p-4 hover:bg-gray-100 rounded-2xl overflow-clip'>
-                                    <div className='flex items-center space-x-2'>
-                                        <img className='w-12 h-12' src={userIcon} alt='subreddit' />
-                                        <h2 className='font-semibold'>
-                                            u/{user.username}
-                                        </h2>
-                                    </div>
-                                </div>
-                            </Link>
+                            <div className='p-4 hover:bg-gray-100 rounded-2xl overflow-clip'>
+                                <ContentUserHeader user={user} />
+                            </div>
                         </li>)}
             </ul>
 
