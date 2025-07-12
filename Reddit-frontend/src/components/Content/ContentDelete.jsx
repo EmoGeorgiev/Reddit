@@ -3,7 +3,7 @@ import { useAuth } from '../Authentication/AuthContext'
 import deleteIcon from '../../assets/delete-icon.svg'
 import userService from '../../services/users'
 
-const DeleteContent = ({ contentId, subreddit, handleDelete }) => {
+const ContentDelete = ({ creatorId, subreddit, handleDelete }) => {
     const [moderators, setModerators] = useState(new Set())
     const { user } = useAuth()
 
@@ -11,7 +11,7 @@ const DeleteContent = ({ contentId, subreddit, handleDelete }) => {
         const getModerators = async () => {
             try {
                 const newModerators = await userService.getModeratorsBySubredditTitle(subreddit.title)
-            
+                
                 setModerators(new Set(newModerators.map(moderator => moderator.id)))
             } catch (error) {
                 console.log(error)
@@ -21,7 +21,7 @@ const DeleteContent = ({ contentId, subreddit, handleDelete }) => {
         getModerators()
     }, [])
 
-    if (user?.id !== contentId && !moderators.has(user?.id)) {
+    if (user?.id !== creatorId && !moderators.has(user?.id)) {
         return <></>
     }
 
@@ -34,4 +34,4 @@ const DeleteContent = ({ contentId, subreddit, handleDelete }) => {
     )
 }
 
-export default DeleteContent
+export default ContentDelete

@@ -55,7 +55,7 @@ public class CommentService {
     @Transactional(readOnly = true)
     public Page<CommentDto> getCommentsByUserId(Long userId, Pageable pageable) {
         return commentRepository
-                .findByUserId(userId, pageable)
+                .findByUserIdAndIsDeletedFalse(userId, pageable)
                 .map(CommentMapper::commentToCommentDto);
     }
 

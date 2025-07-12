@@ -1,6 +1,6 @@
 const ContentText = ({ text }) => {
     return (
-        <div className='font-light break-words'>
+        <div className='mx-2 font-light break-words'>
             {text}
         </div>
     )

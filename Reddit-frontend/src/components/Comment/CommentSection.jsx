@@ -10,6 +10,7 @@ import commentService from '../../services/comments'
 const CommentSection = () => {
     const [post, setPost] = useState(null)
     const [comments, setComments] = useState([])
+    const [isOpen, setIsOpen] = useState(false)
     const { name, postId } = useParams()
     const navigate = useNavigate()
 
@@ -42,12 +43,18 @@ const CommentSection = () => {
         getComments()
     }, [postId])
 
+    const deletePost = async () => {
+        try {
+            
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
     const createComment = async (comment) => {
         try {
             const newComment = await commentService.addComment(comment)
-            
-            console.log(comment)
 
             setComments([...comments, newComment])
         } catch (error) {
@@ -58,7 +65,7 @@ const CommentSection = () => {
     const deleteComment = async (commentId, userId) => {
         try {
             const deletedComment = await commentService.deleteComment(commentId, userId)
-
+            console.log(deletedComment)
             setComments(comments.map(comment => comment.id === commentId ? deletedComment : comment))
         } catch (error) {
             console.log(error)
@@ -74,9 +81,8 @@ const CommentSection = () => {
 
     return (
         <div className='w-4/5 h-auto mx-auto'>
-            {/* r/{post.subreddit.title} */}
-            <Post post={post} deletePost={null} />
-            <CreateCommentForm createComment={createComment} postId={postId} parentId={null} />
+            <Post post={post} deletePost={deletePost} />
+            <CreateCommentForm isOpen={isOpen} setIsOpen={setIsOpen} createComment={createComment} postId={postId} parentId={null} />
             <CommentList comments={comments} deleteComment={deleteComment} />
         </div>
     )

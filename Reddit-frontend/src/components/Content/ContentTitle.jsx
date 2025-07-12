@@ -1,6 +1,6 @@
 const ContentTitle = ({ title }) => {
     return (
-        <div className='text-lg font-semibold'>
+        <div className='mx-2 text-lg font-semibold'>
             {title}
         </div>
     )

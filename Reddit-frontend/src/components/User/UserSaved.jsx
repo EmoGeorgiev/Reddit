@@ -4,6 +4,7 @@ import EmptyContent from '../Common/EmptyContent'
 import savedContentService from '../../services/savedContents'
 import Pagination from '../Common/Pagination'
 import Post from '../Post/Post'
+import Comment from '../Comment/Comment'
 
 const UserSaved = ({ profile }) => {
     const [contents, setContents] = useState([])
@@ -59,9 +60,7 @@ const UserSaved = ({ profile }) => {
 
                     return (
                         <li key={comment.id}>
-                            {comment.title}
-                            {comment.score}
-                            {comment.text}
+                            <Comment comment={comment} deleteComment={null} />
                         </li>
                     )
                 })}

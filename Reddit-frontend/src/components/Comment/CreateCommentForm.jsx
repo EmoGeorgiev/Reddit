@@ -1,17 +1,16 @@
 import { useState } from 'react'
 import { useAuth } from '../Authentication/AuthContext'
 
-const CreateCommentForm = ({ createComment, postId, parentId }) => {
+const CreateCommentForm = ({ isOpen, setIsOpen, createComment, postId, parentId }) => {
     const [text, setText] = useState('')
-    const [isFocused, setIsFocused] = useState(false)
     const { user } = useAuth()
 
     const enableFocus = () => {
-        setIsFocused(true)
+        setIsOpen(true)
     }
 
     const disableFocus = () => {
-        setIsFocused(false)
+        setIsOpen(false)
         setText('')
     }
 
@@ -35,7 +34,7 @@ const CreateCommentForm = ({ createComment, postId, parentId }) => {
     }
 
     return (
-        <div className={`m-3 ${isFocused ? 'h-48' : 'h-12'}`}>
+        <div className={`my-8 ${isOpen ? 'h-48' : 'h-12'}`}>
             <form className='h-full flex flex-col' onSubmit={handleCreateComment}>
                 <textarea className='h-full p-2 flex-1 border border-gray-300 focus:outline-none focus:border-gray-500 rounded-2xl resize-none'
                             value={text}
@@ -46,7 +45,7 @@ const CreateCommentForm = ({ createComment, postId, parentId }) => {
 
                 </textarea>
 
-                {isFocused && 
+                {isOpen && 
                     <div className='mt-2 flex justify-end'>
                         <button className='active-form-cancel-btn' type='button'
                                 onClick={disableFocus}>

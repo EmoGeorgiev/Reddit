@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useAuth } from '../Authentication/AuthContext'
 import Vote from '../Common/Vote'
 import Save from '../Common/Save'
-import DeleteContent from '../Content/DeleteContent'
+import ContentDelete from '../Content/ContentDelete'
 import CreateCommentForm from './CreateCommentForm'
 import ContentDate from '../Content/ContentDate'
 import ContentText from '../Content/ContentText'
@@ -10,6 +10,8 @@ import ContentButtonPanel from '../Content/ContentButtonPanel'
 import ContentHeader from '../Content/ContentHeader'
 import ContentUserHeader from '../Content/ContentUserHeader'
 import commentService from '../../services/comments'
+import ContentEdit from '../Content/ContentEdit'
+import ReplyButton from './ReplyButton'
 
 const Comment = ({ comment, deleteComment }) => {
     const [replies, setReplies] = useState(comment.replies)
@@ -30,7 +32,7 @@ const Comment = ({ comment, deleteComment }) => {
     }
 
     return (
-        <div className='m-3 p-4 flex flex-col space-y-2.5 border border-gray-300 rounded-4xl'>
+        <div className='my-4 p-4 flex flex-col space-y-2.5 border border-gray-300 rounded-4xl'>
             <ContentHeader>
                 <ContentUserHeader user={comment.user} />
                 <ContentDate created={comment.created} />
@@ -38,16 +40,16 @@ const Comment = ({ comment, deleteComment }) => {
 
             <ContentText text={comment.text} />
             
-            <ContentButtonPanel>
-                <Vote contentId={comment.id} contentScore={comment.score} />
-                <Save contentId={comment.id} />
-                <button onClick={() => setIsOpen(!isOpen)}>
-                    {isOpen ? 'Cancel reply' : 'Reply'}
-                </button>
-                {!comment.isDeleted && <DeleteContent contentId={comment.id} subreddit={comment.subreddit} handleDelete={handleDelete} />}
-            </ContentButtonPanel>
+            {!comment.isDeleted && 
+                <ContentButtonPanel>
+                    <Vote contentId={comment.id} contentScore={comment.score} />
+                    <Save contentId={comment.id} />
+                    <ReplyButton handleOpen={() => setIsOpen(true)} />
+                    <ContentEdit creatorId={comment.user.id} handleEdit={null} />
+                    <ContentDelete creatorId={comment.user.id} subreddit={comment.subreddit} handleDelete={handleDelete} />
+                </ContentButtonPanel>}
             
-            {isOpen && <CreateCommentForm createComment={createComment} postId={comment.postId} parentId={comment.id} />}
+            {isOpen && <CreateCommentForm isOpen={isOpen} setIsOpen={setIsOpen} createComment={createComment} postId={comment.postId} parentId={comment.id} />}
 
             {replies && replies.length > 0 && (
                 replies.map(reply => <Comment key={reply.id} comment={reply} deleteComment={deleteComment} />))}

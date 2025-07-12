@@ -4,7 +4,7 @@ const CommentList = ({ comments, deleteComment }) => {
     return (
         <ul className='mb-8'>
             {comments.map(comment => 
-                <li key={comment.id}>
+                <li key={JSON.stringify(comment)}>
                     <Comment comment={comment} deleteComment={deleteComment} />
                 </li>
             )}
