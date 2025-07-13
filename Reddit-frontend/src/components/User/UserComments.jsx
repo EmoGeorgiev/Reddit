@@ -28,6 +28,20 @@ const UserComments = ({ profile }) => {
         getComments()
     }, [profile.id, page])
 
+    const handlePageChange = (change) => {
+        setPage(page + change)
+    }
+
+    const deleteComment = async (commentId, userId) => {
+        try {
+            await commentService.deleteComment(commentId, userId)
+            
+            setComments(comments.filter(comment => comment.id !== commentId))
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     if (isEmpty) {
         return (
             <>
@@ -36,13 +50,9 @@ const UserComments = ({ profile }) => {
         )
     }
 
-    const handlePageChange = (change) => {
-        setPage(page + change)
-    }
-
     return (
         <div>
-            <CommentList comments={comments} />
+            <CommentList comments={comments} deleteComment={deleteComment} />
             <Pagination handlePageChange={handlePageChange} isFirst={isFirst} isLast={isLast} />
         </div>
     )
