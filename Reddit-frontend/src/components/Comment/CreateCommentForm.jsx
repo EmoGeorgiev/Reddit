@@ -1,9 +1,7 @@
 import { useState } from 'react'
-import { useAuth } from '../Authentication/AuthContext'
 
-const CreateCommentForm = ({ isOpen, setIsOpen, createComment, postId, parentId }) => {
+const CreateCommentForm = ({ isOpen, setIsOpen, createComment }) => {
     const [text, setText] = useState('')
-    const { user } = useAuth()
 
     const enableFocus = () => {
         setIsOpen(true)
@@ -17,15 +15,8 @@ const CreateCommentForm = ({ isOpen, setIsOpen, createComment, postId, parentId 
     const handleCreateComment = async (e) => {
         e.preventDefault()
 
-        const comment = {
-            user,
-            text,
-            postId,
-            parentId
-        }
-
         try {
-            await createComment(comment)
+            await createComment(text)
 
             disableFocus()
         } catch (error) {
