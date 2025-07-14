@@ -32,7 +32,12 @@ const CreatePostForm = () => {
         e.preventDefault()
 
         try {
-            const post = { 'user': user, title, 'text': description, 'subreddit': subreddit }
+            const post = { 
+                user, 
+                title, 
+                description, 
+                subreddit 
+            }
 
             await postService.addPost(post)
 

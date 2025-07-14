@@ -4,6 +4,7 @@ import postService from '../../services/posts'
 const AllFeed = () => {
     const getPosts = async (pageable) => {
         const postPage = await postService.getPosts(pageable)
+        console.log(pageable)
         return postPage
     }
 

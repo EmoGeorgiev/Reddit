@@ -44,7 +44,7 @@ const Post = ({ post, deletePost }) => {
     const handleRedirect = (e) => {
         const tag = e.target.tagName.toLowerCase()
         
-        if (['button', 'img', 'span'].includes(tag)) {
+        if (['button', 'img', 'span', 'textarea'].includes(tag)) {
             return
         }
 

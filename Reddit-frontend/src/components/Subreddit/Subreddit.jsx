@@ -92,6 +92,8 @@ const Subreddit = () => {
                             leaveSubreddit={leaveSubreddit} 
                             joinSubreddit={joinSubreddit} />
 
+            
+
             <div className='border-t border-gray-300'>
                 <PostPage query={subreddit.id} getPosts={getPosts} />
             </div>
