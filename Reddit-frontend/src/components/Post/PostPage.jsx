@@ -1,10 +1,11 @@
+import { useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../Authentication/AuthContext'
 import { SortOptions } from '../../util/SortOptions'
+import PostList from './PostList'
 import Pagination from '../Common/Pagination'
 import SortSelect from '../Common/SortSelect'
 import postService from '../../services/posts'
-import PostList from './PostList'
 
 const PostPage = ({ query, getPosts }) => {
     const [posts, setPosts] = useState([])
@@ -13,6 +14,7 @@ const PostPage = ({ query, getPosts }) => {
     const [isFirst, setIsFirst] = useState(true)
     const [isLast, setIsLast] = useState(true)
     const { user } = useAuth()
+    const location = useLocation()
 
     useEffect(() => {
         const getPostPage = async () => {
@@ -44,11 +46,19 @@ const PostPage = ({ query, getPosts }) => {
         setPage(page + change)
     }
 
+    const showSort = () => {
+        const subredditPath = '/r/'
+        const currentPath = location.pathname.toLowerCase()
+
+        return currentPath.includes(subredditPath)
+    }
+
     return (
         <div className='my-4'>
-            <div className='m-4 font-semibold text-gray-700 flex space-x-2'>
-                <SortSelect selected={sort} handleChange={setSort} />
-            </div>
+            {showSort() && 
+                <div className='m-4 font-semibold text-gray-700 flex space-x-2'>
+                    <SortSelect selected={sort} handleChange={setSort} />
+                </div>}
             <PostList posts={posts} deletePost={deletePost} />
             <Pagination handlePageChange={handlePageChange} isFirst={isFirst} isLast={isLast} />
         </div>
