@@ -11,12 +11,14 @@ import commentService from '../../services/comments'
 import ContentEdit from '../Content/ContentEdit'
 import ReplyButton from './ReplyButton'
 import UpdateTextForm from '../Common/UpdateTextForm'
+import ShowReplies from './ShowReplies'
 
 const Comment = ({ comment, deleteComment }) => {
     const [parentComment, setParentComment] = useState(comment)
     const [replies, setReplies] = useState(comment.replies)
     const [isOpen, setIsOpen] = useState(false)
     const [isEdited, setIsEdited] = useState(false)
+    const [showReplies, setShowReplies] = useState(false)
     const { user } = useAuth()
 
     const createComment = async (text) => {
@@ -83,7 +85,11 @@ const Comment = ({ comment, deleteComment }) => {
                                             postId={parentComment.postId}
                                             parentId={parentComment.id} />}
 
-            {replies && replies.length > 0 && (
+            <ShowReplies showReplies={showReplies} 
+                            handleShow={() => setShowReplies(true)} 
+                            length={replies.length} />
+            
+            {showReplies && replies?.length > 0 && (
                 replies.map(reply => <Comment key={reply.id} 
                                                 comment={reply} 
                                                 deleteComment={deleteComment} />))}

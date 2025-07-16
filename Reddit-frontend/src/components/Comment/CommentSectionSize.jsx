@@ -5,7 +5,7 @@ const CommentSectionSize = ({ length, totalElements, setSize }) => {
         <>
             {length < SizeOptions.Default ? 
                 <div className='font-semibold'>
-                    {`All ${length} comments`}
+                    {`All ${length} ${length === 1 ? 'comment' : 'comments'}`}
                 </div> : 
                 <div className='flex space-x-4 font-semibold'>
                     <div>
