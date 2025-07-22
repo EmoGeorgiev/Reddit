@@ -1,5 +1,6 @@
 package com.reddit.user;
 
+import com.reddit.user.dto.ModeratorUpdateDto;
 import com.reddit.user.dto.UpdatePasswordDto;
 import com.reddit.user.dto.UserDto;
 import com.reddit.util.PaginationConstants;
@@ -94,6 +95,22 @@ public class UserController {
         return ResponseEntity
                 .ok()
                 .body(userDto);
+    }
+
+    @PutMapping("/{subredditTitle}/moderators/add")
+    public ResponseEntity<UserDto> addSubredditModerator(@PathVariable String subredditTitle, @RequestBody @Valid ModeratorUpdateDto moderatorUpdateDto) {
+        UserDto subredditDto = userService.addSubredditModerator(subredditTitle, moderatorUpdateDto);
+        return ResponseEntity
+                .ok()
+                .body(subredditDto);
+    }
+
+    @PutMapping("/{subredditTitle}/moderators/remove")
+    public ResponseEntity<UserDto> removeSubredditModerator(@PathVariable String subredditTitle, @RequestBody @Valid ModeratorUpdateDto moderatorUpdateDto) {
+        UserDto subredditDto = userService.removeSubredditModerator(subredditTitle, moderatorUpdateDto);
+        return ResponseEntity
+                .ok()
+                .body(subredditDto);
     }
 
     @DeleteMapping("/{userId}")

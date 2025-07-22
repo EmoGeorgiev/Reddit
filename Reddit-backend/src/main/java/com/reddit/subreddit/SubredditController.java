@@ -1,9 +1,7 @@
 package com.reddit.subreddit;
 
-import com.reddit.subreddit.dto.ModeratorUpdateDto;
 import com.reddit.subreddit.dto.SubredditDto;
 import com.reddit.subreddit.dto.SubredditUpdateTitleDto;
-import com.reddit.user.dto.UserDto;
 import com.reddit.util.PaginationConstants;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -98,22 +96,6 @@ public class SubredditController {
     @PutMapping("/{subredditTitle}/users/remove")
     public ResponseEntity<SubredditDto> removeSubredditFromUserSubscriptions(@PathVariable String subredditTitle, @RequestParam Long userId) {
         SubredditDto subredditDto = subredditService.removeSubredditFromUserSubscriptions(subredditTitle, userId);
-        return ResponseEntity
-                .ok()
-                .body(subredditDto);
-    }
-
-    @PutMapping("/{subredditId}/moderators/add")
-    public ResponseEntity<SubredditDto> addSubredditModerator(@PathVariable Long subredditId, @RequestBody @Valid ModeratorUpdateDto moderatorUpdateDto) {
-        SubredditDto subredditDto = subredditService.addSubredditModerator(subredditId, moderatorUpdateDto);
-        return ResponseEntity
-                .ok()
-                .body(subredditDto);
-    }
-
-    @PutMapping("/{subredditId}/moderators/remove")
-    public ResponseEntity<SubredditDto> removeSubredditModerator(@PathVariable Long subredditId, @RequestBody @Valid ModeratorUpdateDto moderatorUpdateDto) {
-        SubredditDto subredditDto = subredditService.removeSubredditModerator(subredditId, moderatorUpdateDto);
         return ResponseEntity
                 .ok()
                 .body(subredditDto);

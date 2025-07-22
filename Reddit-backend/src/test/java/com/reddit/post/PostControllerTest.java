@@ -41,8 +41,9 @@ public class PostControllerTest {
     private PostService postService;
     private final Long id = 1L;
     private final Integer commentCount = 0;
+    private final Integer userCount = 1;
     private final UserDto userDto = new UserDto(id, "user");
-    private final SubredditDto subredditDto = new SubredditDto(id, "subreddit");
+    private final SubredditDto subredditDto = new SubredditDto(id, "subreddit", userCount);
     private final PostDto postDto = new PostDto(id, userDto, null, "text", Post.INITIAL_SCORE, commentCount, subredditDto, "title");
 
     @Test

@@ -5,7 +5,6 @@ import com.reddit.exception.subreddit.SubredditAlreadyExistsException;
 import com.reddit.exception.subreddit.SubredditNotFoundException;
 import com.reddit.exception.user.UserIsAlreadySubscribedToSubredditException;
 import com.reddit.exception.user.UserNotSubscribedException;
-import com.reddit.subreddit.dto.ModeratorUpdateDto;
 import com.reddit.subreddit.dto.SubredditDto;
 import com.reddit.subreddit.dto.SubredditUpdateTitleDto;
 import com.reddit.user.RedditUser;
@@ -152,47 +151,7 @@ public class SubredditService {
         return SubredditMapper.subredditToSubredditDto(subreddit);
     }
 
-    public SubredditDto addSubredditModerator(Long subredditId, ModeratorUpdateDto moderatorUpdateDto) {
-        Long moderatorId = moderatorUpdateDto.moderatorId();
-        Long newModeratorId = moderatorUpdateDto.updatedModeratorId();
 
-        Subreddit subreddit = getSubredditEntityById(subredditId);
-        RedditUser moderator = userService.getUserEntity(moderatorId);
-        RedditUser newModerator = userService.getUserEntity(newModeratorId);
-
-        if (!subreddit.getModerators().contains(moderator)) {
-            throw new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES);
-        }
-
-        if (!subreddit.getUsers().contains(newModerator)) {
-            throw new UserNotSubscribedException(ErrorMessages.USER_NOT_SUBSCRIBED);
-        }
-
-        subreddit.getModerators().add(newModerator);
-
-        newModerator.getModerated().add(subreddit);
-
-        return SubredditMapper.subredditToSubredditDto(subreddit);
-    }
-
-    public SubredditDto removeSubredditModerator(Long subredditId, ModeratorUpdateDto moderatorUpdateDto) {
-        Long moderatorId = moderatorUpdateDto.moderatorId();
-        Long removedModeratorId = moderatorUpdateDto.updatedModeratorId();
-
-        Subreddit subreddit = getSubredditEntityById(subredditId);
-        RedditUser moderator = userService.getUserEntity(moderatorId);
-        RedditUser removedModerator = userService.getUserEntity(removedModeratorId);
-
-        if (!subreddit.getModerators().contains(moderator) || !subreddit.getModerators().contains(removedModerator)) {
-            throw new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES);
-        }
-
-        subreddit.getModerators().remove(removedModerator);
-
-        moderator.getModerated().remove(subreddit);
-
-        return SubredditMapper.subredditToSubredditDto(subreddit);
-    }
 
     public void deleteSubreddit(Long subredditId, Long moderatorId) {
         Subreddit subreddit = getSubredditEntityById(subredditId);

@@ -1,9 +1,10 @@
 package com.reddit.user;
 
-import com.reddit.exception.user.NewPassWordCannotBeOldPasswordException;
-import com.reddit.exception.user.PasswordsDoNotMatchException;
-import com.reddit.exception.user.UserNotFoundException;
-import com.reddit.exception.user.UsernameAlreadyExistsException;
+import com.reddit.exception.subreddit.MissingModeratorPrivilegesException;
+import com.reddit.exception.user.*;
+import com.reddit.subreddit.Subreddit;
+import com.reddit.subreddit.SubredditService;
+import com.reddit.user.dto.ModeratorUpdateDto;
 import com.reddit.user.dto.UpdatePasswordDto;
 import com.reddit.user.dto.UserDto;
 import com.reddit.util.ErrorMessages;
@@ -24,10 +25,12 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final SubredditService subredditService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, SubredditService subredditService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.subredditService = subredditService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -129,6 +132,50 @@ public class UserService {
         user.setPassword(encodedNewPassword);
 
         return UserMapper.userToUserDto(user);
+    }
+
+    public UserDto addSubredditModerator(String subredditTitle, ModeratorUpdateDto moderatorUpdateDto) {
+        Long moderatorId = moderatorUpdateDto.moderatorId();
+        String username = moderatorUpdateDto.updatedModeratorUsername();
+
+        Subreddit subreddit = subredditService.getSubredditEntityByTitle(subredditTitle);
+        RedditUser moderator = getUserEntity(moderatorId);
+        RedditUser newModerator = userRepository.findByUsernameIgnoreCase(username)
+                                                .orElseThrow(() -> new UsernameNotFoundException(ErrorMessages.USERNAME_DOES_NOT_EXIST));
+
+        if (!subreddit.getModerators().contains(moderator)) {
+            throw new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES);
+        }
+
+        if (!subreddit.getUsers().contains(newModerator)) {
+            throw new UserNotSubscribedException(ErrorMessages.USER_NOT_SUBSCRIBED);
+        }
+
+        subreddit.getModerators().add(newModerator);
+
+        newModerator.getModerated().add(subreddit);
+
+        return UserMapper.userToUserDto(newModerator);
+    }
+
+    public UserDto removeSubredditModerator(String subredditTitle, ModeratorUpdateDto moderatorUpdateDto) {
+        Long moderatorId = moderatorUpdateDto.moderatorId();
+        String username = moderatorUpdateDto.updatedModeratorUsername();
+
+        Subreddit subreddit = subredditService.getSubredditEntityByTitle(subredditTitle);
+        RedditUser moderator = getUserEntity(moderatorId);
+        RedditUser removedModerator = userRepository.findByUsernameIgnoreCase(username)
+                .orElseThrow(() -> new UsernameNotFoundException(ErrorMessages.USERNAME_DOES_NOT_EXIST));
+
+        if (!subreddit.getModerators().contains(moderator) || !subreddit.getModerators().contains(removedModerator)) {
+            throw new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES);
+        }
+
+        subreddit.getModerators().remove(removedModerator);
+
+        removedModerator.getModerated().remove(subreddit);
+
+        return UserMapper.userToUserDto(removedModerator);
     }
 
     public void deleteUser(Long userId, String password) {

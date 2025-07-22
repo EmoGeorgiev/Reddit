@@ -1,10 +1,10 @@
-package com.reddit.subreddit.dto;
+package com.reddit.user.dto;
 
 import jakarta.validation.constraints.NotNull;
 
 public record ModeratorUpdateDto(
         @NotNull(message = "{moderatorId.required}")
         Long moderatorId,
-        @NotNull(message = "{moderatorId.required}")
-        Long updatedModeratorId) {
+        @NotNull(message = "{moderatorUsername.required}")
+        String updatedModeratorUsername) {
 }

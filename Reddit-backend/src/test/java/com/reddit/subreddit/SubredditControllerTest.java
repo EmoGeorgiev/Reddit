@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reddit.exception.subreddit.MissingModeratorPrivilegesException;
 import com.reddit.exception.subreddit.SubredditAlreadyExistsException;
 import com.reddit.exception.subreddit.SubredditNotFoundException;
-import com.reddit.exception.user.UserNotSubscribedException;
-import com.reddit.subreddit.dto.ModeratorUpdateDto;
 import com.reddit.subreddit.dto.SubredditDto;
 import com.reddit.subreddit.dto.SubredditUpdateTitleDto;
 import com.reddit.util.ErrorMessages;
@@ -45,7 +43,8 @@ public class SubredditControllerTest {
     private SubredditService subredditService;
     private final Long id = 1L;
     private final String title = "title";
-    private final SubredditDto subredditDto = new SubredditDto(id, title);
+    private final Integer subredditSize = 0;
+    private final SubredditDto subredditDto = new SubredditDto(id, title, subredditSize);
     private final SubredditUpdateTitleDto subredditUpdateTitleDto = new SubredditUpdateTitleDto(title, id);
 
     @Test
@@ -219,7 +218,7 @@ public class SubredditControllerTest {
 
     @Test
     public void shouldReturnBadRequestForBlankTitleWhenCreatingSubreddit() throws Exception {
-        SubredditDto blankTitleSubredditDto = new SubredditDto(id, BLANK_STRING);
+        SubredditDto blankTitleSubredditDto = new SubredditDto(id, BLANK_STRING, subredditSize);
 
         String expectedMessage = messageSource.getMessage(
                 "title.required",
@@ -238,7 +237,7 @@ public class SubredditControllerTest {
     public void shouldReturnBadRequestForNonValidTitleWhenCreatingSubreddit() throws Exception {
         String title = getStringWithFixedLength(ValidationConstants.TITLE_MAX + 1);
 
-        SubredditDto overMaxTitleSizeSubredditDto = new SubredditDto(id, title);
+        SubredditDto overMaxTitleSizeSubredditDto = new SubredditDto(id, title, subredditSize);
 
         Object[] args = getArgs(ValidationConstants.TITLE_MIN, ValidationConstants.TITLE_MAX);
         String expectedMessage = messageSource.getMessage(
@@ -359,203 +358,6 @@ public class SubredditControllerTest {
 
         verify(subredditService)
                 .updateSubredditTitle(id, subredditUpdateTitleDto1);
-    }
-
-    @Test
-    public void shouldReturnBadRequestForNullModeratorIdWhenAddingSubredditModerator() throws Exception {
-        ModeratorUpdateDto nullModeratorUpdateDto = new ModeratorUpdateDto(null, id);
-
-        String expectedMessage = messageSource.getMessage(
-                "moderatorId.required",
-                null,
-                LocaleContextHolder.getLocale());
-
-        mockMvc
-                .perform(put(BASE_URL + "/" + id + "/moderators/add")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(nullModeratorUpdateDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.moderatorId").value(expectedMessage));
-    }
-
-    @Test
-    public void shouldReturnBadRequestForNullUpdatedModeratorIdWhenAddingSubredditModerator() throws Exception {
-        ModeratorUpdateDto nullModeratorUpdateDto = new ModeratorUpdateDto(id, null);
-
-        String expectedMessage = messageSource.getMessage(
-                "moderatorId.required",
-                null,
-                LocaleContextHolder.getLocale());
-
-        mockMvc
-                .perform(put(BASE_URL + "/" + id + "/moderators/add")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(nullModeratorUpdateDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.updatedModeratorId").value(expectedMessage));
-    }
-    @Test
-    public void shouldReturnBadRequestForNullUpdatedModeratorIdAndNullUpdatedModeratorIdWhenAddingSubredditModerator() throws Exception {
-        ModeratorUpdateDto nullModeratorUpdateDto = new ModeratorUpdateDto(null, null);
-
-        String expectedMessage = messageSource.getMessage(
-                "moderatorId.required",
-                null,
-                LocaleContextHolder.getLocale());
-
-        mockMvc
-                .perform(put(BASE_URL + "/" + id + "/moderators/add")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(nullModeratorUpdateDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.moderatorId").value(expectedMessage))
-                .andExpect(jsonPath("$.updatedModeratorId").value(expectedMessage));
-    }
-
-
-    @Test
-    public void shouldReturnForbiddenForUserMissingModeratorPrivilegesWhenAddingSubredditModerator() throws Exception {
-        ModeratorUpdateDto moderatorUpdateDto = new ModeratorUpdateDto(id, id);
-
-        when(subredditService.addSubredditModerator(id, moderatorUpdateDto))
-                .thenThrow(new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES));
-
-        mockMvc
-                .perform(put(BASE_URL + "/" + id + "/moderators/add")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(moderatorUpdateDto)))
-                .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.message").value(ErrorMessages.MISSING_MODERATOR_PRIVILEGES));
-
-        verify(subredditService)
-                .addSubredditModerator(id, moderatorUpdateDto);
-    }
-
-    @Test
-    public void shouldReturnBadRequestForUserWhoIsNotSubscribedToTheSubredditWhenAddingSubredditModerator() throws Exception {
-        ModeratorUpdateDto moderatorUpdateDto = new ModeratorUpdateDto(id, id);
-
-        when(subredditService.addSubredditModerator(id, moderatorUpdateDto))
-                .thenThrow(new UserNotSubscribedException(ErrorMessages.USER_NOT_SUBSCRIBED));
-
-        mockMvc
-                .perform(put(BASE_URL + "/" + id + "/moderators/add")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(moderatorUpdateDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value(ErrorMessages.USER_NOT_SUBSCRIBED));
-
-        verify(subredditService)
-                .addSubredditModerator(id, moderatorUpdateDto);
-    }
-
-    @Test
-    public void shouldReturnSubredditForValidModeratorAndUpdatedModeratorWhenAddingSubredditModerator() throws Exception {
-        Long secondId = 2L;
-        ModeratorUpdateDto moderatorUpdateDto = new ModeratorUpdateDto(id, secondId);
-
-        when(subredditService.addSubredditModerator(id, moderatorUpdateDto))
-                .thenReturn(subredditDto);
-
-        mockMvc
-                .perform(put(BASE_URL + "/" + id + "/moderators/add")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(moderatorUpdateDto)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpectAll(subredditDtoMatchers("$.", subredditDto));
-
-        verify(subredditService)
-                .addSubredditModerator(id, moderatorUpdateDto);
-    }
-
-    @Test
-    public void shouldReturnBadRequestForNullModeratorIdWhenRemovingSubredditModerator() throws Exception {
-        ModeratorUpdateDto nullModeratorUpdateDto = new ModeratorUpdateDto(null, id);
-
-        String expectedMessage = messageSource.getMessage(
-                "moderatorId.required",
-                null,
-                LocaleContextHolder.getLocale());
-
-        mockMvc
-                .perform(put(BASE_URL + "/" + id + "/moderators/remove")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(nullModeratorUpdateDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.moderatorId").value(expectedMessage));
-    }
-
-    @Test
-    public void shouldReturnBadRequestForNullUpdatedModeratorIdWhenRemovingSubredditModerator() throws Exception {
-        ModeratorUpdateDto nullModeratorUpdateDto = new ModeratorUpdateDto(id, null);
-
-        String expectedMessage = messageSource.getMessage(
-                "moderatorId.required",
-                null,
-                LocaleContextHolder.getLocale());
-
-        mockMvc
-                .perform(put(BASE_URL + "/" + id + "/moderators/remove")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(nullModeratorUpdateDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.updatedModeratorId").value(expectedMessage));
-    }
-    @Test
-    public void shouldReturnBadRequestForNullUpdatedModeratorIdAndNullUpdatedModeratorIdWhenRemovingSubredditModerator() throws Exception {
-        ModeratorUpdateDto nullModeratorUpdateDto = new ModeratorUpdateDto(null, null);
-
-        String expectedMessage = messageSource.getMessage(
-                "moderatorId.required",
-                null,
-                LocaleContextHolder.getLocale());
-
-        mockMvc
-                .perform(put(BASE_URL + "/" + id + "/moderators/remove")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(nullModeratorUpdateDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.moderatorId").value(expectedMessage))
-                .andExpect(jsonPath("$.updatedModeratorId").value(expectedMessage));
-    }
-
-    @Test
-    public void shouldReturnForbiddenForUserMissingModeratorPrivilegesWhenRemovingSubredditModerator() throws Exception {
-        ModeratorUpdateDto moderatorUpdateDto = new ModeratorUpdateDto(id, id);
-
-        when(subredditService.removeSubredditModerator(id, moderatorUpdateDto))
-                .thenThrow(new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES));
-
-        mockMvc
-                .perform(put(BASE_URL + "/" + id + "/moderators/remove")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(moderatorUpdateDto)))
-                .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.message").value(ErrorMessages.MISSING_MODERATOR_PRIVILEGES));
-
-        verify(subredditService)
-                .removeSubredditModerator(id, moderatorUpdateDto);
-    }
-
-    @Test
-    public void shouldReturnSubredditForValidModeratorAndUpdatedModeratorWhenRemovingSubredditModerator() throws Exception {
-        Long secondId = 2L;
-        ModeratorUpdateDto moderatorUpdateDto = new ModeratorUpdateDto(id, secondId);
-
-        when(subredditService.removeSubredditModerator(id, moderatorUpdateDto))
-                .thenReturn(subredditDto);
-
-        mockMvc
-                .perform(put(BASE_URL + "/" + id + "/moderators/remove")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(moderatorUpdateDto)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpectAll(subredditDtoMatchers("$.", subredditDto));
-
-        verify(subredditService)
-                .removeSubredditModerator(id, moderatorUpdateDto);
     }
 
     @Test
