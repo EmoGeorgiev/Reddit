@@ -112,7 +112,7 @@ public class SubredditControllerTest {
     public void shouldReturnEmptyPageForNoSubredditTitleContainingWordWhenGettingSubredditsWhereTitleContainsWord() throws Exception {
         int expectedTotalPages = 1;
         int count = 0;
-        Pageable pageable = getPageable(PaginationConstants.SUBREDDIT_BY_TITLE_CONTAINS_SIZE, PaginationConstants.SUBREDDIT_BY_TITLE_CONTAINS_SORT);
+        Pageable pageable = getPageable(PaginationConstants.SUBREDDIT_BY_TITLE_CONTAINS_SIZE, PaginationConstants.SUBREDDIT_BY_TITLE_CONTAINS_SORT, PaginationConstants.SUBREDDIT_BY_TITLE_CONTAINS_DIRECTION);
         Page<SubredditDto> emptyPage = getPage(subredditDto, count, pageable);
 
         String word = "word";
@@ -136,7 +136,7 @@ public class SubredditControllerTest {
     public void shouldReturnPageWithOneSubredditForOneSubredditTitleContainingWordWhenGettingSubredditsWhereTitleContainsWord() throws Exception {
         int expectedTotalPages = 1;
         int count = 1;
-        Pageable pageable = getPageable(PaginationConstants.SUBREDDIT_BY_TITLE_CONTAINS_SIZE, PaginationConstants.SUBREDDIT_BY_TITLE_CONTAINS_SORT);
+        Pageable pageable = getPageable(PaginationConstants.SUBREDDIT_BY_TITLE_CONTAINS_SIZE, PaginationConstants.SUBREDDIT_BY_TITLE_CONTAINS_SORT, PaginationConstants.SUBREDDIT_BY_TITLE_CONTAINS_DIRECTION);
         Page<SubredditDto> pageWithOneElement = getPage(subredditDto, count, pageable);
 
         String word = "word";

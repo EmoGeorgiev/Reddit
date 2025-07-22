@@ -44,7 +44,7 @@ public class CommentServiceTest {
     private Post post;
     private Comment firstComment;
     private CommentDto firstCommentDto;
-    private final Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_POST_ID_SIZE, PaginationConstants.COMMENT_BY_POST_ID_SORT);
+    private final Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_POST_ID_SIZE, PaginationConstants.COMMENT_BY_POST_ID_SORT, PaginationConstants.COMMENT_BY_POST_ID_DIRECTION);
 
     @BeforeEach
     void setUp() {

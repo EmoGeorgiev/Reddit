@@ -81,7 +81,7 @@ public class PostControllerTest {
     public void shouldReturnEmptyPageForNoPostWhenGettingPosts() throws Exception {
         int expectedTotalPages = 1;
         int count = 0;
-        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT, PaginationConstants.POST_DEFAULT_DIRECTION);
         Page<PostDto> emptyPage = getPage(postDto, count, pageable);
 
         when(postService.getPosts(pageable))
@@ -103,7 +103,7 @@ public class PostControllerTest {
     public void shouldReturnPageWithOnePostForOnePostWhenGettingPosts() throws Exception {
         int expectedTotalPages = 1;
         int count = 1;
-        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT, PaginationConstants.POST_DEFAULT_DIRECTION);
         Page<PostDto> pageWithOneElement = getPage(postDto, count, pageable);
 
         when(postService.getPosts(pageable))
@@ -125,7 +125,7 @@ public class PostControllerTest {
     public void shouldReturnEmptyPageForNoPostTitleContainingWordWhenGettingPostsWhereTitleContainsWord() throws Exception {
         int expectedTotalPages = 1;
         int count = 0;
-        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT, PaginationConstants.POST_DEFAULT_DIRECTION);
         Page<PostDto> emptyPage = getPage(postDto, count, pageable);
 
         String word = "word";
@@ -149,7 +149,7 @@ public class PostControllerTest {
     public void shouldReturnPageWithOnePostForOnePostTitleContainingWordWhenGettingPostsWhereTitleContainsWord() throws Exception {
         int expectedTotalPages = 1;
         int count = 1;
-        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT, PaginationConstants.POST_DEFAULT_DIRECTION);
         Page<PostDto> pageWithOneElement = getPage(postDto, count, pageable);
 
         String word = "word";
@@ -173,7 +173,7 @@ public class PostControllerTest {
     public void shouldReturnEmptyPageForNoPostWhenGettingPostsByUserSubscriptions() throws Exception {
         int expectedTotalPages = 1;
         int count = 0;
-        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT, PaginationConstants.POST_DEFAULT_DIRECTION);
         Page<PostDto> emptyPage = getPage(postDto, count, pageable);
 
         when(postService.getPostsByUserSubscriptions(id, pageable))
@@ -195,7 +195,7 @@ public class PostControllerTest {
     public void shouldReturnPageWithOnePostForOnePostWhenGettingPostsByUserSubscriptions() throws Exception {
         int expectedTotalPages = 1;
         int count = 1;
-        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT, PaginationConstants.POST_DEFAULT_DIRECTION);
         Page<PostDto> pageWithOneElement  = getPage(postDto, count, pageable);
 
         when(postService.getPostsByUserSubscriptions(id, pageable))
@@ -217,7 +217,7 @@ public class PostControllerTest {
     public void shouldReturnEmptyPageForNoPostWhenGettingPostsByUserId() throws Exception {
         int expectedTotalPages = 1;
         int count = 0;
-        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT, PaginationConstants.POST_DEFAULT_DIRECTION);
         Page<PostDto> emptyPage = getPage(postDto, count, pageable);
 
         when(postService.getPostsByUserId(id, pageable))
@@ -239,7 +239,7 @@ public class PostControllerTest {
     public void shouldReturnPageWithOnePostForOnePostWhenGettingPostsByUserId() throws Exception {
         int expectedTotalPages = 1;
         int count = 1;
-        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT, PaginationConstants.POST_DEFAULT_DIRECTION);
         Page<PostDto> pageWithOneElement = getPage(postDto, count, pageable);
 
         when(postService.getPostsByUserId(id, pageable))
@@ -261,7 +261,7 @@ public class PostControllerTest {
     public void shouldReturnEmptyPageForNoPostWhenGettingPostsBySubredditId() throws Exception {
         int expectedTotalPages = 1;
         int count = 0;
-        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT, PaginationConstants.POST_DEFAULT_DIRECTION);
         Page<PostDto> emptyPage = getPage(postDto, count, pageable);
 
         when(postService.getPostsBySubredditId(id, pageable))
@@ -283,7 +283,7 @@ public class PostControllerTest {
     public void shouldReturnPageWithOnePostForOnePostWhenGettingPostsBySubredditId() throws Exception {
         int expectedTotalPages = 1;
         int count = 1;
-        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.POST_DEFAULT_SIZE, PaginationConstants.POST_DEFAULT_SORT, PaginationConstants.POST_DEFAULT_DIRECTION);
         Page<PostDto> pageWithOneElement = getPage(postDto, count, pageable);
 
         when(postService.getPostsBySubredditId(id, pageable))

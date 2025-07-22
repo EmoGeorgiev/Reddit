@@ -83,7 +83,7 @@ public class CommentControllerTest {
     public void shouldReturnEmptyPageWhenPostDoesNotHaveComments() throws Exception {
         int expectedTotalPages = 1;
         int count = 0;
-        Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_POST_ID_SIZE, PaginationConstants.COMMENT_BY_POST_ID_SORT);
+        Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_POST_ID_SIZE, PaginationConstants.COMMENT_BY_POST_ID_SORT, PaginationConstants.COMMENT_BY_POST_ID_DIRECTION);
         Page<CommentDto> emptyPage = getPage(commentDto, count, pageable);
 
         when(commentService.getCommentsByPostId(id, pageable))
@@ -105,7 +105,7 @@ public class CommentControllerTest {
     public void shouldReturnPageWithOneCommentWhenPostHasOneComment() throws Exception {
         int expectedTotalPages = 1;
         int count = 1;
-        Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_POST_ID_SIZE, PaginationConstants.COMMENT_BY_POST_ID_SORT);
+        Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_POST_ID_SIZE, PaginationConstants.COMMENT_BY_POST_ID_SORT, PaginationConstants.COMMENT_BY_POST_ID_DIRECTION);
         Page<CommentDto> pageWithOneElement = getPage(commentDto, count, pageable);
 
         when(commentService.getCommentsByPostId(id, pageable))
@@ -127,7 +127,7 @@ public class CommentControllerTest {
     public void shouldReturnEmptyPageWhenUserDoesNotHaveComments() throws Exception {
         int expectedTotalPages = 1;
         int count = 0;
-        Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_USER_ID_SIZE, PaginationConstants.COMMENT_BY_USER_ID_SORT);
+        Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_USER_ID_SIZE, PaginationConstants.COMMENT_BY_USER_ID_SORT, PaginationConstants.COMMENT_BY_USER_ID_DIRECTION);
         Page<CommentDto> emptyPage = getPage(commentDto, count, pageable);
 
         when(commentService.getCommentsByUserId(id, pageable))
@@ -149,7 +149,7 @@ public class CommentControllerTest {
     public void shouldReturnPageWithOneCommentWhenUserHasOneComment() throws Exception {
         int expectedTotalPages = 1;
         int count = 1;
-        Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_USER_ID_SIZE, PaginationConstants.COMMENT_BY_USER_ID_SORT);
+        Pageable pageable = getPageable(PaginationConstants.COMMENT_BY_USER_ID_SIZE, PaginationConstants.COMMENT_BY_USER_ID_SORT, PaginationConstants.COMMENT_BY_USER_ID_DIRECTION);
         Page<CommentDto> pageWithOneElement = getPage(commentDto, count, pageable);
 
         when(commentService.getCommentsByUserId(id, pageable))

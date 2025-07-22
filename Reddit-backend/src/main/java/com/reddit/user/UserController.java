@@ -44,7 +44,7 @@ public class UserController {
             @PageableDefault(
                     size = PaginationConstants.USER_DEFAULT_SIZE,
                     sort = PaginationConstants.USER_DEFAULT_SORT,
-                    direction = Sort.Direction.DESC) Pageable pageable) {
+                    direction = Sort.Direction.ASC) Pageable pageable) {
         Page<UserDto> users = userService.getUsers(pageable);
         return ResponseEntity
                 .ok()

@@ -79,7 +79,7 @@ public class UserControllerTest {
     public void shouldReturnEmptyPageForNoUsersWhenGettingUsers() throws Exception {
         int expectedTotalPages = 1;
         int count = 0;
-        Pageable pageable = getPageable(PaginationConstants.USER_DEFAULT_SIZE, PaginationConstants.USER_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.USER_DEFAULT_SIZE, PaginationConstants.USER_DEFAULT_SORT, PaginationConstants.USER_DEFAULT_DIRECTION);
         Page<UserDto> emptyPage = getPage(userDto, count, pageable);
 
         when(userService.getUsers(pageable))
@@ -101,7 +101,7 @@ public class UserControllerTest {
     public void shouldReturnPageWithOneUserForOneUserWhenGettingUsers() throws Exception {
         int expectedTotalPages = 1;
         int count = 1;
-        Pageable pageable = getPageable(PaginationConstants.USER_DEFAULT_SIZE, PaginationConstants.USER_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.USER_DEFAULT_SIZE, PaginationConstants.USER_DEFAULT_SORT, PaginationConstants.USER_DEFAULT_DIRECTION);
         Page<UserDto> pageWithOneElement = getPage(userDto, count, pageable);
 
         when(userService.getUsers(pageable))
@@ -123,7 +123,7 @@ public class UserControllerTest {
     public void shouldReturnPageWithTwoUsersForTwoUsersWhenGettingUsers() throws Exception {
         int expectedTotalPages = 1;
         int count = 2;
-        Pageable pageable = getPageable(PaginationConstants.USER_DEFAULT_SIZE, PaginationConstants.USER_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.USER_DEFAULT_SIZE, PaginationConstants.USER_DEFAULT_SORT, PaginationConstants.USER_DEFAULT_DIRECTION);
         Page<UserDto> pageWithTwoElements = getPage(userDto, count, pageable);
 
         when(userService.getUsers(pageable))
@@ -146,7 +146,7 @@ public class UserControllerTest {
     public void shouldReturnEmptyPageForNoUsernameContainingWordWhenGettingUsersWhereUsernameContainsWord() throws Exception {
         int expectedTotalPages = 1;
         int count = 0;
-        Pageable pageable = getPageable(PaginationConstants.USER_DEFAULT_SIZE, PaginationConstants.USER_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.USER_DEFAULT_SIZE, PaginationConstants.USER_DEFAULT_SORT, PaginationConstants.USER_DEFAULT_DIRECTION);
         Page<UserDto> emptyPage = getPage(userDto, count, pageable);
 
         String word = "word";
@@ -170,7 +170,7 @@ public class UserControllerTest {
     public void shouldReturnPageWithOneUserForOneUsernameContainingWordWhenGettingUsersWhereUsernameContainsWord() throws Exception {
         int expectedTotalPages = 1;
         int count = 1;
-        Pageable pageable = getPageable(PaginationConstants.USER_DEFAULT_SIZE, PaginationConstants.USER_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.USER_DEFAULT_SIZE, PaginationConstants.USER_DEFAULT_SORT, PaginationConstants.USER_DEFAULT_DIRECTION);
         Page<UserDto> pageWithOneElement = getPage(userDto, count, pageable);
 
         String word = "word";
@@ -194,7 +194,7 @@ public class UserControllerTest {
     public void shouldReturnPageWithTwoUsersForTwoUsernamesContainingWordWhenGettingUsersWhereUsernameContainsWord() throws Exception {
         int expectedTotalPages = 1;
         int count = 2;
-        Pageable pageable = getPageable(PaginationConstants.USER_DEFAULT_SIZE, PaginationConstants.USER_DEFAULT_SORT);
+        Pageable pageable = getPageable(PaginationConstants.USER_DEFAULT_SIZE, PaginationConstants.USER_DEFAULT_SORT, PaginationConstants.USER_DEFAULT_DIRECTION);
         Page<UserDto> pageWithTwoElements = getPage(userDto, count, pageable);
 
         String word = "word";

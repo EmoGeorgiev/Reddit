@@ -22,11 +22,15 @@ public final class TestUtils {
         return "a".repeat(length);
     }
 
-    public static Pageable getPageable(int size, String sort) {
+    public static Pageable getPageable(int size, String sort, String direction) {
+        Sort.Order order = direction.equalsIgnoreCase("desc")
+                            ? Sort.Order.desc(sort)
+                            : Sort.Order.asc(sort);
+
         return PageRequest.of(
                 0,
                 size,
-                Sort.by(sort).descending()
+                Sort.by(order)
         );
     }
 
