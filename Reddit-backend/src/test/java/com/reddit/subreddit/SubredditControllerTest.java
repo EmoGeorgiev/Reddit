@@ -393,7 +393,8 @@ public class SubredditControllerTest {
     private ResultMatcher[] subredditDtoMatchers(String prefix, SubredditDto dto) {
         return new ResultMatcher[] {
                 jsonPath(prefix + "id").value(dto.id()),
-                jsonPath(prefix + "title").value(dto.title())
+                jsonPath(prefix + "title").value(dto.title()),
+                jsonPath(prefix + "userCount").value(dto.userCount())
         };
     }
 }

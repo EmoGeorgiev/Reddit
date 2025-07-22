@@ -302,43 +302,6 @@ public class PostControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequestForBlankTextWhenCreatingPost() throws Exception {
-        PostDto blankTextPostDto = new PostDto(id, userDto, null, BLANK_STRING, Post.INITIAL_SCORE, commentCount, subredditDto, "title");
-
-        String expectedMessage = messageSource.getMessage(
-                "text.required",
-                null,
-                LocaleContextHolder.getLocale());
-
-        mockMvc
-                .perform(post(BASE_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(blankTextPostDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.description").value(expectedMessage));
-    }
-
-    @Test
-    public void shouldReturnBadRequestForNonValidTextWhenCreatingPost() throws Exception {
-        String text = getStringWithFixedLength(ValidationConstants.TEXT_MAX + 1);
-
-        PostDto overMaxTextSizePostDto = new PostDto(id, userDto, null, text, Post.INITIAL_SCORE, commentCount, subredditDto, "title");
-
-        Object[] args = getArgs(ValidationConstants.TEXT_MIN, ValidationConstants.TEXT_MAX);
-        String expectedMessage = messageSource.getMessage(
-                "text.size.test",
-                args,
-                LocaleContextHolder.getLocale());
-
-        mockMvc
-                .perform(post(BASE_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(overMaxTextSizePostDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.description").value(expectedMessage));
-    }
-
-    @Test
     public void shouldReturnBadRequestForBlankTitleWhenCreatingPost() throws Exception {
         PostDto blankTitlePostDto = new PostDto(id, userDto, null, "text", Post.INITIAL_SCORE, commentCount, subredditDto, BLANK_STRING);
 

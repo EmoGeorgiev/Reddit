@@ -178,7 +178,7 @@ public class CommentControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(blankTextCommentDto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.description").value(expectedMessage));
+                .andExpect(jsonPath("$.text").value(expectedMessage));
     }
 
     @Test
@@ -198,7 +198,7 @@ public class CommentControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(overMaxTextSizeCommentDto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.description").value(expectedMessage));
+                .andExpect(jsonPath("$.text").value(expectedMessage));
     }
 
     @Test
@@ -318,7 +318,7 @@ public class CommentControllerTest {
                 jsonPath(prefix + "user.id").value(dto.user().id()),
                 jsonPath(prefix + "user.username").value(dto.user().username()),
                 jsonPath(prefix + "created").value(dto.created()),
-                jsonPath(prefix + "description").value(dto.text()),
+                jsonPath(prefix + "text").value(dto.text()),
                 jsonPath(prefix + "score").value(dto.score()),
                 jsonPath(prefix + "isDeleted").value(dto.isDeleted()),
                 jsonPath(prefix + "replies").value(dto.replies()),
