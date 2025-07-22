@@ -74,12 +74,12 @@ const Settings = () => {
 
             <div className='mt-10 mx-5'>
                 <SettingsCategory name='General'>
-                    <SettingsField name='Username' handleClick={() => openActiveForm(ActiveFormOption.CHANGE_USERNAME)} />
-                    <SettingsField name='Password' handleClick={() => openActiveForm(ActiveFormOption.CHANGE_PASSWORD)} />
+                    <SettingsField name={ActiveFormOption.CHANGE_USERNAME} handleClick={() => openActiveForm(ActiveFormOption.CHANGE_USERNAME)} />
+                    <SettingsField name={ActiveFormOption.CHANGE_PASSWORD} handleClick={() => openActiveForm(ActiveFormOption.CHANGE_PASSWORD)} />
                 </SettingsCategory>
                         
                 <SettingsCategory name='Advanced'>
-                    <SettingsField name='Delete account' handleClick={() => openActiveForm(ActiveFormOption.DELETE_ACCOUNT)} />
+                    <SettingsField name={ActiveFormOption.DELETE_ACCOUNT} handleClick={() => openActiveForm(ActiveFormOption.DELETE_ACCOUNT)} />
                 </SettingsCategory>
             </div>
         </div>

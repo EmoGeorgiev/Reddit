@@ -13,6 +13,7 @@ import User from './User/User'
 import Search from './Search/Search'
 import CreatePostForm from './Post/CreatePostForm'
 import CommentSection from './Comment/CommentSection'
+import ModeratorPage from './Moderator/ModeratorPage'
 
 const Layout = () => {
     const [collapsed, setCollapsed] = useState(false)
@@ -34,6 +35,7 @@ const Layout = () => {
                         <Route path='/r/:name' element={<Subreddit />} />
                         <Route path='/r/:name/submit' element={<CreatePostForm />} />
                         <Route path='/r/:name/comments/:postId' element={<CommentSection />} />
+                        <Route path='/r/:name/moderators' element={<ProtectedRoute><ModeratorPage /></ProtectedRoute>} />
                         <Route path='/users/:username' element={<User />} />
                         <Route path='/settings' element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                     </Routes>

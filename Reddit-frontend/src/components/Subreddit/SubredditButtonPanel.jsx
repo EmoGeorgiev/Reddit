@@ -14,12 +14,18 @@ const SubredditButtonPanel = ({ title, isMember, isModerator, leaveSubreddit, jo
 
             {isMember ? 
                 <button className='w-24 p-2 text-gray-800 font-semibold border border-gray-600 hover:border-black rounded-full' 
-                        onClick={leaveSubreddit}>
+                onClick={leaveSubreddit}>
                     Joined
                 </button>  :
                 <button className='w-24 p-2 bg-gray-800 hover:bg-black text-gray-200 font-semibold rounded-full'
-                        onClick={joinSubreddit}>
+                onClick={joinSubreddit}>
                     Join
+                </button>}
+            
+            {isModerator && 
+                <button className='w-24 p-2 bg-blue-800 hover:bg-blue-900 text-gray-200 font-semibold rounded-full' 
+                        onClick={() => navigate(`/r/${title}/moderators`)}>
+                    Mod Tools
                 </button>}
         </div>
     )
