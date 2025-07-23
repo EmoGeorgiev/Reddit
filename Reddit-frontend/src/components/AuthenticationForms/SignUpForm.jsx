@@ -2,10 +2,13 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import FormHeader from '../Common/FormHeader'
 import authenticationService from '../../services/authentication'
+import { useFormErrors } from '../../hooks/useFormErrors'
+import FormErrorMessage from '../Common/FormErrorMessage'
 
 const SignUpForm = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const { errors, setBackendErrors } = useFormErrors()
     const navigate = useNavigate()
 
     const handleSignUp = async (e) => {
@@ -24,6 +27,7 @@ const SignUpForm = () => {
             }
         } catch (error) {
             console.log(error)
+            setBackendErrors(error)
         }   
     }
 
@@ -53,6 +57,10 @@ const SignUpForm = () => {
                                 placeholder='Username'
                                 onChange={(e) => setUsername(e.target.value)}
                             />
+
+                            <FormErrorMessage>
+                                {errors.username}
+                            </FormErrorMessage>
                         </div>
 
                         <div className='m-6'>
@@ -64,6 +72,11 @@ const SignUpForm = () => {
                                 placeholder='Password'
                                 onChange={(e) => setPassword(e.target.value)}
                             />
+
+                            <FormErrorMessage>
+                                {errors.password}
+                                {errors.message}
+                            </FormErrorMessage>
                         </div>
 
                         <div className='m-6'>
