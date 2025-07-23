@@ -37,7 +37,15 @@ const ModeratorPage = () => {
 
     const addModerator = async (username) => {
         try {
-            
+            const moderatorUpdate = {
+                'moderatorId': user.id,
+                'updatedModeratorUsername': username
+            }
+            const newModerator = await userService.addSubredditModerator(name, moderatorUpdate)
+
+            setModerators([...moderators, newModerator])
+
+            closeActiveForm()
         } catch (error) {
             console.log(error)
         }
@@ -45,7 +53,16 @@ const ModeratorPage = () => {
 
     const removeModerator = async (username) => {
         try {
+            const moderatorUpdate = {
+                'moderatorId': user.id,
+                'updatedModeratorUsername': username
+            }
+
+            const removedModerator = await userService.removeSubredditModerator(name, moderatorUpdate)
+
+            setModerators(moderators.filter(moderator => moderator.id !== removedModerator.id))
             
+            closeActiveForm()
         } catch (error) {
             console.log(error)
         }
@@ -53,7 +70,7 @@ const ModeratorPage = () => {
 
     const deleteSubreddit = async () => {
         try {
-            await subredditService.deleteSubreddit(-1, user.id)
+            await subredditService.deleteSubreddit(name, user.id)
 
             navigate('/')
         } catch (error) {

@@ -4,7 +4,9 @@ import FormHeader from '../Common/FormHeader'
 const AddModeratorForm = ({ addModerator, handleClose }) => {
     const [username, setUsername] = useState('')
 
-    const handleAddingModerator = async () => {
+    const handleAddingModerator = async (e) => {
+        e.preventDefault()
+        
         try {
             await addModerator(username)
 

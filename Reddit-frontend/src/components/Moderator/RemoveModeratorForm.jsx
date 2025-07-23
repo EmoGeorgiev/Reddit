@@ -4,7 +4,9 @@ import FormHeader from '../Common/FormHeader'
 const RemoveModeratorForm = ({ removeModerator, handleClose }) => {
     const [username, setUsername] = useState('')
 
-    const handleRemovingModerator = async () => {
+    const handleRemovingModerator = async (e) => {
+        e.preventDefault()
+
         try {
             await removeModerator(username)
 
