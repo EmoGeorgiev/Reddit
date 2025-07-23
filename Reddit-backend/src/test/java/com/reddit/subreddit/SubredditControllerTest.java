@@ -364,30 +364,30 @@ public class SubredditControllerTest {
     public void shouldReturnForbiddenForMissingModeratorPrivilegesWhenDeletingSubreddit() throws Exception {
         doThrow(new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES))
                 .when(subredditService)
-                        .deleteSubreddit(id, id);
+                        .deleteSubreddit(title, id);
 
         mockMvc
-                .perform(delete(BASE_URL + "/" + id + "?moderatorId=" + id))
+                .perform(delete(BASE_URL + "/" + title + "?moderatorId=" + id))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.message").value(ErrorMessages.MISSING_MODERATOR_PRIVILEGES));
 
         verify(subredditService)
-                .deleteSubreddit(id, id);
+                .deleteSubreddit(title, id);
     }
 
     @Test
     public void shouldReturnNoContentForValidModeratorWhenDeletingSubreddit() throws Exception {
         doNothing()
                 .when(subredditService)
-                    .deleteSubreddit(id, id);
+                    .deleteSubreddit(title, id);
 
         mockMvc
-                .perform(delete(BASE_URL + "/" + id + "?moderatorId=" + id))
+                .perform(delete(BASE_URL + "/" + title + "?moderatorId=" + id))
                 .andExpect(status().isNoContent());
 
 
         verify(subredditService)
-                .deleteSubreddit(id, id);
+                .deleteSubreddit(title, id);
     }
 
     private ResultMatcher[] subredditDtoMatchers(String prefix, SubredditDto dto) {

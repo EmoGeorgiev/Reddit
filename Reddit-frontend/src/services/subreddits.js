@@ -62,22 +62,12 @@ const removeSubredditFromUserSubscriptions = async (title, userId) => {
     return response.data
 }
 
-const addSubredditModerator = async (id, moderatorUpdate) => {
-    const response = await axiosInstance.put(`${baseUrl}/${id}/moderators/add`, moderatorUpdate)
-    return response.data
-}
-
-const removeSubredditModerator = async (id, moderatorUpdate) => {
-    const response = await axiosInstance.put(`${baseUrl}/${id}/moderators/remove`, moderatorUpdate)
-    return response.data
-}
-
-const deleteSubreddit = async (subredditId, moderatorId) => {
-    const response = await axiosInstance.delete(`${baseUrl}/${subredditId}`, {
+const deleteSubreddit = async (subredditTitle, moderatorId) => {
+    const response = await axiosInstance.delete(`${baseUrl}/${subredditTitle}`, {
         params: { moderatorId }
     })
     return response.data
 }
 
 
-export default { getSubredditById, getSubredditByTitle, getSubredditsWhereTitleContainsWord, getSubredditsByUserId, getSubredditsByModeratorId, addSubreddit, updateSubredditTitle, addSubredditToUserSubscriptions, removeSubredditFromUserSubscriptions, addSubredditModerator, removeSubredditModerator, deleteSubreddit }
+export default { getSubredditById, getSubredditByTitle, getSubredditsWhereTitleContainsWord, getSubredditsByUserId, getSubredditsByModeratorId, addSubreddit, updateSubredditTitle, addSubredditToUserSubscriptions, removeSubredditFromUserSubscriptions, deleteSubreddit }

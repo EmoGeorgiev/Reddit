@@ -151,10 +151,8 @@ public class SubredditService {
         return SubredditMapper.subredditToSubredditDto(subreddit);
     }
 
-
-
-    public void deleteSubreddit(Long subredditId, Long moderatorId) {
-        Subreddit subreddit = getSubredditEntityById(subredditId);
+    public void deleteSubreddit(String subredditTitle, Long moderatorId) {
+        Subreddit subreddit = getSubredditEntityByTitle(subredditTitle);
         RedditUser moderator = userService.getUserEntityById(moderatorId);
 
         if (!subreddit.getModerators().contains(moderator)) {
@@ -163,7 +161,7 @@ public class SubredditService {
 
         removeSubredditFromCollections(subreddit);
 
-        subredditRepository.deleteById(subredditId);
+        subredditRepository.delete(subreddit);
     }
 
     private void removeSubredditFromCollections(Subreddit subreddit) {

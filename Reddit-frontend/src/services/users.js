@@ -51,6 +51,16 @@ const updatePassword = async (id, updatePassword) => {
     return response.data
 }
 
+const addSubredditModerator = async (subredditTitle, moderatorUpdate) => {
+    const response = await axiosInstance.put(`${baseUrl}/${subredditTitle}/moderators/add`, moderatorUpdate)
+    return response.data
+}
+
+const removeSubredditModerator = async (subredditTitle, moderatorUpdate) => {
+    const response = await axiosInstance.put(`${baseUrl}/${subredditTitle}/moderators/remove`, moderatorUpdate)
+    return response.data
+}
+
 const deleteUser = async (id, password) => {
     const response = await axiosInstance.delete(`${baseUrl}/${id}`, {
         params: { password }
@@ -59,4 +69,4 @@ const deleteUser = async (id, password) => {
 }
 
 
-export default { getUserById, getUserByUsername, getUsers, getUsersBySubredditTitle, getModeratorsBySubredditTitle, getUsersWhereUsernameContainsWord, updateUsername, updatePassword, deleteUser }
+export default { getUserById, getUserByUsername, getUsers, getUsersBySubredditTitle, getModeratorsBySubredditTitle, getUsersWhereUsernameContainsWord, updateUsername, updatePassword, addSubredditModerator, removeSubredditModerator, deleteUser }

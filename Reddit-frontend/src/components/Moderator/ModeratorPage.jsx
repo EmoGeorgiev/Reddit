@@ -53,7 +53,7 @@ const ModeratorPage = () => {
 
     const deleteSubreddit = async () => {
         try {
-            // await subredditService.deleteSubreddit(-1, user.id)
+            await subredditService.deleteSubreddit(-1, user.id)
 
             navigate('/')
         } catch (error) {
