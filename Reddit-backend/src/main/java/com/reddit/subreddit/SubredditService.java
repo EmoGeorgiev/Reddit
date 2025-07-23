@@ -85,7 +85,7 @@ public class SubredditService {
     }
 
     public SubredditDto addSubreddit(SubredditDto subredditDto, Long creatorId) {
-        RedditUser user = userService.getUserEntity(creatorId);
+        RedditUser user = userService.getUserEntityById(creatorId);
 
         if (subredditRepository.findByTitleIgnoreCase(subredditDto.title()).isPresent()) {
             throw new SubredditAlreadyExistsException(ErrorMessages.SUBREDDIT_ALREADY_EXISTS);
@@ -109,7 +109,7 @@ public class SubredditService {
         Long moderatorId = subredditUpdateTitleDto.moderatorId();
 
         Subreddit subreddit = getSubredditEntityById(subredditId);
-        RedditUser user = userService.getUserEntity(moderatorId);
+        RedditUser user = userService.getUserEntityById(moderatorId);
 
         if (!subreddit.getModerators().contains(user)) {
             throw new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES);
@@ -122,7 +122,7 @@ public class SubredditService {
 
     public SubredditDto addSubredditToUserSubscriptions(String subredditTitle, Long userId) {
         Subreddit subreddit = getSubredditEntityByTitle(subredditTitle);
-        RedditUser user = userService.getUserEntity(userId);
+        RedditUser user = userService.getUserEntityById(userId);
 
         if (user.getSubscribedTo().contains(subreddit)) {
             throw new UserIsAlreadySubscribedToSubredditException(ErrorMessages.USER_ALREADY_SUBSCRIBED);
@@ -136,7 +136,7 @@ public class SubredditService {
 
     public SubredditDto removeSubredditFromUserSubscriptions(String subredditTitle, Long userId) {
         Subreddit subreddit = getSubredditEntityByTitle(subredditTitle);
-        RedditUser user = userService.getUserEntity(userId);
+        RedditUser user = userService.getUserEntityById(userId);
 
         if (!user.getSubscribedTo().contains(subreddit)) {
             throw new UserNotSubscribedException(ErrorMessages.USER_NOT_SUBSCRIBED);
@@ -155,7 +155,7 @@ public class SubredditService {
 
     public void deleteSubreddit(Long subredditId, Long moderatorId) {
         Subreddit subreddit = getSubredditEntityById(subredditId);
-        RedditUser moderator = userService.getUserEntity(moderatorId);
+        RedditUser moderator = userService.getUserEntityById(moderatorId);
 
         if (!subreddit.getModerators().contains(moderator)) {
             throw new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES);

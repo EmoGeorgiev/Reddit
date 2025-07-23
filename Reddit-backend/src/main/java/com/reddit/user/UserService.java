@@ -1,9 +1,10 @@
 package com.reddit.user;
 
 import com.reddit.exception.subreddit.MissingModeratorPrivilegesException;
+import com.reddit.exception.subreddit.SubredditNotFoundException;
 import com.reddit.exception.user.*;
 import com.reddit.subreddit.Subreddit;
-import com.reddit.subreddit.SubredditService;
+import com.reddit.subreddit.SubredditRepository;
 import com.reddit.user.dto.ModeratorUpdateDto;
 import com.reddit.user.dto.UpdatePasswordDto;
 import com.reddit.user.dto.UserDto;
@@ -25,25 +26,32 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
-    private final SubredditService subredditService;
+    private final SubredditRepository subredditRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, SubredditService subredditService, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, SubredditRepository subredditRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.subredditService = subredditService;
+        this.subredditRepository = subredditRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
-    public RedditUser getUserEntity(Long id) {
+    public RedditUser getUserEntityById(Long id) {
         return userRepository
                 .findById(id)
                 .orElseThrow(() -> new UserNotFoundException(ErrorMessages.USER_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
+    public RedditUser getUserEntityByUsername(String username) {
+        return userRepository
+                .findByUsernameIgnoreCase(username)
+                .orElseThrow(() -> new UserNotFoundException(ErrorMessages.USER_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
     public UserDto getUser(Long id) {
-        return UserMapper.userToUserDto(getUserEntity(id));
+        return UserMapper.userToUserDto(getUserEntityById(id));
     }
 
     @Transactional(readOnly = true)
@@ -103,7 +111,7 @@ public class UserService {
     }
 
     public UserDto updateUsername(Long id, UserDto userDto) {
-        RedditUser user = getUserEntity(id);
+        RedditUser user = getUserEntityById(id);
         String username = userDto.username();
 
         if (userRepository.findByUsernameIgnoreCase(username).isPresent()) {
@@ -116,7 +124,7 @@ public class UserService {
     }
 
     public UserDto updatePassword(Long id, UpdatePasswordDto updatePasswordDto) {
-        RedditUser user = getUserEntity(id);
+        RedditUser user = getUserEntityById(id);
         String oldPassword = updatePasswordDto.oldPassword();
         String newPassword = updatePasswordDto.newPassword();
 
@@ -138,10 +146,10 @@ public class UserService {
         Long moderatorId = moderatorUpdateDto.moderatorId();
         String username = moderatorUpdateDto.updatedModeratorUsername();
 
-        Subreddit subreddit = subredditService.getSubredditEntityByTitle(subredditTitle);
-        RedditUser moderator = getUserEntity(moderatorId);
-        RedditUser newModerator = userRepository.findByUsernameIgnoreCase(username)
-                                                .orElseThrow(() -> new UsernameNotFoundException(ErrorMessages.USERNAME_DOES_NOT_EXIST));
+        Subreddit subreddit = subredditRepository.findByTitleIgnoreCase(subredditTitle)
+                                                .orElseThrow(() -> new SubredditNotFoundException(ErrorMessages.SUBREDDIT_NOT_FOUND));
+        RedditUser moderator = getUserEntityById(moderatorId);
+        RedditUser newModerator = getUserEntityByUsername(username);
 
         if (!subreddit.getModerators().contains(moderator)) {
             throw new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES);
@@ -162,10 +170,10 @@ public class UserService {
         Long moderatorId = moderatorUpdateDto.moderatorId();
         String username = moderatorUpdateDto.updatedModeratorUsername();
 
-        Subreddit subreddit = subredditService.getSubredditEntityByTitle(subredditTitle);
-        RedditUser moderator = getUserEntity(moderatorId);
-        RedditUser removedModerator = userRepository.findByUsernameIgnoreCase(username)
-                .orElseThrow(() -> new UsernameNotFoundException(ErrorMessages.USERNAME_DOES_NOT_EXIST));
+        Subreddit subreddit = subredditRepository.findByTitleIgnoreCase(subredditTitle)
+                                                .orElseThrow(() -> new SubredditNotFoundException(ErrorMessages.SUBREDDIT_NOT_FOUND));
+        RedditUser moderator = getUserEntityById(moderatorId);
+        RedditUser removedModerator = getUserEntityByUsername(username);
 
         if (!subreddit.getModerators().contains(moderator) || !subreddit.getModerators().contains(removedModerator)) {
             throw new MissingModeratorPrivilegesException(ErrorMessages.MISSING_MODERATOR_PRIVILEGES);
@@ -179,7 +187,7 @@ public class UserService {
     }
 
     public void deleteUser(Long userId, String password) {
-        RedditUser user = getUserEntity(userId);
+        RedditUser user = getUserEntityById(userId);
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new PasswordsDoNotMatchException(ErrorMessages.PASSWORDS_DO_NOT_MATCH);

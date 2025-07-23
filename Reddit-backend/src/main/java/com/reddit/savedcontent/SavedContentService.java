@@ -33,7 +33,7 @@ public class SavedContentService {
     @Transactional(readOnly = true)
     public SavedDto getSavedByContentAndUser(Long contentId, Long userId) {
         Content content = contentService.getContentEntity(contentId);
-        RedditUser user = userService.getUserEntity(userId);
+        RedditUser user = userService.getUserEntityById(userId);
 
         Optional<SavedContent> savedContentOptional = savedContentRepository.findByUserAndContent(user, content);
 
@@ -50,7 +50,7 @@ public class SavedContentService {
     }
 
     public SavedDto toggleSavedContent(SavedDto savedDto) {
-        RedditUser user = userService.getUserEntity(savedDto.userId());
+        RedditUser user = userService.getUserEntityById(savedDto.userId());
         Content content = contentService.getContentEntity(savedDto.contentId());
 
         if (content instanceof Comment c) {

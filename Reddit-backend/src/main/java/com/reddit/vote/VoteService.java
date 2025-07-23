@@ -33,7 +33,7 @@ public class VoteService {
     @Transactional(readOnly = true)
     public VoteDto getVoteByContentAndUser(Long contentId, Long userId) {
         Content content = contentService.getContentEntity(contentId);
-        RedditUser user = userService.getUserEntity(userId);
+        RedditUser user = userService.getUserEntityById(userId);
 
         Optional<Vote> voteOptional = voteRepository.findByUserAndContent(user, content);
 
@@ -56,7 +56,7 @@ public class VoteService {
                 .map(VoteMapper::voteToVotedContentDto);
     }
     public VoteDto toggleVote(VoteDto voteDto) {
-        RedditUser user = userService.getUserEntity(voteDto.userId());
+        RedditUser user = userService.getUserEntityById(voteDto.userId());
         Content content = contentService.getContentEntity(voteDto.contentId());
         VoteType voteType = voteDto.voteType();
 

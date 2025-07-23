@@ -60,7 +60,7 @@ public class CommentService {
     }
 
     public CommentDto addComment(CommentDto commentDto) {
-        RedditUser user = userService.getUserEntity(commentDto.user().id());
+        RedditUser user = userService.getUserEntityById(commentDto.user().id());
         Post post = postService.getPostEntity(commentDto.postId());
         Comment parent = commentDto.parentId() != null
                 ? getCommentEntity(commentDto.parentId())
@@ -101,7 +101,7 @@ public class CommentService {
             return CommentMapper.commentToCommentDto(comment);
         }
 
-        RedditUser user = userService.getUserEntity(userId);
+        RedditUser user = userService.getUserEntityById(userId);
         Subreddit subreddit = comment.getPost().getSubreddit();
 
         if (comment.getUser() == null || !comment.getUser().equals(user)) {

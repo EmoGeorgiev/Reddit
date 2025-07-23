@@ -79,7 +79,7 @@ public class PostService {
     }
 
     public PostDto addPost(PostDto postDto) {
-        RedditUser user = userService.getUserEntity(postDto.user().id());
+        RedditUser user = userService.getUserEntityById(postDto.user().id());
         Subreddit subreddit = subredditService.getSubredditEntityById(postDto.subreddit().id());
 
         Post post = new Post();
@@ -110,7 +110,7 @@ public class PostService {
 
     public void deletePost(Long postId, Long userId) {
         Post post = getPostEntity(postId);
-        RedditUser user = userService.getUserEntity(userId);
+        RedditUser user = userService.getUserEntityById(userId);
         Subreddit subreddit = post.getSubreddit();
 
         if (post.getUser() == null || !post.getUser().equals(user)) {
