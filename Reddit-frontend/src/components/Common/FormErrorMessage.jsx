@@ -4,7 +4,7 @@ const FormErrorMessage = ({ children }) => {
     }
 
     return (
-        <div className='text-red-500 text-center'>
+        <div className='my-2 text-red-500 text-center text-sm font-semibold'>
             {children}
         </div>
     )

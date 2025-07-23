@@ -1,17 +1,24 @@
 import { useState } from 'react'
+import { useFormErrors } from '../../hooks/useFormErrors'
 import FormHeader from '../Common/FormHeader'
+import FormErrorMessage from '../Common/FormErrorMessage'
 
 const CreateSubredditForm = ({ addSubreddit, handleClose }) => {
     const [title, setTitle] = useState('')
+    const { errors, setBackendErrors } = useFormErrors()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         
-        const subreddit = { title }
+        try {
+            const subreddit = { title }
 
-        addSubreddit(subreddit)
+            await addSubreddit(subreddit)
 
-        setTitle('')
+            setTitle('')
+        } catch (error) {
+            setBackendErrors(error)
+        }
     }
 
     return (
@@ -27,6 +34,10 @@ const CreateSubredditForm = ({ addSubreddit, handleClose }) => {
                     placeholder='Subreddit title'
                     onChange={(e) => setTitle(e.target.value)}
                 />
+
+                <FormErrorMessage>
+                    {errors.title}
+                </FormErrorMessage>
 
                 <div className='active-form-btn-container'>
                     <button className='my-5 active-form-cancel-btn focus-item' type='button' onClick={handleClose}>

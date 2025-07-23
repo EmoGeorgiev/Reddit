@@ -1,14 +1,17 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../Authentication/AuthContext'
+import { useFormErrors } from '../../hooks/useFormErrors'
 import FormHeader from '../Common/FormHeader'
 import authenticationService from '../../services/authentication'
+import FormErrorMessage from '../Common/FormErrorMessage'
 
 const LoginForm = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const navigate = useNavigate()
     const { login } = useAuth()
+    const { errors, setBackendErrors } = useFormErrors()
+    const navigate = useNavigate()
 
     const handleLogin = async (e) => {
         e.preventDefault()
@@ -25,7 +28,7 @@ const LoginForm = () => {
 
             navigate('/')
         } catch (error) {
-            console.log(error)
+            setBackendErrors(error)
         }
     }
 
@@ -46,7 +49,7 @@ const LoginForm = () => {
                     </h1>
 
                     <form onSubmit={handleLogin}>
-                        <div className='m-6'>
+                        <div className='m-5'>
                             <input 
                                 className='auth-input focus-item'
                                 type='text'
@@ -57,7 +60,7 @@ const LoginForm = () => {
                             />
                         </div>
 
-                        <div className='m-6'>
+                        <div className='m-5'>
                             <input 
                                 className='auth-input focus-item'
                                 type='password'
@@ -66,9 +69,13 @@ const LoginForm = () => {
                                 placeholder='Password'
                                 onChange={(e) => setPassword(e.target.value)}
                             />
+
+                            <FormErrorMessage>
+                                {errors.message}
+                            </FormErrorMessage>
                         </div>
                         
-                        <div className='m-6'>
+                        <div className='m-5'>
                             <button className='auth-btn focus-item' type='submit'>
                                 Log in
                             </button>

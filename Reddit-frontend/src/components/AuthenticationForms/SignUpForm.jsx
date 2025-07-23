@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useFormErrors } from '../../hooks/useFormErrors'
 import FormHeader from '../Common/FormHeader'
 import authenticationService from '../../services/authentication'
-import { useFormErrors } from '../../hooks/useFormErrors'
 import FormErrorMessage from '../Common/FormErrorMessage'
 
 const SignUpForm = () => {
@@ -48,7 +48,7 @@ const SignUpForm = () => {
                     </h1>
 
                     <form onSubmit={handleSignUp}>
-                        <div className='m-6'>
+                        <div className='m-5'>
                             <input 
                                 className='auth-input focus-item'
                                 type='text'
@@ -63,7 +63,7 @@ const SignUpForm = () => {
                             </FormErrorMessage>
                         </div>
 
-                        <div className='m-6'>
+                        <div className='m-5'>
                             <input 
                                 className='auth-input focus-item'
                                 type='password'
@@ -79,7 +79,7 @@ const SignUpForm = () => {
                             </FormErrorMessage>
                         </div>
 
-                        <div className='m-6'>
+                        <div className='m-5'>
                             <button className='auth-btn focus-item' type='submit'>
                                 Sign Up
                             </button>

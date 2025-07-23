@@ -34,7 +34,7 @@ const SubscriptionsList = ({ isOpen, handleOpen }) => {
 
             closeForm()
         } catch (error) {
-            console.log(error)
+            throw error
         }
     }
 
