@@ -1,6 +1,6 @@
 import arrowIcon from '../../assets/expand-arrow-icon.svg'
 
-const SettingsField = ({ name, handleClick }) => {
+const OptionItem = ({ name, handleClick }) => {
     return (
         <div onClick={handleClick} className='w-full p-2 mx-2 flex justify-between items-center text-gray-700 cursor-pointer group'>
             <span>
@@ -14,4 +14,4 @@ const SettingsField = ({ name, handleClick }) => {
     )
 }
 
-export default SettingsField
+export default OptionItem

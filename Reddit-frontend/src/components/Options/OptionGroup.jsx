@@ -1,4 +1,4 @@
-const SettingsCategory = ({ name, children }) => {
+const OptionGroup = ({ name, children }) => {
     return (
         <div>
             <h2 className='text-gray-800 text-lg font-semibold'>{name}</h2>
@@ -10,4 +10,4 @@ const SettingsCategory = ({ name, children }) => {
     )
 }
 
-export default SettingsCategory
+export default OptionGroup

@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { ActiveFormOption } from '../../util/ActiveFormOption'
 import { useAuth } from '../Authentication/AuthContext'
-import SettingsCategory from './SettingsCategory'
-import SettingsField from './SettingsField'
 import UsernameChangeForm from './UsernameChangeForm'
 import PasswordChangeForm from './PasswordChangeForm'
 import DeleteAccountForm from './DeleteAccountForm'
 import userService from '../../services/users'
+import OptionPanel from '../Options/OptionPanel'
+import OptionFormManager from '../Options/OptionFormManager'
 
 const Settings = () => {
     const [activeForm, setActiveForm] = useState(null)
@@ -54,34 +54,48 @@ const Settings = () => {
         setActiveForm(null)
     }
 
+    const forms = [
+        {
+            formKey: ActiveFormOption.CHANGE_USERNAME, 
+            element: (<UsernameChangeForm usernameChange={usernameChange} 
+                                          handleClose={closeActiveForm} />) 
+        },
+        {
+            formKey: ActiveFormOption.CHANGE_PASSWORD, 
+            element: (<PasswordChangeForm passwordChange={passwordChange} 
+                                          handleClose={closeActiveForm} />) 
+        },
+        {
+            formKey: ActiveFormOption.DELETE_ACCOUNT, 
+            element: (<DeleteAccountForm deleteAccount={deleteAccount} 
+                                          handleClose={closeActiveForm} />) 
+        }
+    ]
+
+    const generalSettings = [
+        { label: ActiveFormOption.CHANGE_USERNAME, formKey: ActiveFormOption.CHANGE_USERNAME },
+        { label: ActiveFormOption.CHANGE_PASSWORD, formKey: ActiveFormOption.CHANGE_PASSWORD },
+    ]
+
+    const advancedSettings = [
+        { label: ActiveFormOption.DELETE_ACCOUNT, formKey: ActiveFormOption.DELETE_ACCOUNT },
+    ]
+
+    const sections = [
+        { title: 'General', options: generalSettings },
+        { title: 'Advanced', options: advancedSettings }
+    ]
+
     return (
         <div className='w-1/2 mt-10 mx-auto'>
             <h1 className='page-header'>Settings</h1>
-            
-            <div>
-                {activeForm !== null && <button className='background-btn background-blur' onClick={closeActiveForm}></button>}
 
-                <div className={`${activeForm === ActiveFormOption.CHANGE_USERNAME ? 'opacity-100 visible' : 'opacity-0 invisible'} duration-300`}>
-                    <UsernameChangeForm usernameChange={usernameChange} handleClose={closeActiveForm} />
-                </div>
-                <div className={`${activeForm === ActiveFormOption.CHANGE_PASSWORD ? 'opacity-100 visible' : 'opacity-0 invisible'} duration-300`}>
-                    <PasswordChangeForm passwordChange={passwordChange} handleClose={closeActiveForm} />
-                </div>
-                <div className={`${activeForm === ActiveFormOption.DELETE_ACCOUNT ? 'opacity-100 visible' : 'opacity-0 invisible'} duration-300`}>
-                    <DeleteAccountForm deleteAccount={deleteAccount} handleClose={closeActiveForm} />
-                </div>
-            </div>
+            <OptionFormManager activeForm={activeForm} 
+                                forms={forms} 
+                                handleClose={closeActiveForm} />
 
-            <div className='mt-10 mx-5'>
-                <SettingsCategory name='General'>
-                    <SettingsField name={ActiveFormOption.CHANGE_USERNAME} handleClick={() => openActiveForm(ActiveFormOption.CHANGE_USERNAME)} />
-                    <SettingsField name={ActiveFormOption.CHANGE_PASSWORD} handleClick={() => openActiveForm(ActiveFormOption.CHANGE_PASSWORD)} />
-                </SettingsCategory>
-                        
-                <SettingsCategory name='Advanced'>
-                    <SettingsField name={ActiveFormOption.DELETE_ACCOUNT} handleClick={() => openActiveForm(ActiveFormOption.DELETE_ACCOUNT)} />
-                </SettingsCategory>
-            </div>
+            <OptionPanel sections={sections} 
+                         onSelect={openActiveForm} />
         </div>
     )
 }

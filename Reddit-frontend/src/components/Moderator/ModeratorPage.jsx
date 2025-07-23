@@ -4,11 +4,11 @@ import { useAuth } from '../Authentication/AuthContext'
 import { ActiveFormOption } from '../../util/ActiveFormOption'
 import subredditService from '../../services/subreddits'
 import userService from '../../services/users'
-import SettingsCategory from '../Settings/SettingsCategory'
-import SettingsField from '../Settings/SettingsField'
 import DeleteSubredditForm from './DeleteSubredditForm'
 import AddModeratorForm from './AddModeratorForm'
 import RemoveModeratorForm from './RemoveModeratorForm'
+import OptionPanel from '../Options/OptionPanel'
+import OptionFormManager from '../Options/OptionFormManager'
 
 const ModeratorPage = () => {
     const [activeForm, setActiveForm] = useState(null)
@@ -86,35 +86,50 @@ const ModeratorPage = () => {
         setActiveForm(null)
     }
 
+    const forms = [
+        {
+            formKey: ActiveFormOption.ADD_MODERATOR, 
+            element: (<AddModeratorForm addModerator={addModerator} 
+                                        handleClose={closeActiveForm} />) 
+        },
+        {
+            formKey: ActiveFormOption.REMOVE_MODERATOR, 
+            element: (<RemoveModeratorForm removeModerator={removeModerator} 
+                                           handleClose={closeActiveForm} />) 
+        },
+        {
+            formKey: ActiveFormOption.DELETE_SUBREDDIT, 
+            element: (<DeleteSubredditForm deleteSubreddit={deleteSubreddit} 
+                                           handleClose={closeActiveForm} />) 
+        }
+    ]
+
+    const userManagementSettings = [
+        { label: ActiveFormOption.ADD_MODERATOR, formKey: ActiveFormOption.ADD_MODERATOR },
+        { label: ActiveFormOption.REMOVE_MODERATOR, formKey: ActiveFormOption.REMOVE_MODERATOR },
+    ]
+
+    const subredditManagementSettings = [
+        { label: ActiveFormOption.DELETE_SUBREDDIT, formKey: ActiveFormOption.DELETE_SUBREDDIT },
+    ]
+
+    const sections = [
+        { title: 'User management', options: userManagementSettings },
+        { title: 'Subreddit mangement', options: subredditManagementSettings }
+    ]
+
     return (
         <div className='w-1/2 mt-10 mx-auto'>
             <h1 className='page-header'>
                 Moderator Panel
             </h1>
 
-            <div>
-                {activeForm !== null && <button className='background-btn background-blur' onClick={closeActiveForm}></button>}
-                <div className={`${activeForm === ActiveFormOption.ADD_MODERATOR ? 'opacity-100 visible' : 'opacity-0 invisible'} duration-300`}>
-                    <AddModeratorForm addModerator={addModerator} handleClose={closeActiveForm} />
-                </div>
-                <div className={`${activeForm === ActiveFormOption.REMOVE_MODERATOR ? 'opacity-100 visible' : 'opacity-0 invisible'} duration-300`}>
-                    <RemoveModeratorForm removeModerator={removeModerator} handleClose={closeActiveForm} />
-                </div>
-                <div className={`${activeForm === ActiveFormOption.DELETE_SUBREDDIT ? 'opacity-100 visible' : 'opacity-0 invisible'} duration-300`}>
-                    <DeleteSubredditForm deleteSubreddit={deleteSubreddit} handleClose={closeActiveForm} />
-                </div>
-            </div>
+            <OptionFormManager activeForm={activeForm}
+                                forms={forms}
+                                handleClose={closeActiveForm} />
 
-            <div className='mt-10 mx-5'>
-                <SettingsCategory name='User management'>
-                    <SettingsField name={ActiveFormOption.ADD_MODERATOR} handleClick={() => openActiveForm(ActiveFormOption.ADD_MODERATOR)} />
-                    <SettingsField name={ActiveFormOption.REMOVE_MODERATOR} handleClick={() => openActiveForm(ActiveFormOption.REMOVE_MODERATOR)} />
-                </SettingsCategory>
-
-                <SettingsCategory name='Subreddit mangement'>
-                    <SettingsField name={ActiveFormOption.DELETE_SUBREDDIT} handleClick={() => openActiveForm(ActiveFormOption.DELETE_SUBREDDIT)} />
-                </SettingsCategory>
-            </div>
+            <OptionPanel sections={sections} 
+                         onSelect={openActiveForm} />
         </div>
     )
 }
