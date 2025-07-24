@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { usePagination } from '../../hooks/usePagination'
 import EmptyContent from '../Common/EmptyContent'
 import postService from '../../services/posts'
 import PostPage from '../Post/PostPage'
 
 const UserPosts = ({ profile }) => {
-    const [isEmpty, setIsEmpty] = useState(false)
+    const { isEmpty, setIsEmpty } = usePagination()
 
     const getPostPage = async (id, pageable) => {
         const postPage = await postService.getPostsByUserId(id, pageable)

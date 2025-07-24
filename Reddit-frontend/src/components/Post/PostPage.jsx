@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { SortOptions } from '../../util/SortOptions'
+import { usePagination } from '../../hooks/usePagination'
 import PostList from './PostList'
 import Pagination from '../Common/Pagination'
 import SortSelect from '../Common/SortSelect'
@@ -10,9 +11,15 @@ import postService from '../../services/posts'
 const PostPage = ({ query, getPosts }) => {
     const [posts, setPosts] = useState([])
     const [sort, setSort] = useState(SortOptions.New)
-    const [page, setPage] = useState(0)
-    const [isFirst, setIsFirst] = useState(true)
-    const [isLast, setIsLast] = useState(true)
+    const { 
+        page,
+        goToNextPage,
+        goToPreviousPage,
+        isFirst,
+        setIsFirst,
+        isLast,
+        setIsLast 
+    } = usePagination()
     const { user } = useAuth()
     const location = useLocation()
 
@@ -41,11 +48,7 @@ const PostPage = ({ query, getPosts }) => {
             console.log(error)
         }
     }
-
-    const handlePageChange = (change) => {
-        setPage(page + change)
-    }
-
+    
     const showSort = () => {
         const subredditPath = '/r/'
         const currentPath = location.pathname.toLowerCase()
@@ -60,7 +63,7 @@ const PostPage = ({ query, getPosts }) => {
                     <SortSelect selected={sort} handleChange={setSort} />
                 </div>}
             <PostList posts={posts} deletePost={deletePost} />
-            <Pagination handlePageChange={handlePageChange} isFirst={isFirst} isLast={isLast} />
+            <Pagination goToNextPage={goToNextPage} goToPreviousPage={goToPreviousPage} isFirst={isFirst} isLast={isLast} />
         </div>
     )
 }

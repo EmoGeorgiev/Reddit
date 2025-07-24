@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react'
 import { contentToPost } from '../../util/contentMapper'
+import { usePagination } from '../../hooks/usePagination'
 import PostList from '../Post/PostList'
 import Pagination from '../Common/Pagination'
 
 const UserVoted = ({ profile, getVoted }) => {
     const [contents, setContents] = useState([])
-    const [page, setPage] = useState(0)
-    const [isFirst, setIsFirst] = useState(true)
-    const [isLast, setIsLast] = useState(true)
+    const { 
+        page,
+        goToNextPage,
+        goToPreviousPage,
+        isFirst,
+        setIsFirst,
+        isLast,
+        setIsLast
+    } = usePagination()
 
     useEffect(() => {
         const getVotedPage = async () => {
@@ -28,14 +35,10 @@ const UserVoted = ({ profile, getVoted }) => {
         getVotedPage()
     }, [profile.id, page])
 
-    const handlePageChange = (change) => {
-        setPage(page + change)
-    }
-
     return (
         <div>
             <PostList posts={contents} deletePost={null} />
-            <Pagination handlePageChange={handlePageChange} isFirst={isFirst} isLast={isLast} />
+            <Pagination goToNextPage={goToNextPage} goToPreviousPage={goToPreviousPage} isFirst={isFirst} isLast={isLast} />
         </div>
     )
 }

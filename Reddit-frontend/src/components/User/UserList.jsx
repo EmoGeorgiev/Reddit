@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react'
+import { usePagination } from '../../hooks/usePagination'
 import Pagination from '../Common/Pagination'
 import ContentUserHeader from '../Content/ContentUserHeader'
 
 const UserList = ({ query, getUsers }) => {
     const [users, setUsers] = useState([])
-    const [page, setPage] = useState(0)
-    const [isFirst, setIsFirst] = useState(true)
-    const [isLast, setIsLast] = useState(true)
+    const { 
+        page,
+        goToNextPage,
+        goToPreviousPage,
+        isFirst,
+        setIsFirst,
+        isLast,
+        setIsLast
+    } = usePagination()
 
     useEffect(() => {
         const getUserPage = async () => {
@@ -39,7 +46,7 @@ const UserList = ({ query, getUsers }) => {
                         </li>)}
             </ul>
 
-            <Pagination handlePageChange={handlePageChange} isFirst={isFirst} isLast={isLast} />
+            <Pagination goToNextPage={goToNextPage} goToPreviousPage={goToPreviousPage} isFirst={isFirst} isLast={isLast} />
         </div>
     )
 }

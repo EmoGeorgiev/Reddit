@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { usePagination } from '../../hooks/usePagination'
 import EmptyContent from '../Common/EmptyContent'
 import Pagination from '../Common/Pagination'
 import commentService from '../../services/comments'
@@ -6,10 +7,17 @@ import CommentList from '../Comment/CommentList'
 
 const UserComments = ({ profile }) => {
     const [comments, setComments] = useState([])
-    const [isEmpty, setIsEmpty] = useState(true)
-    const [page, setPage] = useState(0)
-    const [isFirst, setIsFirst] = useState(true)
-    const [isLast, setIsLast] = useState(true)
+    const { 
+        page,
+        goToNextPage,
+        goToPreviousPage,
+        isEmpty,
+        setIsEmpty,
+        isFirst,
+        setIsFirst,
+        isLast,
+        setIsLast
+    } = usePagination()
 
     useEffect(() => {
         const getComments = async () => {
@@ -27,10 +35,6 @@ const UserComments = ({ profile }) => {
 
         getComments()
     }, [profile.id, page])
-
-    const handlePageChange = (change) => {
-        setPage(page + change)
-    }
 
     const deleteComment = async (commentId, userId) => {
         try {
@@ -53,7 +57,7 @@ const UserComments = ({ profile }) => {
     return (
         <div>
             <CommentList comments={comments} deleteComment={deleteComment} />
-            <Pagination handlePageChange={handlePageChange} isFirst={isFirst} isLast={isLast} />
+            <Pagination goToNextPage={goToNextPage} goToPreviousPage={goToPreviousPage} isFirst={isFirst} isLast={isLast} />
         </div>
     )
 }

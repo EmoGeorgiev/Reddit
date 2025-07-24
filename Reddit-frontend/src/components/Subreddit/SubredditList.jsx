@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react'
+import { usePagination } from '../../hooks/usePagination'
 import { Link } from 'react-router-dom'
 import Pagination from '../Common/Pagination'
 import subredditIcon from '../../assets/subreddit-icon.svg'
 
 const SubredditList = ({ query, getSubreddits }) => {
     const [subreddits, setSubreddits] = useState([])
-    const [page, setPage] = useState(0)
-    const [isFirst, setIsFirst] = useState(true)
-    const [isLast, setIsLast] = useState(true)
+    const { 
+        page,
+        goToNextPage,
+        goToPreviousPage,
+        isFirst,
+        setIsFirst,
+        isLast,
+        setIsLast 
+    } = usePagination()
 
     useEffect(() => {
         const getSubredditPage = async () => {
@@ -24,10 +31,6 @@ const SubredditList = ({ query, getSubreddits }) => {
 
         getSubredditPage()
     }, [query, page])
-
-    const handlePageChange = (change) => {
-        setPage(page + change)
-    }
 
     return (
         <div>
@@ -52,7 +55,7 @@ const SubredditList = ({ query, getSubreddits }) => {
                         </li>)}
             </ul>
 
-            <Pagination handlePageChange={handlePageChange} isFirst={isFirst} isLast={isLast} />
+            <Pagination goToNextPage={goToNextPage} goToPreviousPage={goToPreviousPage} isFirst={isFirst} isLast={isLast} />
         </div>
     )
 }

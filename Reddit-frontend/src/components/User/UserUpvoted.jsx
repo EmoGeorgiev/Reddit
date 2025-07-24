@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { usePagination } from '../../hooks/usePagination'
 import EmptyContent from '../Common/EmptyContent'
 import UserVoted from './UserVoted'
 import voteService from '../../services/votes'
 
 const UserUpvoted = ({ profile }) => {
-    const [isEmpty, setIsEmpty] = useState(false)
+    const { isEmpty, setIsEmpty } = usePagination()
 
     const getUpvotedPage = async (id, pageable) => {
         try {

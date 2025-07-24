@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { contentToPost, contentToComment } from '../../util/contentMapper'
+import { usePagination } from '../../hooks/usePagination'
 import EmptyContent from '../Common/EmptyContent'
 import savedContentService from '../../services/savedContents'
 import Pagination from '../Common/Pagination'
@@ -8,10 +9,17 @@ import Comment from '../Comment/Comment'
 
 const UserSaved = ({ profile }) => {
     const [contents, setContents] = useState([])
-    const [isEmpty, setIsEmpty] = useState(false)
-    const [page, setPage] = useState(0)
-    const [isFirst, setIsFirst] = useState(true)
-    const [isLast, setIsLast] = useState(true)
+    const { 
+        page,
+        goToNextPage,
+        goToPreviousPage,
+        isEmpty,
+        setIsEmpty,
+        isFirst,
+        setIsFirst,
+        isLast,
+        setIsLast
+    } = usePagination()
 
     useEffect(() => {
         const getSavedContents = async () => {
@@ -66,7 +74,7 @@ const UserSaved = ({ profile }) => {
                 })}
             </ul>
 
-            <Pagination handlePageChange={handlePageChange} isFirst={isFirst} isLast={isLast} />
+            <Pagination goToNextPage={goToNextPage} goToPreviousPage={goToPreviousPage} isFirst={isFirst} isLast={isLast} />
         </div>
     )
 }
