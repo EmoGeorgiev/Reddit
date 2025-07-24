@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../Authentication/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import subredditService from '../../services/subreddits'
 import arrowIcon from '../../assets/expand-arrow-icon.svg'
 import subredditIcon from '../../assets/subreddit-icon.svg'

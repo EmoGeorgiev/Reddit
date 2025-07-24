@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { useAuth } from '../Authentication/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import { useEffect, useState } from 'react'
 import { Category } from '../../util/Category'
 import MissingContent from '../Common/MissingContent'

@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { useAuth } from '../Authentication/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import { SortOptions } from '../../util/SortOptions'
 import PostList from './PostList'
 import Pagination from '../Common/Pagination'

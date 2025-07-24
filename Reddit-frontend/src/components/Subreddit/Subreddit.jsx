@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useAuth } from '../Authentication/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import subredditService from '../../services/subreddits'
 import userService from '../../services/users'
 import postService from '../../services/posts'

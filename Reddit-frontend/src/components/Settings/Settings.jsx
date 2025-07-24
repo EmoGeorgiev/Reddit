@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ActiveFormOption } from '../../util/ActiveFormOption'
-import { useAuth } from '../Authentication/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import UsernameChangeForm from './UsernameChangeForm'
 import PasswordChangeForm from './PasswordChangeForm'
 import DeleteAccountForm from './DeleteAccountForm'

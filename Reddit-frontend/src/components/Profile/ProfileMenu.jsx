@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAuth } from '../Authentication/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import userIcon from '../../assets/user-icon.svg'
 import settingsIcon from '../../assets/settings-icon.svg'
 import logoutIcon from '../../assets/logout-icon.svg'

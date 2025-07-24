@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useAuth } from '../Authentication/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import deleteIcon from '../../assets/delete-icon.svg'
 import userService from '../../services/users'
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useAuth } from '../Authentication/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import { VoteType } from '../../util/VoteType'
 import voteService from '../../services/votes'
 import voteIcon from '../../assets/vote-icon.svg'

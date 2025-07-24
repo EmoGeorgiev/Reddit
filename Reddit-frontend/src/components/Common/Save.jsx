@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useAuth } from '../Authentication/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import { SavedType } from '../../util/SavedType.js'
 import savedContentService from '../../services/savedContents'
 import saveIcon from '../../assets/save-icon.svg'

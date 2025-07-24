@@ -1,4 +1,3 @@
-import thinkingIcon from '../../assets/thinking-icon.svg'
 import EmptyContent from './EmptyContent'
 
 const MissingContent = ({ heading, text, button, handleClick }) => {

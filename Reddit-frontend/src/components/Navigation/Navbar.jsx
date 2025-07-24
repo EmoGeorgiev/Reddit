@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../Authentication/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import { Link } from 'react-router-dom'
 import ProfileMenu from '../Profile/ProfileMenu'
 import SearchBar from '../Search/SearchBar'

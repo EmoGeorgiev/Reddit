@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAuth } from '../Authentication/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import Vote from '../Common/Vote'
 import Save from '../Common/Save'
 import ContentDelete from '../Content/ContentDelete'

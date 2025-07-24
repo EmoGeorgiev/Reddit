@@ -1,4 +1,4 @@
-import { useAuth } from '../Authentication/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import editIcon from '../../assets/edit-icon.svg'
 
 const ContentEdit = ({ creatorId, handleEdit }) => {

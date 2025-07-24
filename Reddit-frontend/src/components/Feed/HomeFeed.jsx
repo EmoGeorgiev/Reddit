@@ -1,4 +1,4 @@
-import { useAuth } from '../Authentication/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import Feed from './Feed'
 import postService from '../../services/posts'
 
