@@ -1,7 +1,10 @@
 import { useState } from 'react'
+import { useFormErrors } from '../../hooks/useFormErrors'
+import FormErrorMessage from '../Common/FormErrorMessage'
 
 const UpdateTextForm = ({ handleClose, originalText, updateContent }) => {
     const [text, setText] = useState(originalText)
+    const { errors, setBackendErrors } = useFormErrors()
 
     const disableEdit = () => {
         handleClose()
@@ -15,7 +18,7 @@ const UpdateTextForm = ({ handleClose, originalText, updateContent }) => {
             await updateContent(text)
             disableEdit()
         } catch (error) {
-            console.log(error)
+            setBackendErrors(error)
         }
     }
 
@@ -28,6 +31,10 @@ const UpdateTextForm = ({ handleClose, originalText, updateContent }) => {
                             name='textArea'>
                         
                 </textarea>
+
+                <FormErrorMessage>
+                    {errors.text}
+                </FormErrorMessage>
 
                 <div className='mt-2 flex justify-end'>
                     <button className='active-form-cancel-btn' type='button'

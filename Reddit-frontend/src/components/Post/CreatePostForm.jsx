@@ -1,7 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../Authentication/AuthContext'
 import { useEffect, useState } from 'react'
+import { useFormErrors } from '../../hooks/useFormErrors'
 import MissingContent from '../Common/MissingContent'
+import FormErrorMessage from '../Common/FormErrorMessage'
 import subredditService from '../../services/subreddits'
 import postService from '../../services/posts'
 import subredditIcon from '../../assets/subreddit-icon.svg'
@@ -10,6 +12,7 @@ const CreatePostForm = () => {
     const [subreddit, setSubreddit] = useState(null)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
+    const { errors, setBackendErrors } = useFormErrors()
     const { name } = useParams()
     const { user } = useAuth()
     const navigate = useNavigate()
@@ -43,7 +46,7 @@ const CreatePostForm = () => {
 
             handleRedirect()
         } catch (error) {
-            console.log(error)
+            setBackendErrors(error)
         }
     }
 
@@ -80,6 +83,10 @@ const CreatePostForm = () => {
                     placeholder='Title'
                     onChange={(e) => setTitle(e.target.value)} 
                 />
+
+                <FormErrorMessage>
+                    {errors.title}
+                </FormErrorMessage>
 
                 <input 
                     className='h-1/2 p-4 border border-gray-400 rounded-3xl focus:outline-none focus:border-2 focus:border-blue-400'

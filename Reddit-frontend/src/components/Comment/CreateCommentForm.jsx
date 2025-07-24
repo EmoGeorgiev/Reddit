@@ -1,7 +1,10 @@
 import { useState } from 'react'
+import { useFormErrors } from '../../hooks/useFormErrors'
+import FormErrorMessage from '../Common/FormErrorMessage'
 
 const CreateCommentForm = ({ isOpen, setIsOpen, createComment }) => {
     const [text, setText] = useState('')
+    const { errors, setBackendErrors } = useFormErrors()
 
     const enableFocus = () => {
         setIsOpen(true)
@@ -20,7 +23,7 @@ const CreateCommentForm = ({ isOpen, setIsOpen, createComment }) => {
 
             disableFocus()
         } catch (error) {
-            console.log(error)
+            setBackendErrors(error)
         }
     }
 
@@ -35,6 +38,10 @@ const CreateCommentForm = ({ isOpen, setIsOpen, createComment }) => {
                             onFocus={enableFocus}>
 
                 </textarea>
+
+                <FormErrorMessage>
+                    {errors.text}
+                </FormErrorMessage>
 
                 {isOpen && 
                     <div className='mt-2 flex justify-end'>

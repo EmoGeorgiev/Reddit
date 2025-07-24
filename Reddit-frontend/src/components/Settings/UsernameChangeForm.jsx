@@ -1,15 +1,22 @@
 import { useState } from 'react'
+import { useFormErrors } from '../../hooks/useFormErrors'
 import FormHeader from '../Common/FormHeader'
+import FormErrorMessage from '../Common/FormErrorMessage'
 
 const UsernameChangeForm = ({ usernameChange, handleClose }) => {
     const [username, setUsername] = useState('')
+    const { errors, setBackendErrors } = useFormErrors()
 
-    const handleUsernameChange = (e) => {
+    const handleUsernameChange = async (e) => {
         e.preventDefault()
 
-        usernameChange(username)
+        try {
+            await usernameChange(username)
 
-        setUsername('')
+            setUsername('')
+        } catch (error) {
+            setBackendErrors(error)
+        }
     }
 
     return (
@@ -25,6 +32,10 @@ const UsernameChangeForm = ({ usernameChange, handleClose }) => {
                     placeholder='New username'
                     onChange={(e) => setUsername(e.target.value)}
                 />
+
+                <FormErrorMessage>
+                    {errors.username}
+                </FormErrorMessage>
 
                 <div className='active-form-btn-container'>
                     <button className='my-5 active-form-cancel-btn focus-item' type='button' onClick={handleClose}>

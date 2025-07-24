@@ -46,7 +46,7 @@ public class UserService {
     public RedditUser getUserEntityByUsername(String username) {
         return userRepository
                 .findByUsernameIgnoreCase(username)
-                .orElseThrow(() -> new UserNotFoundException(ErrorMessages.USER_NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(ErrorMessages.USERNAME_DOES_NOT_EXIST));
     }
 
     @Transactional(readOnly = true)

@@ -1,8 +1,11 @@
 import { useState } from 'react'
+import { useFormErrors } from '../../hooks/useFormErrors'
 import FormHeader from '../Common/FormHeader'
+import FormErrorMessage from '../Common/FormErrorMessage'
 
 const RemoveModeratorForm = ({ removeModerator, handleClose }) => {
     const [username, setUsername] = useState('')
+    const { errors, setBackendErrors } = useFormErrors()
 
     const handleRemovingModerator = async (e) => {
         e.preventDefault()
@@ -12,7 +15,7 @@ const RemoveModeratorForm = ({ removeModerator, handleClose }) => {
 
             setUsername('')
         } catch (error) {
-            console.log(error)
+            setBackendErrors(error)
         }
     }
 
@@ -28,6 +31,10 @@ const RemoveModeratorForm = ({ removeModerator, handleClose }) => {
                     placeholder='Enter Username'
                     onChange={(e) => setUsername(e.target.value)}
                 />
+
+                <FormErrorMessage>
+                    {errors.message}
+                </FormErrorMessage>
 
                 <div className='active-form-btn-container'>
                     <button className='my-5 active-form-cancel-btn focus-item' type='button' onClick={handleClose}>

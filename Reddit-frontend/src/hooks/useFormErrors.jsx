@@ -24,7 +24,6 @@ export const useFormErrors = () => {
 
     return {
         errors,
-        setBackendErrors,
-        clearErrors
+        setBackendErrors
     }
 }

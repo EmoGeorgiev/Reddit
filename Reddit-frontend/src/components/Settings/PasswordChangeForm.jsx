@@ -1,17 +1,25 @@
 import { useState } from 'react'
+import { useFormErrors } from '../../hooks/useFormErrors'
 import FormHeader from '../Common/FormHeader'
+import FormErrorMessage from '../Common/FormErrorMessage'
 
 const PasswordChangeForm = ({ passwordChange, handleClose }) => {
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
+    const { errors, setBackendErrors } = useFormErrors()
 
-    const handlePasswordChange = (e) => {
+    const handlePasswordChange = async (e) => {
         e.preventDefault()
 
-        passwordChange(oldPassword, newPassword)
+        try {
+            await passwordChange(oldPassword, newPassword)
 
-        setOldPassword('')
-        setNewPassword('')
+            setOldPassword('')
+            setNewPassword('')
+        } catch (error) {
+            console.log(error)
+            setBackendErrors(error)
+        }
     }
 
     return (
@@ -28,6 +36,10 @@ const PasswordChangeForm = ({ passwordChange, handleClose }) => {
                     onChange={(e) => setOldPassword(e.target.value)}
                 />
 
+                <FormErrorMessage>
+                    {errors.oldPassword}
+                </FormErrorMessage>
+
                 <input 
                     className='active-form-input focus-item'
                     type='password'
@@ -36,6 +48,11 @@ const PasswordChangeForm = ({ passwordChange, handleClose }) => {
                     placeholder='New password'
                     onChange={(e) => setNewPassword(e.target.value)}
                 />
+
+                <FormErrorMessage>
+                    {errors.newPassword}
+                    {errors.message}
+                </FormErrorMessage>
 
                 <div className='active-form-btn-container'>
                     <button className='my-10 active-form-cancel-btn focus-item' type='button' onClick={handleClose}>

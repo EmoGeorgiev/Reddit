@@ -47,7 +47,7 @@ const ModeratorPage = () => {
 
             closeActiveForm()
         } catch (error) {
-            console.log(error)
+            throw error
         }
     }
 
@@ -64,7 +64,7 @@ const ModeratorPage = () => {
             
             closeActiveForm()
         } catch (error) {
-            console.log(error)
+            throw error
         }
     }
 
@@ -74,7 +74,7 @@ const ModeratorPage = () => {
 
             navigate('/')
         } catch (error) {
-            console.log(error)
+            throw error
         }
     }
 

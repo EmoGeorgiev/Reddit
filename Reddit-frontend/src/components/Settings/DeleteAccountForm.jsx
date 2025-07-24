@@ -1,17 +1,24 @@
 import { useState } from 'react'
+import { useFormErrors } from '../../hooks/useFormErrors'
 import FormHeader from '../Common/FormHeader'
+import FormErrorMessage from '../Common/FormErrorMessage'
 
 const DeleteAccountForm = ({ deleteAccount, handleClose }) => {
    const [password, setPassword] = useState('')
+   const { errors, setBackendErrors } = useFormErrors()
    
-    const handleDeleteAccount = (e) => {
+    const handleDeleteAccount = async (e) => {
         e.preventDefault()
 
-        if (window.confirm('Are you sure you want to delete your account?')) {
-            deleteAccount(password)
-        }
+        try {
+            if (window.confirm('Are you sure you want to delete your account?')) {
+                await deleteAccount(password)
+            }
 
-        setPassword('')
+            setPassword('')
+        } catch (error) {
+            setBackendErrors(error)
+        }
     }
 
     return (
@@ -31,6 +38,10 @@ const DeleteAccountForm = ({ deleteAccount, handleClose }) => {
                     placeholder='Password'
                     onChange={(e) => setPassword(e.target.value)}
                 />
+
+                <FormErrorMessage>
+                    {errors.message}
+                </FormErrorMessage>
 
                 <div className='active-form-btn-container'>
                     <button className='my-2 active-form-cancel-btn focus-item' type='button' onClick={handleClose}>

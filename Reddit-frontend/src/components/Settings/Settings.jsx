@@ -20,7 +20,7 @@ const Settings = () => {
 
             closeActiveForm()
         } catch (error) {
-            console.log(error)
+            throw error
         }
     }
     
@@ -30,7 +30,7 @@ const Settings = () => {
 
             closeActiveForm()
         } catch (error) {
-            console.log(error)
+            throw error
         }
     }
     
@@ -42,7 +42,7 @@ const Settings = () => {
 
             logout()
         } catch (error) {
-            console.log(error)
+            throw error
         }
     }
 

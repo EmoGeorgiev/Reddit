@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { SortOptions } from '../../util/SortOptions'
 import { SizeOptions } from '../../util/SizeOptions'
+import { useAuth } from '../Authentication/AuthContext'
 import Post from '../Post/Post'
 import MissingContent from '../Common/MissingContent'
 import CommentList from './CommentList'
@@ -18,6 +19,7 @@ const CommentSection = () => {
     const [sort, setSort] = useState(SortOptions.Top)
     const [size, setSize] = useState(SizeOptions.Default)
     const [totalElements, setTotalElements] = useState(0)
+    const { user } = useAuth()
     const { name, postId } = useParams()
     const navigate = useNavigate()
 
@@ -60,13 +62,19 @@ const CommentSection = () => {
     }
 
 
-    const createComment = async (comment) => {
+    const createComment = async (text) => {
         try {
+            const comment = {
+                user,
+                text,
+                postId
+            }
+
             const newComment = await commentService.addComment(comment)
 
             setComments([...comments, newComment])
         } catch (error) {
-            console.log(error)
+            throw error
         }
     }
 

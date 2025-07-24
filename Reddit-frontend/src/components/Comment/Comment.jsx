@@ -33,7 +33,7 @@ const Comment = ({ comment, deleteComment }) => {
             const createdComment = await commentService.addComment(newComment)
             setReplies([...replies, createdComment])
         } catch (error) {
-            console.log(error)
+            throw error
         }
     }
 
@@ -46,7 +46,7 @@ const Comment = ({ comment, deleteComment }) => {
             const updatedComment = await commentService.updateComment(newComment.id, newComment)
             setParentComment(updatedComment)
         } catch (error) {
-            console.log(error)
+            throw error
         }
     }
 
