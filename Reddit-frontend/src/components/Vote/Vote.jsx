@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { VoteType } from "../../util/VoteType";
 import voteService from "../../services/votes";
-import VoteButton from "./VoteButton";
+import UpVoteButton from "./UpVoteButton";
+import DownVoteButton from "./DownVoteButton";
 
 const Vote = ({ contentId, contentScore }) => {
   const [score, setScore] = useState(contentScore);
@@ -47,18 +48,16 @@ const Vote = ({ contentId, contentScore }) => {
 
   return (
     <div className="p-1 flex justify-center space-x-1.5 bg-gray-200 rounded-full">
-      <VoteButton
+      <UpVoteButton
         handleVote={() => toggleVote(VoteType.UP_VOTE)}
         active={voteType === VoteType.UP_VOTE}
-        voteType={VoteType.UP_VOTE}
       />
 
       <span className="font-semibold">{score}</span>
 
-      <VoteButton
+      <DownVoteButton
         handleVote={() => toggleVote(VoteType.DOWN_VOTE)}
         active={voteType === VoteType.DOWN_VOTE}
-        voteType={VoteType.DOWN_VOTE}
       />
     </div>
   );
