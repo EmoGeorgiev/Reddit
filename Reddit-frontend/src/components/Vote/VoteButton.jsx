@@ -4,13 +4,9 @@ const VoteButton = ({ handleVote, active, voteType }) => {
   return (
     <button onClick={handleVote}>
       <svg
-<<<<<<< HEAD
         className={`w-6 h-6 ${
           voteType === VoteType.DOWN_VOTE ? "transform rotate-180" : ""
         } cursor-pointer`}
-=======
-        className={`w-6 h-6 ${voteType === VoteType.DOWN_VOTE ? "transform rotate-180" : ""} cursor-pointer`}
->>>>>>> afcfc68540368602acfded0924f92145841fe822
         viewBox="0 0 24 24"
         stroke="currentColor"
         strokeWidth="1"
