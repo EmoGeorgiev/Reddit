@@ -66,7 +66,7 @@ const Comment = ({ comment, deleteComment }) => {
                                             originalText={parentComment.text}
                                             updateContent={updateComment} />}
 
-            <ContentText text={parentComment.text} />
+            {!isEdited && <ContentText text={parentComment.text} />}
             
             {!parentComment.isDeleted && 
                 <ContentButtonPanel>

@@ -40,7 +40,7 @@ const LoginForm = () => {
         <div>
             <button className='background-btn background-blur' onClick={handleClose}></button>
 
-            <div className='active-form h-3/5'>
+            <div className='active-form h-2/3'>
                 <FormHeader name='' handleClose={handleClose} />
 
                 <div className='flex flex-col items-center'>

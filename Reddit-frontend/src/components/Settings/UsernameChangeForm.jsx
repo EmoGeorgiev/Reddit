@@ -20,7 +20,7 @@ const UsernameChangeForm = ({ usernameChange, handleClose }) => {
     }
 
     return (
-        <div className='active-form 2/5'>
+        <div className='active-form h-1/3'>
             <FormHeader name='Username' handleClose={handleClose} />
 
             <form onSubmit={handleUsernameChange}>
@@ -38,11 +38,11 @@ const UsernameChangeForm = ({ usernameChange, handleClose }) => {
                 </FormErrorMessage>
 
                 <div className='active-form-btn-container'>
-                    <button className='my-5 active-form-cancel-btn focus-item' type='button' onClick={handleClose}>
+                    <button className='active-form-cancel-btn focus-item' type='button' onClick={handleClose}>
                         Cancel
                     </button>
 
-                    <button className='my-5 active-form-confirm-btn focus-item' type='submit'>
+                    <button className='active-form-confirm-btn focus-item' type='submit'>
                         Save
                     </button>
                 </div>

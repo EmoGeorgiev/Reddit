@@ -54,11 +54,11 @@ const PasswordChangeForm = ({ passwordChange, handleClose }) => {
                 </FormErrorMessage>
 
                 <div className='active-form-btn-container'>
-                    <button className='my-10 active-form-cancel-btn focus-item' type='button' onClick={handleClose}>
+                    <button className='active-form-cancel-btn focus-item' type='button' onClick={handleClose}>
                         Cancel
                     </button>
                     
-                    <button className='my-10 active-form-confirm-btn focus-item' type='submit'>
+                    <button className='active-form-confirm-btn focus-item' type='submit'>
                         Save
                     </button>
                 </div>

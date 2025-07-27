@@ -22,7 +22,7 @@ const CreateSubredditForm = ({ addSubreddit, handleClose }) => {
     }
 
     return (
-        <div className='active-form h-2/5'>
+        <div className='active-form h-1/3'>
             <FormHeader name='Tell us about your subreddit' handleClose={handleClose} />
 
             <form onSubmit={handleSubmit}>
@@ -40,11 +40,11 @@ const CreateSubredditForm = ({ addSubreddit, handleClose }) => {
                 </FormErrorMessage>
 
                 <div className='active-form-btn-container'>
-                    <button className='my-5 active-form-cancel-btn focus-item' type='button' onClick={handleClose}>
+                    <button className='active-form-cancel-btn focus-item' type='button' onClick={handleClose}>
                         Cancel
                     </button>
 
-                    <button className='my-5 active-form-confirm-btn focus-item' type='submit'>
+                    <button className='active-form-confirm-btn focus-item' type='submit'>
                         Create Subreddit
                     </button>
                 </div>

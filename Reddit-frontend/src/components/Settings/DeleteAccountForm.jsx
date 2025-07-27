@@ -44,11 +44,11 @@ const DeleteAccountForm = ({ deleteAccount, handleClose }) => {
                 </FormErrorMessage>
 
                 <div className='active-form-btn-container'>
-                    <button className='my-2 active-form-cancel-btn focus-item' type='button' onClick={handleClose}>
+                    <button className='active-form-cancel-btn focus-item' type='button' onClick={handleClose}>
                         Cancel
                     </button>
 
-                    <button className='my-2 bg-red-700 hover:bg-red-800 active-form-confirm-btn focus-item' type='submit'>
+                    <button className='bg-red-700 hover:bg-red-800 active-form-confirm-btn focus-item' type='submit'>
                         Delete
                     </button>
                 </div>
