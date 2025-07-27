@@ -9,7 +9,7 @@ import SubredditPanel from "./SubredditPanel";
 import PostPage from "../Post/PostPage";
 
 const Subreddit = () => {
-  const [subreddit, setSubreddit] = useStatae(null);
+  const [subreddit, setSubreddit] = useState(null);
   const [users, setUsers] = useState(new Set());
   const [moderators, setModerators] = useState(new Set());
   const { name } = useParams();

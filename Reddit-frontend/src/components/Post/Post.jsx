@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Vote from "../Common/Vote";
+import Vote from "../Vote/Vote";
 import Save from "../Common/Save";
 import CommentCount from "../Comment/CommentCount";
 import ContentDelete from "../Content/ContentDelete";
@@ -44,7 +44,7 @@ const Post = ({ post, deletePost }) => {
   const handleRedirect = (e) => {
     const tag = e.target.tagName.toLowerCase();
 
-    if (["button", "img", "span", "textarea"].includes(tag)) {
+    if (["button", "img", "span", "textarea", "svg", "polygon"].includes(tag)) {
       return;
     }
 
