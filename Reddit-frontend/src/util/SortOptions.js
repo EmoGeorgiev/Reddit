@@ -1,4 +1,4 @@
 export const SortOptions = Object.freeze({
-    New: 'created',
-    Top: 'score'
-})
+  New: "created",
+  Top: "score",
+});

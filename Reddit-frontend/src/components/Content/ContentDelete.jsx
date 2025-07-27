@@ -1,37 +1,41 @@
-import { useEffect, useState } from 'react'
-import { useAuth } from '../../hooks/useAuth'
-import deleteIcon from '../../assets/delete-icon.svg'
-import userService from '../../services/users'
+import { useEffect, useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
+import deleteIcon from "../../assets/delete-icon.svg";
+import userService from "../../services/users";
 
 const ContentDelete = ({ creatorId, subreddit, handleDelete }) => {
-    const [moderators, setModerators] = useState(new Set())
-    const { user } = useAuth()
+  const [moderators, setModerators] = useState(new Set());
+  const { user } = useAuth();
 
-    useEffect(() => {
-        const getModerators = async () => {
-            try {
-                const newModerators = await userService.getModeratorsBySubredditTitle(subreddit.title)
-                
-                setModerators(new Set(newModerators.map(moderator => moderator.id)))
-            } catch (error) {
-                console.log(error)
-            }
-        }
+  useEffect(() => {
+    const getModerators = async () => {
+      try {
+        const newModerators = await userService.getModeratorsBySubredditTitle(
+          subreddit.title
+        );
 
-        getModerators()
-    }, [])
+        setModerators(new Set(newModerators.map((moderator) => moderator.id)));
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-    if (user?.id !== creatorId && !moderators.has(user?.id)) {
-        return <></>
-    }
+    getModerators();
+  }, []);
 
-    return (
-        <button className='px-1.5 py-1 flex items-center bg-gray-200 hover:bg-gray-300 rounded-full'
-                onClick={handleDelete}>
-            <img className='w-6 h-6' src={deleteIcon} alt='delete' />
-            <span className='font-semibold'>Delete</span>
-        </button>
-    )
-}
+  if (user?.id !== creatorId && !moderators.has(user?.id)) {
+    return <></>;
+  }
 
-export default ContentDelete
+  return (
+    <button
+      className="px-1.5 py-1 flex items-center bg-gray-200 hover:bg-gray-300 rounded-full"
+      onClick={handleDelete}
+    >
+      <img className="w-6 h-6" src={deleteIcon} alt="delete" />
+      <span className="font-semibold">Delete</span>
+    </button>
+  );
+};
+
+export default ContentDelete;

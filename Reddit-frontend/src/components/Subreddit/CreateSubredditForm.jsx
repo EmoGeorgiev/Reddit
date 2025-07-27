@@ -1,56 +1,61 @@
-import { useState } from 'react'
-import { useFormErrors } from '../../hooks/useFormErrors'
-import FormHeader from '../Common/FormHeader'
-import FormErrorMessage from '../Common/FormErrorMessage'
+import { useState } from "react";
+import { useFormErrors } from "../../hooks/useFormErrors";
+import FormHeader from "../Common/FormHeader";
+import FormErrorMessage from "../Common/FormErrorMessage";
 
 const CreateSubredditForm = ({ addSubreddit, handleClose }) => {
-    const [title, setTitle] = useState('')
-    const { errors, setBackendErrors } = useFormErrors()
+  const [title, setTitle] = useState("");
+  const { errors, setBackendErrors } = useFormErrors();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        
-        try {
-            const subreddit = { title }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-            await addSubreddit(subreddit)
+    try {
+      const subreddit = { title };
 
-            setTitle('')
-        } catch (error) {
-            setBackendErrors(error)
-        }
+      await addSubreddit(subreddit);
+
+      setTitle("");
+    } catch (error) {
+      setBackendErrors(error);
     }
+  };
 
-    return (
-        <div className='active-form h-1/3'>
-            <FormHeader name='Tell us about your subreddit' handleClose={handleClose} />
+  return (
+    <div className="active-form h-1/3">
+      <FormHeader
+        name="Tell us about your subreddit"
+        handleClose={handleClose}
+      />
 
-            <form onSubmit={handleSubmit}>
-                <input
-                    className='active-form-input focus-item'
-                    type='text' 
-                    value={title}
-                    name='title'
-                    placeholder='Subreddit title'
-                    onChange={(e) => setTitle(e.target.value)}
-                />
+      <form onSubmit={handleSubmit}>
+        <input
+          className="active-form-input focus-item"
+          type="text"
+          value={title}
+          name="title"
+          placeholder="Subreddit title"
+          onChange={(e) => setTitle(e.target.value)}
+        />
 
-                <FormErrorMessage>
-                    {errors.title}
-                </FormErrorMessage>
+        <FormErrorMessage>{errors.title}</FormErrorMessage>
 
-                <div className='active-form-btn-container'>
-                    <button className='active-form-cancel-btn focus-item' type='button' onClick={handleClose}>
-                        Cancel
-                    </button>
+        <div className="active-form-btn-container">
+          <button
+            className="active-form-cancel-btn focus-item"
+            type="button"
+            onClick={handleClose}
+          >
+            Cancel
+          </button>
 
-                    <button className='active-form-confirm-btn focus-item' type='submit'>
-                        Create Subreddit
-                    </button>
-                </div>
-            </form>
+          <button className="active-form-confirm-btn focus-item" type="submit">
+            Create Subreddit
+          </button>
         </div>
-    )
-}
+      </form>
+    </div>
+  );
+};
 
-export default CreateSubredditForm
+export default CreateSubredditForm;

@@ -1,9 +1,5 @@
 const ContentButtonPanel = ({ children }) => {
-    return (
-        <div className='flex space-x-4 items-center'>
-            {children}
-        </div>
-    )
-}
+  return <div className="flex space-x-4 items-center">{children}</div>;
+};
 
-export default ContentButtonPanel
+export default ContentButtonPanel;

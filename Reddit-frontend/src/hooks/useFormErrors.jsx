@@ -1,29 +1,29 @@
-import { useState } from 'react'
+import { useState } from "react";
 
 export const useFormErrors = () => {
-    const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({});
 
-    const setBackendErrors = (errorResponse) => {
-        const data = errorResponse?.response?.data
-        const status = errorResponse?.response?.status
-        
-        if (data && typeof data === 'object') {
-            setErrors(data)
-        } else if (status === 401) {
-            setErrors({ message: 'Invalid username or password' })
-        }
+  const setBackendErrors = (errorResponse) => {
+    const data = errorResponse?.response?.data;
+    const status = errorResponse?.response?.status;
 
-        setTimeout(() => {
-            clearErrors()
-        }, 3000)
+    if (data && typeof data === "object") {
+      setErrors(data);
+    } else if (status === 401) {
+      setErrors({ message: "Invalid username or password" });
     }
 
-    const clearErrors = () => {
-        setErrors({})
-    }
+    setTimeout(() => {
+      clearErrors();
+    }, 3000);
+  };
 
-    return {
-        errors,
-        setBackendErrors
-    }
-}
+  const clearErrors = () => {
+    setErrors({});
+  };
+
+  return {
+    errors,
+    setBackendErrors,
+  };
+};

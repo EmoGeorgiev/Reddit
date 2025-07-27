@@ -1,9 +1,9 @@
 export const Category = Object.freeze({
-    COMMENTS: 'Comments',
-    POSTS: 'Posts',
-    UPVOTED: 'Upvoted',
-    DOWNVOTED: 'Downvoted',
-    SAVED: 'Saved',
-    SUBREDDITS: 'Subreddits',
-    USERS: 'Users'
-})
+  COMMENTS: "Comments",
+  POSTS: "Posts",
+  UPVOTED: "Upvoted",
+  DOWNVOTED: "Downvoted",
+  SAVED: "Saved",
+  SUBREDDITS: "Subreddits",
+  USERS: "Users",
+});

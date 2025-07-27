@@ -1,18 +1,18 @@
-import Feed from './Feed'
-import postService from '../../services/posts'
+import Feed from "./Feed";
+import postService from "../../services/posts";
 
 const AllFeed = () => {
-    const getPosts = async (pageable) => {
-        const postPage = await postService.getPosts(pageable)
-        
-        return postPage
-    }
+  const getPosts = async (pageable) => {
+    const postPage = await postService.getPosts(pageable);
 
-    return (
-        <div>
-            <Feed query={null} getPosts={getPosts} />
-        </div>
-    )
-}
+    return postPage;
+  };
 
-export default AllFeed
+  return (
+    <div>
+      <Feed query={null} getPosts={getPosts} />
+    </div>
+  );
+};
+
+export default AllFeed;

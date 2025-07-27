@@ -1,32 +1,32 @@
-import { usePagination } from '../../hooks/usePagination'
-import EmptyContent from '../Common/EmptyContent'
-import postService from '../../services/posts'
-import PostPage from '../Post/PostPage'
+import { usePagination } from "../../hooks/usePagination";
+import EmptyContent from "../Common/EmptyContent";
+import postService from "../../services/posts";
+import PostPage from "../Post/PostPage";
 
 const UserPosts = ({ profile }) => {
-    const { isEmpty, setIsEmpty } = usePagination()
+  const { isEmpty, setIsEmpty } = usePagination();
 
-    const getPostPage = async (id, pageable) => {
-        const postPage = await postService.getPostsByUserId(id, pageable)
+  const getPostPage = async (id, pageable) => {
+    const postPage = await postService.getPostsByUserId(id, pageable);
 
-        setIsEmpty(postPage.empty)
+    setIsEmpty(postPage.empty);
 
-        return postPage
-    }
+    return postPage;
+  };
 
-    if (isEmpty) {
-        return (
-            <>
-                <EmptyContent text={`u/${profile.username} hasn't posted yet`} />
-            </>
-        )
-    }
-
+  if (isEmpty) {
     return (
-        <>
-            <PostPage query={profile.id} getPosts={getPostPage} />
-        </>
-    )
-}
+      <>
+        <EmptyContent text={`u/${profile.username} hasn't posted yet`} />
+      </>
+    );
+  }
 
-export default UserPosts
+  return (
+    <>
+      <PostPage query={profile.id} getPosts={getPostPage} />
+    </>
+  );
+};
+
+export default UserPosts;

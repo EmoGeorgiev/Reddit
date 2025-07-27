@@ -1,73 +1,73 @@
 @import "tailwindcss";
 
 @layer base {
-    button {
-        @apply cursor-pointer
-    }
+  button {
+    @apply cursor-pointer;
+  }
 }
 
 @layer components {
-    .focus-item {
-        @apply border-2 border-transparent focus:outline-none focus:border-blue-400
-    }
+  .focus-item {
+    @apply border-2 border-transparent focus:outline-none focus:border-blue-400;
+  }
 
-    .auth-form {
-        @apply w-full
-    }
+  .auth-form {
+    @apply w-full;
+  }
 
-    .auth-input { 
-        @apply w-full p-3 font-medium bg-gray-200 hover:bg-gray-300 rounded-2xl
-    }
+  .auth-input {
+    @apply w-full p-3 font-medium bg-gray-200 hover:bg-gray-300 rounded-2xl;
+  }
 
-    .auth-btn {
-        @apply w-full p-2.5 text-gray-100 font-medium bg-orange-600 hover:bg-orange-700 rounded-3xl
-    }
+  .auth-btn {
+    @apply w-full p-2.5 text-gray-100 font-medium bg-orange-600 hover:bg-orange-700 rounded-3xl;
+  }
 
-    .active-form {
-        @apply fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/4 h-1/2 flex flex-col rounded-2xl shadow-2xl bg-white
-    }
+  .active-form {
+    @apply fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/4 h-1/2 flex flex-col rounded-2xl shadow-2xl bg-white;
+  }
 
-    .active-form-header {
-        @apply mx-5 my-3 flex justify-between
-    }
+  .active-form-header {
+    @apply mx-5 my-3 flex justify-between;
+  }
 
-    .active-form-heading { 
-        @apply text-lg text-gray-700 font-bold
-    }
+  .active-form-heading {
+    @apply text-lg text-gray-700 font-bold;
+  }
 
-    .active-form-input {
-        @apply block w-4/5 mx-auto my-4 p-3 font-medium bg-gray-200 hover:bg-gray-300 rounded-2xl
-    }
+  .active-form-input {
+    @apply block w-4/5 mx-auto my-4 p-3 font-medium bg-gray-200 hover:bg-gray-300 rounded-2xl;
+  }
 
-    .active-form-btn-container {
-        @apply mx-3 flex justify-end
-    }
+  .active-form-btn-container {
+    @apply mx-3 flex justify-end;
+  }
 
-    .active-form-cancel-btn {
-        @apply mx-2 my-4 px-2.5 py-2 font-semibold bg-gray-200 hover:bg-gray-300 rounded-full
-    }
-    
-    .active-form-confirm-btn {
-        @apply mx-2 my-4 px-2.5 py-2 font-semibold text-gray-100 bg-blue-800 hover:bg-blue-900 rounded-full
-    }
-    
-    .close-btn {
-        @apply w-8 h-8 p-1 bg-gray-200 hover:bg-gray-300 rounded-full
-    }
+  .active-form-cancel-btn {
+    @apply mx-2 my-4 px-2.5 py-2 font-semibold bg-gray-200 hover:bg-gray-300 rounded-full;
+  }
 
-    .expand-arrow {
-        @apply w-5 h-5
-    }
+  .active-form-confirm-btn {
+    @apply mx-2 my-4 px-2.5 py-2 font-semibold text-gray-100 bg-blue-800 hover:bg-blue-900 rounded-full;
+  }
 
-    .page-header {
-        @apply text-gray-800 text-3xl text-center font-bold
-    }
+  .close-btn {
+    @apply w-8 h-8 p-1 bg-gray-200 hover:bg-gray-300 rounded-full;
+  }
 
-    .background-btn {
-        @apply fixed inset-0 cursor-default
-    }
+  .expand-arrow {
+    @apply w-5 h-5;
+  }
 
-    .background-blur {
-        @apply bg-black/40 backdrop-blur-xs
-    }
+  .page-header {
+    @apply text-gray-800 text-3xl text-center font-bold;
+  }
+
+  .background-btn {
+    @apply fixed inset-0 cursor-default;
+  }
+
+  .background-blur {
+    @apply bg-black/40 backdrop-blur-xs;
+  }
 }

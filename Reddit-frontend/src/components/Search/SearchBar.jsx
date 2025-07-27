@@ -1,54 +1,64 @@
-import { useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import searchIcon from '../../assets/search-icon.svg'
-import closIcon from '../../assets/close-icon.svg'
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import searchIcon from "../../assets/search-icon.svg";
+import closIcon from "../../assets/close-icon.svg";
 
 const SearchBar = () => {
-    const [query, setQuery] = useState('')
-    const inputRef = useRef()
-    const navigate = useNavigate()
+  const [query, setQuery] = useState("");
+  const inputRef = useRef();
+  const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        
-        inputRef.current?.blur()
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-        navigate(`/search/${query}`)
-    }
+    inputRef.current?.blur();
 
-    const handleClear = () => {
-        setQuery('')
-        
-        handleFocus()
-    }
+    navigate(`/search/${query}`);
+  };
 
-    const handleFocus = () => {
-        inputRef.current?.focus()
-    }
+  const handleClear = () => {
+    setQuery("");
 
-    return (
-        <div className='w-full flex items-center relative group'>
-            <form className='w-full flex items-center' onSubmit={handleSubmit}>
-                <button className='absolute left-3 flex items-center cursor-default' onClick={handleFocus} type='button'>
-                    <img className='w-5 h-5' src={searchIcon} alt='search' />
-                </button>
-                
-                <input
-                    className='w-full px-10 p-2 font-light bg-gray-200 hover:bg-gray-300 focus-item rounded-full' 
-                    ref={inputRef}
-                    type='text'
-                    name='query'
-                    value={query}
-                    placeholder='Search Reddit'
-                    onChange={(e) => setQuery(e.target.value)}
-                />
+    handleFocus();
+  };
 
-                {query.length !== 0 && <button className='absolute right-3' onClick={handleClear} type='button'>
-                    <img className='w-4 h-4' src={closIcon} alt='clear' />
-                </button>}
-            </form>
-        </div>
-    )
-}
+  const handleFocus = () => {
+    inputRef.current?.focus();
+  };
 
-export default SearchBar
+  return (
+    <div className="w-full flex items-center relative group">
+      <form className="w-full flex items-center" onSubmit={handleSubmit}>
+        <button
+          className="absolute left-3 flex items-center cursor-default"
+          onClick={handleFocus}
+          type="button"
+        >
+          <img className="w-5 h-5" src={searchIcon} alt="search" />
+        </button>
+
+        <input
+          className="w-full px-10 p-2 font-light bg-gray-200 hover:bg-gray-300 focus-item rounded-full"
+          ref={inputRef}
+          type="text"
+          name="query"
+          value={query}
+          placeholder="Search Reddit"
+          onChange={(e) => setQuery(e.target.value)}
+        />
+
+        {query.length !== 0 && (
+          <button
+            className="absolute right-3"
+            onClick={handleClear}
+            type="button"
+          >
+            <img className="w-4 h-4" src={closIcon} alt="clear" />
+          </button>
+        )}
+      </form>
+    </div>
+  );
+};
+
+export default SearchBar;

@@ -1,3 +1,3 @@
 export const SizeOptions = Object.freeze({
-    Default: 200
-})
+  Default: 200,
+});
