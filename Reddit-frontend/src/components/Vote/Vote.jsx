@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { VoteType } from "../../util/VoteType";
 import voteService from "../../services/votes";
-import voteIcon from "../../assets/vote-icon.svg";
+import VoteButton from "./VoteButton";
 
 const Vote = ({ contentId, contentScore }) => {
   const [score, setScore] = useState(contentScore);
@@ -39,7 +39,7 @@ const Vote = ({ contentId, contentScore }) => {
       const newVote = await voteService.toggleVote(vote);
 
       setVoteType(newVote.voteType);
-      setScore(score + newVote.score);
+      setScore((prevScore) => prevScore + newVote.score);
     } catch (error) {
       console.log(error);
     }
@@ -47,25 +47,19 @@ const Vote = ({ contentId, contentScore }) => {
 
   return (
     <div className="p-1 flex justify-center space-x-1.5 bg-gray-200 rounded-full">
-      <button
-        className={`${
-          voteType === VoteType.UP_VOTE && "bg-red-600"
-        } hover:bg-red-700 rounded-full cursor-pointer`}
-        onClick={() => toggleVote(VoteType.UP_VOTE)}
-      >
-        <img className="w-6 h-6" src={voteIcon} alt="vote" />
-      </button>
+      <VoteButton
+        handleVote={() => toggleVote(VoteType.UP_VOTE)}
+        active={voteType === VoteType.UP_VOTE}
+        voteType={VoteType.UP_VOTE}
+      />
 
       <span className="font-semibold">{score}</span>
 
-      <button
-        className={`${
-          voteType === VoteType.DOWN_VOTE && "bg-blue-600"
-        } hover:bg-blue-700 rounded-full cursor-pointer`}
-        onClick={() => toggleVote(VoteType.DOWN_VOTE)}
-      >
-        <img className="w-6 h-6 rotate-180" src={voteIcon} alt="vote" />
-      </button>
+      <VoteButton
+        handleVote={() => toggleVote(VoteType.DOWN_VOTE)}
+        active={voteType === VoteType.DOWN_VOTE}
+        voteType={VoteType.DOWN_VOTE}
+      />
     </div>
   );
 };

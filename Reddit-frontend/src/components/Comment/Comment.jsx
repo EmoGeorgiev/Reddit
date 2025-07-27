@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
-import Vote from "../Common/Vote";
+import Vote from '../Vote/Vote'
 import Save from "../Common/Save";
 import ContentDelete from "../Content/ContentDelete";
 import CreateCommentForm from "./CreateCommentForm";
