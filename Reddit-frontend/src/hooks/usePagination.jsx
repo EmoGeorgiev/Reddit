@@ -7,11 +7,11 @@ export const usePagination = () => {
     const [isLast, setIsLast] = useState(true)
     
     const goToNextPage = () => {
-        setPage(page + 1)
+        setPage((prev) => prev + 1)
     }
 
     const goToPreviousPage = () => {
-        setPage(page - 1)
+        setPage((prev) => prev - 1)
     }
 
     return {
