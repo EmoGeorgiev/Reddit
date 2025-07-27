@@ -11,12 +11,16 @@
         @apply border-2 border-transparent focus:outline-none focus:border-blue-400
     }
 
+    .auth-form {
+        @apply w-full
+    }
+
     .auth-input { 
-        @apply w-80 p-3 font-medium bg-gray-200 hover:bg-gray-300 rounded-2xl
+        @apply w-full p-3 font-medium bg-gray-200 hover:bg-gray-300 rounded-2xl
     }
 
     .auth-btn {
-        @apply w-80 p-2.5 text-gray-100 font-medium bg-orange-600 hover:bg-orange-700 rounded-3xl
+        @apply w-full p-2.5 text-gray-100 font-medium bg-orange-600 hover:bg-orange-700 rounded-3xl
     }
 
     .active-form {
@@ -32,7 +36,7 @@
     }
 
     .active-form-input {
-        @apply block w-80 mx-auto my-10 p-3 font-medium bg-gray-200 hover:bg-gray-300 rounded-2xl
+        @apply block w-4/5 mx-auto my-10 p-3 font-medium bg-gray-200 hover:bg-gray-300 rounded-2xl
     }
 
     .active-form-btn-container {

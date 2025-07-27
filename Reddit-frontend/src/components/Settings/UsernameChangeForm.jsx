@@ -20,7 +20,7 @@ const UsernameChangeForm = ({ usernameChange, handleClose }) => {
     }
 
     return (
-        <div className='active-form h-1/3'>
+        <div className='active-form 2/5'>
             <FormHeader name='Username' handleClose={handleClose} />
 
             <form onSubmit={handleUsernameChange}>

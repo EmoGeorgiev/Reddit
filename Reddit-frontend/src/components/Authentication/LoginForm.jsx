@@ -48,7 +48,7 @@ const LoginForm = () => {
                         Log In
                     </h1>
 
-                    <form onSubmit={handleLogin}>
+                    <form className='auth-form' onSubmit={handleLogin}>
                         <div className='m-5'>
                             <input 
                                 className='auth-input focus-item'

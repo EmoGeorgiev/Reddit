@@ -22,7 +22,7 @@ const CreateSubredditForm = ({ addSubreddit, handleClose }) => {
     }
 
     return (
-        <div className='active-form h-1/3'>
+        <div className='active-form h-2/5'>
             <FormHeader name='Tell us about your subreddit' handleClose={handleClose} />
 
             <form onSubmit={handleSubmit}>

@@ -50,8 +50,7 @@ const PasswordChangeForm = ({ passwordChange, handleClose }) => {
                 />
 
                 <FormErrorMessage>
-                    {errors.newPassword}
-                    {errors.message}
+                    {errors.newPassword || errors.message}
                 </FormErrorMessage>
 
                 <div className='active-form-btn-container'>

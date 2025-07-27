@@ -47,7 +47,7 @@ const SignUpForm = () => {
                         Sign Up
                     </h1>
 
-                    <form onSubmit={handleSignUp}>
+                    <form className='auth-form' onSubmit={handleSignUp}>
                         <div className='m-5'>
                             <input 
                                 className='auth-input focus-item'
